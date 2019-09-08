@@ -1,2 +1,5 @@
 # hearts
-Simple implmentation of game of hearts
+
+Simple implementation of game of hearts. (in German)
+
+
