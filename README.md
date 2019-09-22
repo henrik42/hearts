@@ -131,7 +131,12 @@ Spieler bei Punktgleichheit den Sieg teilen.
 # Implementation
 
 Nun folgt eine detailierte Erläuterung des Codes. Ich möchte damit
-verschiedene Aspekte von Clojure erläutern.
+verschiedene Aspekte von Clojure erläutern. Dabei werde ich erst immer
+jene Dinge erläutern, die für das Verständnis des dann aufgeführten
+Code-Abschnitts nötig sind. Ich führe hier wirklich jede Zeile-Code
+auf. Es wird nichts ausgelassen.
+
+Los geht's.
 
 Clojure ist eine funktionale Programmiersprache. Clojure-Code ist in
 _Namespaces_ (__Namensräumen__) organisiert (ähnlich wie Packages in
@@ -202,8 +207,9 @@ hier nicht.
 `def` (`clojure.core/def`; auch ein Makro) bindet einen __Wert__ (hier
 einen String) an einen __Namen__ (hier durch Symbol `hr` angegeben) im
 __aktuellen__ __Namensraum__. Die Form `hr` wird also in diesem Fall
-__nicht__ zu ihrem gebundenen Wert ausgewertet (vgl. oben), sondern
-sie wird als __Name__ für die Bindung verwendet.
+__nicht__ zu ihrem gebundenen Wert __ausgewertet__ (vgl. oben),
+sondern sie wird als __Name__ für die Bindung verwendet (__TODO__:
+Java L-value vs R-value).
 
 Es handelt sich um einen "Java String" vom Typ
 `java.lang.String`. Clojure übernimmt komplett die `java.lang`
@@ -235,9 +241,9 @@ eine Funktion_ die das erste Element eine Liste liefert.
 Genauer: der Name `clojure.core/first` ist an eine Funktion d.h. ein
 __Funktionsobjekt__ gebunden (Funktor; vgl. oben). Das ist aber zu
 länglich zu schreiben, daher verwendet man einfach beim Sprechen über
-den Code den "Namen für den Wert" (also `first`) anstatt den Wert
-explizit zu benennen, falls keine Gefahr von
-Unklarheit/Missverständnis besteht.
+den Code den "Namen für den Wert" (also `first`; den __Benenner__)
+anstatt den Wert explizit zu benennen (__Benanntes__), falls keine
+Gefahr von Unklarheit/Missverständnis besteht.
 
 Dieses Funktionsobjekt und die __zugehörige Klasse__ entsteht durch
 die __Kompilierung__ von S-Expressions. Clojure hat __keinen
@@ -279,7 +285,8 @@ und die ganzen Datenstrukturen sind __immutable__ (in Clojure-Sprech
 _persistent data structures_). D.h. wir können ihren Wert(!!)
 d.h. Inhalt/Zustand nicht ändern. Daher können wir sie auch ohne
 Gefahr mit anderen teilen, weil sie niemand _hinterrücks_ ändern kann
-(man braucht also keine "Clone" oder "defensive Kopien").
+(man braucht also keine "Clone" oder "defensive Kopien" und keine
+Synchronisation im Race-Conditions zu unterbinden).
 
 Für die Vornamen unserer Spieler verwenden wir Clojure __Keywords__
 (natürlich ebenfalls immutable, genau wie die Java Datentypen in
@@ -314,10 +321,11 @@ einen "höheren Rang hat" als die andere.
 ---
 
 Anstatt später immer wieder die "Position" einer Karte in `bilder` zu
-ermitteln, erzeugen wir __einmalig__ eine Abbildung `bild->index`
-(eine `java.util.Map`) von den Bildern auf die jeweilige Position des
-Bilds in `bilder`. Der Name `bild->index` ist beliebig gewählt, das
-`->` in dem Namen hat hier keine besondere Bedeutung in Clojure.
+ermitteln (also ihren __Rang__), erzeugen wir __einmalig__ eine
+Abbildung `bild->index` (eine `java.util.Map`) von den Bildern auf die
+jeweilige Position des Bilds in `bilder`. Der Name `bild->index` ist
+beliebig gewählt, das `->` in dem Namen hat hier keine besondere
+Bedeutung in Clojure.
 
 In dieser S-Expression werden eine Reihe weiterer Funktionen
 verwendet.
@@ -357,7 +365,10 @@ verwendet.
   `#(-> [%2 %1])` ist eine Funktion mit zwei Parameter, die einen
   Vektor liefert, dessen erstes Element das zweite Argument der
   Funktion ist und dessen zweites Element das erste Argument der
-  Funktion ist. `->` ist das _thread first_ Makro, das ich hier
+  Funktion ist. In Clojure gibt es kein
+  `return`-Statement. Stattdessen liefert eine Funktion immer den
+  Auswertungswert der "letzten Form" (welche das genau ist, besprechen
+  wir im Code). `->` ist das _thread first_ Makro, das ich hier
   verwende, weil der Ausdruck `#([%2 %1])` von Clojure so
   interpretiert wird, als wenn der Vektor eine Funktion (Funktor)
   wäre. `->` tut uns den Gefallen, den Code so umzuformen, dass der
@@ -396,6 +407,8 @@ Die ganze Verarbeitung nimmt also `bilder`, macht eine Folge (in
 Clojure-Sprech _Sequence_) von 2-Tupeln [Bild, Bild-Position] daraus
 und fügt diese als __<Key,Value>__ in eine Map, die wir an den Namen
 `bild->index` binden.
+
+Wie man auf diese Map zugreift, sehen wir weiter unten.
 
 ---
 
@@ -456,10 +469,11 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   nennen.
 
   Mit einem Vektor-Pattern kann man __sequentielle__ Argumente
-  zerlegen (also Listen, Vektoren, Strings, Maps) und mit einer Map
-  kann man __assioziative__ Dinge zerlegen (Maps). Destructuring
-  erspart einem also, den Zugriff auf die Elemente explizit über
-  Funktionsaufrufe (z.B. `first` und `second`) hinschreiben zu müssen.
+  zerlegen (also Listen, Vektoren, Strings, Maps) und mit einem
+  Map-Pattern (kommt weiter unten noch) kann man __assioziative__
+  Dinge zerlegen (Maps). Destructuring erspart einem also, den Zugriff
+  auf die Elemente explizit über Funktionsaufrufe (z.B. `first` und
+  `second`) hinschreiben zu müssen.
 
   Unsere Arity-1-Funktion liefert als Ergebnis wieder ein
   2-Tupel/Vektor, dessen erstes Element die Karte __<Farbe,Bild>__ ist
@@ -477,10 +491,11 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
 
   In Clojure gelten nur `nil` (das ist __dasselbe__ wie Java `null`)
   und `false` (ist __desselbe__ wie Java `java.lang.Boolean/FALSE`)
-  als _unwahr__. Alle anderen Werte (inkl. `(new java.lang.Boolean
-  false)` gelten als __wahr__. Um _wahr_ von `true` zu unterscheiden
-  (denn sie sind __nicht__ __dasselbe__), sagt man i.d.R. _truthy_,
-  wenn man "logisch wahr" meint.
+  als __unwahr__. Alle anderen Werte (inkl. `(new java.lang.Boolean
+  false)` gelten als __wahr__. Um _logisch_ _wahr_ von `true` zu
+  unterscheiden (denn sie sind __nicht__ __dasselbe__), sagt man
+  i.d.R. _truthy_, wenn man "logisch wahr" meint und _falsy_, wenn man
+  "logisch unwahr" meint.
 
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
   __<<Farbe,Bild>,Punkte>__ Tupeln in eine Map
@@ -488,17 +503,17 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
 
 ---
 
-	(def karten->punkte
-	  (->> (for [f [:kreuz :pik :herz :karo]
-				 b bilder]
-			 [f b])
-		   (map
-			(fn [[f b]]
-			  [[f b] (cond
-					   (= [f b] [:pik :dame]) 13
-					   (= f :herz) 1
-					   :else 0)]))
-		   (into {})))
+    (def karten->punkte
+      (->> (for [f [:kreuz :pik :herz :karo]
+                 b bilder]
+             [f b])
+           (map
+            (fn [[f b]]
+              [[f b] (cond
+                       (= [f b] [:pik :dame]) 13
+                       (= f :herz) 1
+                       :else 0)]))
+           (into {})))
 
 ---
 
