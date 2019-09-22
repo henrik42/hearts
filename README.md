@@ -1,9 +1,8 @@
 # Hearts
 
 Dies ist eine Implementierung des Spiels _Hearts_ [1] in Clojure
-[2]. Ich habe nicht alle Regeln des Spiels implementiert.
-
-Angeregt hat mich ein Artikel im Java Magazin 2019/06 [2], in dem eine
+[2]. Ich habe nicht alle Regeln des Spiels implementiert. Angeregt hat
+mich ein Artikel im Java Magazin 2019/06 [2], in dem eine
 Implementation in Haskell vorgestellt wurde.
 
 Um den Code laufen zu lassen, brauchst du erstmal ein Java 8 JDK (eine
@@ -400,9 +399,9 @@ und fügt diese als __<Key,Value>__ in eine Map, die wir an den Namen
 
 ---
 
-	(def bild->index (->> bilder
-						  (map-indexed #(-> [%2 %1]))
-						  (into {})))
+    (def bild->index (->> bilder
+                          (map-indexed #(-> [%2 %1]))
+                          (into {})))
 
 ---
 
