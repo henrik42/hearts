@@ -628,10 +628,11 @@ Nun aber zur Umsetzung von `beginnt`:
   der Liste), also muss sie etwas "ausführbares" sein --- eine
   Funktion!
 
-  Diese zur Menge zugehörige 1-Arity-Funktion bildet die Elemente der
-  Menge wiederum auf das jeweilige Element ab. Alle anderen Argumente
-  werden auf `nil` abgebildet. D.h. eine Menge ist ihre eigene
-  "Lookup-Funktion". Somit wertet `((h [:kreuz 2])` zu `[:kreuz 2]`
+  Diese zu Mengen zugehörige 1-Arity-__Lookup-Funktion__ bildet die
+  Elemente der Menge wiederum auf das jeweilige Element ab (also auf
+  "sich selbst"). Alle anderen Argumente werden auf `nil`
+  abgebildet. D.h. eine Menge ist "ihre eigene
+  __Lookup-Funktion__". Somit wertet `(h [:kreuz 2])` zu `[:kreuz 2]`
   aus, falls `[:kreuz 2]` Element von `h` ist oder zu `nil`
   andernfalls.
 
@@ -644,13 +645,13 @@ Fertig.
 
 ---
 
-	(defn beginnt [s-map]
-	  (->> s-map
-		   (keep 
-			(fn [[s {h :hand}]]
-			  (when (h [:kreuz 2])
-				s)))
-		   first))
+    (defn beginnt [s-map]
+      (->> s-map
+           (keep 
+            (fn [[s {h :hand}]]
+              (when (h [:kreuz 2])
+                s)))
+           first))
 
 ---
 
