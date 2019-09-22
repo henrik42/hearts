@@ -795,8 +795,9 @@ auch merkwürdig aus).
 
 `punkte` liefert die Summe der Karten-Punkte zu einer Sequenz von
 Stichen. Ein Stich ist wiederum eine Sequenz von "gespielten" Karten
-(also eine Map mit `:spieler` und `:karte`; vgl. `sticht`). Wir haben
-also zwei ineinander geschachtelte Sequenzen!
+(also eine Sequenz von Maps jeweils mit `:spieler` und `:karte`;
+vgl. `sticht`). Wir haben also zwei ineinander geschachtelte
+Sequenzen!
 
 
 * `flatten` macht aus der Sequenz von Sequenzen (von Elementen) eine
@@ -829,7 +830,7 @@ also zwei ineinander geschachtelte Sequenzen!
   Argumentpositionen der aufgerufenen Funktion. D.h. wir übergeben
   `apply` eine Sequenz mit n Werten und `apply` ruft die Funktion mit
   n Argumenten auf. Das ist was komplett anderes, als die Funktion mit
-  einem Sequenz-Argument aufzurufen!
+  einem Sequenz-Argument mit n Elementen aufzurufen!
 
 * `+` ist eine Funktion, die beliebig viele Zahl-Argumente
   addiert. `(+)` ergibt `0`, `(+ 4)` ergibt `4` und `(+ 3 2 1)` ergibt
@@ -837,7 +838,7 @@ also zwei ineinander geschachtelte Sequenzen!
 
 Mit `apply` können wir also auf einen Schlag (ohne aggregierende
 Schleife; vgl. oben) alle gemappten Punktwerte addieren und als
-Ergebnis liefern.
+Ergebnis liefern. `(apply + [1 2 3])` ist das gleiche wie `(+ 1 2 3)`.
 
 Fertig.
 
@@ -853,10 +854,10 @@ __Anmerkung__: Clojure-Programme haben schon dadurch weniger Fehler,
 
 ---
 
-	(defn punkte [stiche]
-	  (->> (flatten stiche)
-		   (map (comp karten->punkte :karte))
-		   (apply +)))
+    (defn punkte [stiche]
+      (->> (flatten stiche)
+           (map (comp karten->punkte :karte))
+           (apply +)))
 
 ---
 
