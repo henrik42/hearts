@@ -655,14 +655,14 @@ Fertig.
 
 ---
 
-__Anmerkung__: es fällt auf, dass Clojure-Programme wenig Verzeigungen
-  haben. Bisher haben wir `cond` und `when` als
+__Anmerkung__: es fällt auf, dass Clojure-Programme wenig
+  __Verzeigungen__ haben. Bisher haben wir `cond` und `when` als
   Fallunterscheidung/Verzweigung kennengelernt. Viele Dinge, die man
   in Java mit `if-then-else-if-else` machen würde, macht man in
   Clojure mit Sequenzen (und den Funktionen) auf diesen und HOFs. Ob
   das "einfacher" oder "besser" ist, ist noch eine andere Frage.
 
-  Ich finde, dass Clojure-Programme sehr "kompakt" oder "dicht"
+  Ich finde, dass Clojure-Programme sehr "kompakt" bzw. "dicht"
   wirken. Als Clojure-Anfänger empfand ich das schon fast als "Schmerz
   beim Lesen", weil die Semanik sich auf so wenig Code "verteilt",
   dass man extrem aufmerksam lesen muss. Es gibt wenig "Raum zwischen
@@ -671,8 +671,8 @@ __Anmerkung__: es fällt auf, dass Clojure-Programme wenig Verzeigungen
 
   Das führt meiner Meinung nach auch dazu, dass Clojure-Programm
   einfach "kurz sind". Sie haben i.d.R. weniger Zeilen als Java-Code
-  und weniger Verzeigungen. Beides sind Faktoren, effektiv zu einer
-  höheren Testabdeckung führen.
+  und weniger Verzeigungen. Beides sind Faktoren, die effektiv zu
+  einer höheren Testabdeckung (branch coverage) führen.
 
   Aber das ist nur meine subjktive Meinung.
 
@@ -689,9 +689,9 @@ wurde (Karten-Vektor).
 
 Die Sequenz wird per Vektor-Destrukturierung zerlegt wird. Das
 __erste__ Element (man spricht häufig vom _head_) wird an den Namen
-`eroeffnung` gebunden. Durch die `&`-Notation wird die restlichen
-Elemente (also auch wieder eine Sequenz; man spricht häufig vom
-_tail_) an den Namen `xs` gebunden.
+`eroeffnung` gebunden. Durch die `&`-Notation werden die restlichen
+__Elemente__ (also auch wieder eine __Sequenz__; man spricht häufig
+vom _tail_) an den Namen `xs` gebunden.
 
 D.h. die Reihenfolge der Element in der Sequenz gibt an, in welcher
 Reihenfolge die Karten ausgespielt wurden. Daher gibt das erste
@@ -740,7 +740,7 @@ gelegt hat.
 
   In Java gibt es mittlerweile ja auch ein `reduce` [1]. Früher hätte
   man in Java einfach eine `for` Schleife mit einer lokalen Variable
-  benutzt, der in der man das Aggregate hält.
+  benutzt, in der man das Aggregate hält.
 
 
 * Die Parameter der Aggregats-Funktion werden hier via
@@ -753,10 +753,10 @@ gelegt hat.
   hier also `t`.
 
   Die Namen `f2`, `b2` und `s` binden wir an die Wertes des zweiten
-  Arguments (dies sind die Elemente von `xs`; vgl. oben).
+  Arguments (das jeweilige Element von `xs`; vgl. oben).
 
   Die Funktion prüft nun, ob mit `s` bzw. `f2` die Farbe `f1` bedient
-  wurden __und__ ob der Rand von `s` __höher__ ist als der von `t`
+  wurden __und__ ob der Rang von `s` __höher__ ist als der von `t`
   (für den ersten Aufruf wird `t` ja `eroeffnung` sein).
 
   Falls dem so ist, wird `s` unser weiterer Aggregationszustand
@@ -780,16 +780,16 @@ auch merkwürdig aus).
 
 ---
 
-	(defn sticht [[eroeffnung & xs]]
-	  (:spieler
-	   (reduce
-		(fn [{[f1 b1] :karte :as t}
-			 {[f2 b2] :karte :as s}]
-		  (if (and (= f1 f2) (> (bild->index b2) (bild->index b1)))
-			s
-			t))
-		eroeffnung
-		xs)))
+    (defn sticht [[eroeffnung & xs]]
+      (:spieler
+       (reduce
+        (fn [{[f1 b1] :karte :as t}
+             {[f2 b2] :karte :as s}]
+          (if (and (= f1 f2) (> (bild->index b2) (bild->index b1)))
+            s
+            t))
+        eroeffnung
+        xs)))
 
 ---
 
