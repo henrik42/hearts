@@ -870,33 +870,38 @@ geben kann, sind es Mengen von Spielern.
   Stiche der Spieler ausgewertet werden, um festzustellen, wer
   gewonnen hat.
 
+
 * via `map` bilden wir die sequenzialisierte Alle-Spieler-Map (also
-  eine Sequenz von __<Spieler,Ein-Spieler-Map>__-Tupel) auf eine
+  eine Sequenz von __&lt;Spieler,Ein-Spieler-Map>__-Tupel) auf eine
   Sequenz von Maps mit den Schlüsseln `:spieler` und `:punkte`.
 
   An dieser Stelle hätten wir auch einfach ein
-  __<Spieler,Punkte>__-Tupel anstatt der Map nehmen können (genau so,
-  wie wir unsere Karten ja als __<Farbe,Bild>__-Tupel repräsentieren,
+  __&lt;Spieler,Punkte>__-Tupel anstatt der Map nehmen können (genau so,
+  wie wir unsere Karten ja als __&lt;Farbe,Bild>__-Tupel repräsentieren,
   anstatt als Map mit `:farbe` und `:bild`. Das ist einfach eine
   Designentscheidung.
+
 
 * `group-by` ist eine HOF, die die Elemente der Sequenz (zweites
   Argument) nach den Funktionswerten "gruppiert", die sich durch
   Anwendung der Funktion (erstes Argument) auf die Elemente
   ergibt. Das Ergebnis von `group-by` ist eine Map
-  __<Gruppierungs-Wert-->Gruppen-Menge>__.
+  __&lt;Gruppierungs-Wert-->Gruppen-Menge>__.
 
   Hier ist `:punkte` die Funktion, durch die die Gruppierung nach den
   Punkten erfolgt.
 
+
 * via `map` erzeugen wir eine Sequenz von
-  __<Punkte,Spieler-Menge>__-Tupel.
+  __&lt;Punkte,Spieler-Menge>__-Tupel.
+
 
 * und diese sortieren wir nach dem ersten (`first`) Element dieser
   Tupel: also den Punkten.
 
+
 `rang-liste` liefert also eine nach Punkten aufsteigend sortierte
-Sequenz von __<Punkte,Spieler-Menge>__-Tupel.
+Sequenz von __&lt;Punkte,Spieler-Menge>__-Tupel.
 
 Fertig.
 
@@ -914,7 +919,13 @@ Fertig.
 
 ---
 
-__TODO__: `gewinnt`
+`gewinnt` liefert zu der Alle-Spieler-Map den bzw. die Gewinner. Hier
+wird die `rang-liste` Funktion aufgerufen und dann auf das erste
+Element der Sequenz (also jene Gruppe mit den niedrigsten Punkten) und
+dann auf das zweite Element (also die Spieler-Menge) zugegriffen.
+
+Das Ergebnis ist also eine Menge mit den Gewinnern (Menge von
+Keywords).
 
 ---
 
@@ -925,7 +936,61 @@ __TODO__: `gewinnt`
 
 ---
 
-__TODO__: `geben!`
+Bis jetzt haben wir nur "einfache Berechnungsregeln" implementiert. Es
+wurde noch gar nicht "gespielt". Diese Funktionen kommen jetzt.
+
+Als erstes wird gegeben.
+
+`geben!` ist eine "impure function". Sie liefert nämlich nicht immer
+bei gleicher Eingabe das gleiche Ergebnis (tatsächlich hat die
+Funktion gar keinen Parameter und somit auch keine "Eingabe"). Ein
+weiterer Umstand, der eine Funktion "impure" macht ist, wenn eine
+Funktion "Seiteneffekte" hat --- also z.B. eine globale Variable
+ändert (das kann man in Clojure machen, somit ist Clojure auch keine
+"reine funktionale Programmiersprache").
+
+In Clojure ist es üblich, für solche Funktionen einen Namen mit einem
+`!` am Ende zu verwenden (ist also ein "hallo wach!" für den
+Leser). Aber dabei handelt es sich __nur__ __um__ __eine__
+__Konvention__. Ansonsten hat das `!` im Namen keine besondere
+Bedeutung.
+
+
+* `keys` liefert die Sequenz mit den Schlüssln der `karten->punkte`
+  Map. Also die Karten.
+
+
+* `shuffle` ist eine Zufalls-Misch-Funktion.
+
+
+* `partition` ist das Gegenstück zu `flatten`: es macht aus einer
+  Sequenz von Elementen, eine Sequenz von Sequenzen von Elementen. Die
+  "inneren" Sequenzen haben hier alle die Länge 13. Wir haben damit
+  also 4x jeweils 13 Karten.
+
+
+* die HOF `mapv` wendet eine Funktion (erstes Argument) auf die
+  Elemente mehrere Sequenzen an, wobei erst die ersten Element
+  genommen werden, dann die zweiten usw. Das Ergebnis von `mapv` ist
+  ein Vektor mit den Funktionswerten.
+
+  Hier wird also die Funktion auf `spieler` und die aufgeteilten
+  Karten-Partition angewendet.
+
+
+* die Funktion liefert ein Tupel mit `%1` (dem Spieler; erstes
+  Argument) und einer Map mit dem Schlüssel `:hand` und (via `into`)
+  dem Wert "Karten-Menge" (`%2` ist ja das zweite Argument, das von
+  `mapv` mit den Elementen aus der Karten-Partition bestückt
+  wird). Diese Map ist die anfängliche Ein-Spieler-Map.
+
+
+* durch `into` in eine Map wird aus der
+  __<Spieler,Ein-Spieler-Map>__-Sequenz die Alle-Spieler-Map.
+
+
+`geben!` liefert also die Alle-Spieler-Map, den den Zustand der
+Spieler zu Spielbeginn repräsentiert.
 
 ---
 
