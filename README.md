@@ -861,7 +861,44 @@ __Anmerkung__: Clojure-Programme haben schon dadurch weniger Fehler,
 
 ---
 
-__TODO__: `rang-liste`
+`rang-liste` soll eine nach Punkten aufsteigend geordnete
+Liste/Sequenz von Spielern liefern. Da es auch einen Punktegleichstand
+geben kann, sind es Mengen von Spielern.
+
+* `s-map` ist wieder eine Alle-Spieler-Map. `rang-liste` wird nur
+  einmal pro Spiel aufgerufen, nämlich wenn nach der letzten Runde die
+  Stiche der Spieler ausgewertet werden, um festzustellen, wer
+  gewonnen hat.
+
+* via `map` bilden wir die sequenzialisierte Alle-Spieler-Map (also
+  eine Sequenz von __<Spieler,Ein-Spieler-Map>__-Tupel) auf eine
+  Sequenz von Maps mit den Schlüsseln `:spieler` und `:punkte`.
+
+  An dieser Stelle hätten wir auch einfach ein
+  __<Spieler,Punkte>__-Tupel anstatt der Map nehmen können (genau so,
+  wie wir unsere Karten ja als __<Farbe,Bild>__-Tupel repräsentieren,
+  anstatt als Map mit `:farbe` und `:bild`. Das ist einfach eine
+  Designentscheidung.
+
+* `group-by` ist eine HOF, die die Elemente der Sequenz (zweites
+  Argument) nach den Funktionswerten "gruppiert", die sich durch
+  Anwendung der Funktion (erstes Argument) auf die Elemente
+  ergibt. Das Ergebnis von `group-by` ist eine Map
+  __<Gruppierungs-Wert-->Gruppen-Menge>__.
+
+  Hier ist `:punkte` die Funktion, durch die die Gruppierung nach den
+  Punkten erfolgt.
+
+* via `map` erzeugen wir eine Sequenz von
+  __<Punkte,Spieler-Menge>__-Tupel.
+
+* und diese sortieren wir nach dem ersten (`first`) Element dieser
+  Tupel: also den Punkten.
+
+`rang-liste` liefert also eine nach Punkten aufsteigend sortierte
+Sequenz von __<Punkte,Spieler-Menge>__-Tupel.
+
+Fertig.
 
 ---
 
@@ -901,7 +938,7 @@ __TODO__: `geben!`
 
 ---
 
-__TODO__: `geben!`
+__TODO__: `legt`
 
 ---
 
