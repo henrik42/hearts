@@ -542,7 +542,7 @@ __Runde__ beginnt (nämlich jener mit der Kreuz-2) und liefert diesen
 als Keyword (also z.B: `:gabi`).
 
 Das Argument ist eine Map. Diese nenne ich __Alle-Spieler-Map__. Die
-Alle-Spieler-Map bildet __<spieler>__ wiederum auf eine Map ab. Die
+Alle-Spieler-Map bildet **<spieler>** wiederum auf eine Map ab. Die
 nenne ich __Ein-Spieler-Map__. Die Ein-Spieler-Map hat u.a. den Key
 `:hand` und der (gemappte) Wert von `:hand` ist eine __Menge__ (Set;
 Hand-Menge). Die Elemente der Hand-Menge sind
