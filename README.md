@@ -400,12 +400,12 @@ verwendet.
   dann wird das jeweils erste Element als Schlüssel (Key) und das
   jeweils zweite Element als Wert (Value) des Map-Entries
   verwendet. Somit fügt `into` alle [Bild, Position]-Tupel als
-  __<Key,Value>__ in die leere Map und liefert das Ergebnis als
+  __&lt;Key,Value>__ in die leere Map und liefert das Ergebnis als
   Rückgabewert.
 
 Die ganze Verarbeitung nimmt also `bilder`, macht eine Folge (in
 Clojure-Sprech _Sequence_) von 2-Tupeln [Bild, Bild-Position] daraus
-und fügt diese als __<Key,Value>__ in eine Map, die wir an den Namen
+und fügt diese als __&lt;Key,Value>__ in eine Map, die wir an den Namen
 `bild->index` binden.
 
 Wie man auf diese Map zugreift, sehen wir weiter unten.
@@ -425,7 +425,7 @@ __Kreuzprodukt__ über die Farben `:kreuz`, `:pik`, `:herz` und `:karo`
 (`bilder`).
 
 Die Karten sind also einfach nur 2-Tupel/Vektoren
-__<Farbe,Bild>__. Wir haben weder explizit einen __Datentyp__
+__&lt;Farbe,Bild>__. Wir haben weder explizit einen __Datentyp__
 definiert (in Java hätte man wohl eine Klasse eingeführt) noch
 irgendwie anders ausgedrückt, dass das erste Element des 2-Tupels die
 Farbe der Karte ist oder dass das zweite Element das Bild der Karte
@@ -441,7 +441,7 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   wird _list comprehension_ (etwa "Listenerzeugung") genannt.
 
 
-* Diese Sequenz von __<Farbe,Bild>__ "fädeln" wir nun via `->>` durch
+* Diese Sequenz von __&lt;Farbe,Bild>__ "fädeln" wir nun via `->>` durch
   die HOF `map`, die als erstes Argument eine Arity-1-Funktion
   erwartet, die sie der Reihe nach auf die Elemente des zweiten
   Arguments anwendet und als Ergebnis wiederum eine __Sequenz__ mit
@@ -476,7 +476,7 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   `second`) hinschreiben zu müssen.
 
   Unsere Arity-1-Funktion liefert als Ergebnis wieder ein
-  2-Tupel/Vektor, dessen erstes Element die Karte __<Farbe,Bild>__ ist
+  2-Tupel/Vektor, dessen erstes Element die Karte __&lt;Farbe,Bild>__ ist
   und deren zweites Element der Punkte-Wert der Karte ist.
 
 * `cond` verhält sich wie die (neue) `switch`-__Expression__ (NICHT
@@ -498,8 +498,8 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   "logisch unwahr" meint.
 
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
-  __<<Farbe,Bild>,Punkte>__ Tupeln in eine Map
-  __<Farbe,Bild>--><Punkte>__ zu überführen.
+  __&lt;<Farbe,Bild>,Punkte>__ Tupeln in eine Map
+  __&lt;Farbe,Bild>--><Punkte>__ zu überführen.
 
 ---
 
@@ -542,11 +542,11 @@ __Runde__ beginnt (nämlich jener mit der Kreuz-2) und liefert diesen
 als Keyword (also z.B: `:gabi`).
 
 Das Argument ist eine Map. Diese nenne ich __Alle-Spieler-Map__. Die
-Alle-Spieler-Map bildet __&lt;spieler>__ wiederum auf eine Map ab. Die
-nenne ich __Ein-Spieler-Map__. Die Ein-Spieler-Map hat u.a. den Key
-`:hand` und der (gemappte) Wert von `:hand` ist eine __Menge__ (Set;
-Hand-Menge). Die Elemente der Hand-Menge sind
-__<Farbe,Bild>__-Tupel/Vektoren (könnten wir __Karte-Vektor__ nennen).
+Alle-Spieler-Map bildet __&lt;spieler>__ wiederum auf eine Map
+ab. Diese nenne ich __Ein-Spieler-Map__. Die Ein-Spieler-Map hat
+u.a. den Key `:hand` und der (gemappte) Wert von `:hand` ist eine
+__Menge__ (Set; Hand-Menge). Die Elemente der Hand-Menge sind
+__&lt;Farbe,Bild>__-Tupel/Vektoren (könnten wir __Karte-Vektor__ nennen).
 
 Die Alle-Spieler-Map soll als Datenstruktur(-Wert) den Zustand aller
 Spieler während des Spiels repräsentieren. Es fehlen noch einige Dinge
@@ -555,8 +555,8 @@ werden aber noch eingeführt (vgl. unten).
 
 Zu Beginn des Spiels werden alle Karten gemischt und auf die Spieler
 verteilt. `beginnt` wird also __einmalig__ (nach dem Verteilen der
-Karten) mit diesem _Start-Zustand_ der Spieler-Map aufgerufen, um zu
-ermitteln, wer die erste Runde beginnt.
+Karten) mit diesem _Start-Zustand_ der Alle-Spieler-Map aufgerufen, um
+zu ermitteln, wer die erste Runde beginnt.
 
 In Java würde man wohl für Karte-Vektor, Ein-Spieler-Map und
 Alle-Spieler-Map separate __Klassen__ einführen, mit Konstruktor,
@@ -586,12 +586,12 @@ Nun aber zur Umsetzung von `beginnt`:
 * `->>` fädelt den Argument-Wert (Alle-Spieler-Map) durch die HOF
   `keep`, die aus der Map eine Sequenz von Map-Entries macht. Wenn
   eine Map auf diese Weise "sequenziallisiert" wird, dann besteht die
-  entstehende Sequenz aus __<Key,Value>__ der Map-Entries. Hier also
-  __<Spieler,Ein-Spieler-Map>__.
+  entstehende Sequenz aus __&lt;Key,Value>__ der Map-Entries. Hier also
+  __&lt;Spieler,Ein-Spieler-Map>__.
 
 
 * `keep` wendet eine Funktion (erstes Argument) auf die Elemente des
-  zweiten Arguments (also der __<Spieler,Ein-Spieler-Map>__-Sequenz)
+  zweiten Arguments (also der __&lt;Spieler,Ein-Spieler-Map>__-Sequenz)
   an und liefert all jene Funktions-Rückgabe-Werte/Ergebnisse, die
   _truthy_ (vgl. oben) sind. `keep` ist sowas ähnliches wie ein
   Filter, nur dass es nicht die __Eingabelemente__ liefert, sondern
@@ -600,9 +600,9 @@ Nun aber zur Umsetzung von `beginnt`:
 
 * Für die Definition der Parameter unserer "Abbildungsfunktion" (`fn`)
   verwenden wir diesmal ein komplexeres (geschachteltes) "Muster": wir
-  benutzen ein __Vektor-Destructuring__, um jeweils den __<Spieler>__
+  benutzen ein __Vektor-Destructuring__, um jeweils den __&lt;Spieler>__
   des 2-Tupels an `s` zu binden. Für das zweite Element des 2-Tupels
-  (die __<Ein-Spieler-Map>__) benutzen wir ein __Map-Destructuring__
+  (die __&lt;Ein-Spieler-Map>__) benutzen wir ein __Map-Destructuring__
   und binden `h` an den Wert des Ein-Spieler-Map-Eintrags mit dem
   Schlüssel `:hand` (also die Hand-Menge).
 
