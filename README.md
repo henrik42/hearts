@@ -2,30 +2,55 @@
 
 Dies ist eine Implementierung des Spiels _Hearts_ [1] in Clojure
 [2]. Ich habe nicht alle Regeln des Spiels implementiert. Angeregt hat
-mich ein Artikel im Java Magazin 2019/06 [2], in dem eine
+mich ein Artikel im Java Magazin 2019/09 [3], in dem eine
 Implementation in Haskell vorgestellt wurde.
 
-Um den Code laufen zu lassen, brauchst du erstmal ein Java 8 JDK (eine
-JRE sollte auch reichen).
+Um den Code laufen zu lassen, brauchst du erstmal ein __Java 8 JDK__
+(eine JRE sollte auch reichen).
 
-Dann braucht man Clojure: __TODO__
+Dann braucht man __Clojure__ [4, 5]. Alles was man benötigt, ist die
+eine JAR Datei. Du kannst sie über deinen Browser runterladen oder
+auch per `wget`:
 
-Und schließlich noch den Code. Du kannst entweder das git Repo clonen
-oder downloaden oder einfach nur die eine Datei runterladen: __TODO__
+	wget https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/clojure-1.8.0.jar
 
-Nun kannst du das Programm starten: __TODO__
+Und schließlich noch den __Quelltext__. Du kannst entweder das git
+Repo clonen oder downloaden oder einfach nur die eine Datei
+runterladen:
+
+    wget https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj
+
+Nun kannst du das Programm starten:
+
+	java -jar clojure-1.8.0.jar -i core.clj -e '(hearts.core/spiel)'
+
+Du kannst auch eine __interaktive REPL__ [7] starten und dann Dinge
+ausprobieren, während du die folgende Beschreibung durchliest:
+
+    $ java -jar clojure-1.8.0.jar -i core.clj -e "(in-ns 'hearts.core)" -r
+    #object[clojure.lang.Namespace 0xc430e6c "hearts.core"]
+    hearts.core=> spieler
+    [:gabi :peter :paul :sonja]
+    hearts.core=> ^D
 
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
-Programme bauen und ausführen kann, findest du ein paar Hinweise in
-Solo [4].
+Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
-[1] __TODO__ URL Wikipeadi
+[1] https://de.wikipedia.org/wiki/Hearts
 
-[2] __TODO__ Clojure
+[2] https://clojure.org/
 
-[3] __TODO__ URL Java Magazin
+[3] https://kiosk.entwickler.de/java-magazin/java-magazin-9-2019/hearts-ist-trumpf/
 
-[4] __TODO__ Solo
+[4] https://clojure.org/community/downloads
+
+[5] https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/clojure-1.8.0.jar
+
+[6] https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj
+
+[7] https://clojure.org/guides/repl/introduction
+
+[8] https://github.com/henrik42/solo
 
 -----------------------------------------------------------------------
 
@@ -1019,13 +1044,13 @@ an der Reihe ist. `legt` ist eine Arity-1-Funktion, die als
 __einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
 `:tisch` erwartet.
 
-  Wir hätten die Funktion auch als Ariry-2-Funktion mit
-  `[hand tisch]`-Parametern implementieren können. In diesem Fall
+  Wir hätten die Funktion auch als Ariry-2-Funktion mit `[hand tisch]`-Parametern
+  implementieren können. In diesem Fall
   würde man von __positional__ __parameters__ sprechen. D.h. die
   Zuordnung der __Argumente__ zu den formalen __Parametern__ der
-  Funktion erfolgt aufgrund der __Reihenfolge__, in der die
-  __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand>
-  <tisch>)`. Das hat aber den Nachteil, dass man an der Aufrufstelle
+  Funktion erfolgt aufgrund der __Reihenfolge__, in der
+  die __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand> <tisch>)`.
+  Das hat aber den Nachteil, dass man an der Aufrufstelle
   nicht direkt sieht, dass das erste Argument "die Hand" ist bzw. sein
   muss und das zweite Argument "der Tisch". Und da Clojure aufgrund
   der fehlenden Typinformation das auch nicht weiß, ist es durchaus
@@ -1041,25 +1066,24 @@ __einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
   Verwechslungen mit falschen Werten bestückt werden, kennt man auch
   in Java, wenn man z.B. mehrere `null` Werte als Argument
   angibt. Denn in diesem Fall kann auch der Comiler nicht mehr helfen,
-  weil `null` ja ein untypisierter Wert ist. Frage: was macht der
-  folgende Aufruf?  `AdressenService.verlegeBeginn(1, 911, null, true,
-  null)`. Und hätte es nicht `AdressenService.verlegeBeginn(911, 1,
-  null, null, true)` heißen müssen? Wer weiß. Der Compiler hilft eben
-  nur bedingt. Natürlich kann man auf __benannt__ Parameter mit
-  falschen Werten belegen, aber man bekommt zumindest beim Lesen eine
-  Ahnung davon, was der Code wohl tuen wird bzw. tuen soll.
+  weil `null` ja ein untypisierter Wert ist.
+
+  Frage: was macht der folgende Aufruf? `AdressenService.verlegeBeginn(1, 911, null, true, null)`.
+  Und hätte es nicht `AdressenService.verlegeBeginn(911, 1, null, null, true)`
+  heißen müssen? Wer weiß. Der Compiler hilft eben nur
+  bedingt. Natürlich kann man auf __benannt__ Parameter mit falschen
+  Werten belegen, aber man bekommt zumindest beim Lesen eine Ahnung
+  davon, was der Code wohl tuen wird bzw. tuen soll.
 
   Aber __positional parameters__ habe auch ihre Stärken. In der
   Funktionalen Programmierung und auch in Clojure benutzt man
   "partielle Funktionsauswertung" (sowas ähnliches wie __currying__;
   z.B. `(partial str "LOG:")`), um aus Funktionen neue Funktionen zu
   erzeugen, deren "ersten n" Parameter schon mit Argumenten besetzt
-  sind. Aus diesem Grund verwenden die Funktionen, die in
-  `clojure.core` geliefert werden, wohl alle __positional parameter__.
-
-
-
-
+  sind. Aus diesem Grund verwenden die Funktionen, die
+  in `clojure.core` geliefert werden, wohl alle __positional parameter__,
+  damit man sich eben zusammen mit `partial` verwenden kann. Außerdem ist die Gefahr der
+  Verwechslung bei 1 oder 2 Parametern noch nicht so groß wie bei 4 oder 5.
 
 ---
 
