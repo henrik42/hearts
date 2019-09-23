@@ -628,7 +628,7 @@ Nun aber zur Umsetzung von `beginnt`:
   der Liste), also muss sie etwas "ausführbares" sein --- eine
   Funktion!
 
-  Diese zu Mengen zugehörige 1-Arity-__Lookup-Funktion__ bildet die
+  Diese zu Mengen zugehörige Arity-1-__Lookup-Funktion__ bildet die
   Elemente der Menge wiederum auf das jeweilige Element ab (also auf
   "sich selbst"). Alle anderen Argumente werden auf `nil`
   abgebildet. D.h. eine Menge ist "ihre eigene
@@ -808,7 +808,7 @@ Sequenzen!
 
 * `comp` ist eine __Funktion__, die __eine Funktion erzeugt__!
   D.h. das Ergebnis von `comp` ist eine Funktion oder ein
-  Funktionsobjekt. `comp` ("compose") liefert eine 1-Arity-Funktion,
+  Funktionsobjekt. `comp` ("compose") liefert eine Arity-1-Funktion,
   die die angegebenen Funktionen der Reihe nach auf das Argument
   anwenden und als Ergebnis das Funktionsergebnis der letzten Funktion
   liefert. Wichtig: die Funktionen werden "von rechts nach links"
@@ -939,7 +939,7 @@ Keywords).
 Bis jetzt haben wir nur "einfache Berechnungsregeln" implementiert. Es
 wurde noch gar nicht "gespielt". Diese Funktionen kommen jetzt.
 
-Als erstes wird gegeben.
+Als erstes wird __gegeben__.
 
 `geben!` ist eine "impure function". Sie liefert nämlich nicht immer
 bei gleicher Eingabe das gleiche Ergebnis (tatsächlich hat die
@@ -956,7 +956,7 @@ __Konvention__. Ansonsten hat das `!` im Namen keine besondere
 Bedeutung.
 
 
-* `keys` liefert die Sequenz mit den Schlüssln der `karten->punkte`
+* `keys` liefert die Sequenz mit den Schlüsslen der `karten->punkte`
   Map. Also die Karten.
 
 
@@ -978,19 +978,30 @@ Bedeutung.
   Karten-Partition angewendet.
 
 
-* die Funktion liefert ein Tupel mit `%1` (dem Spieler; erstes
+* die Arity-2-Funktion liefert ein Tupel mit `%1` (dem Spieler; erstes
   Argument) und einer Map mit dem Schlüssel `:hand` und (via `into`)
   dem Wert "Karten-Menge" (`%2` ist ja das zweite Argument, das von
   `mapv` mit den Elementen aus der Karten-Partition bestückt
-  wird). Diese Map ist die anfängliche Ein-Spieler-Map.
+  wird).
+
+  Diese Map ist die anfängliche __Ein-Spieler-Map__. Sie hat nur den
+  Schlüssel `:hand`. In `rang-liste` wird auf den Schlüssel `:stiche`
+  der Ein-Spieler-Map zugegriffen. Ich habe mich dazu entschlossen,
+  die `:stiche` hier an dieser Stelle nicht zu
+  "initialisieren". Später werden die `:stiche` zu der Ein-Spieler-Map
+  zugefügt werden, ohne dass wir dafür jetzt schon einen "Leereintrag"
+  bräuchten. Das kann man so machen, muss man aber nicht. Es ist eine
+  Designentscheidung.
+
+__TODO:__ map anstatt mapv!!!
 
 
 * durch `into` in eine Map wird aus der
-  __<Spieler,Ein-Spieler-Map>__-Sequenz die Alle-Spieler-Map.
+  __<Spieler,Ein-Spieler-Map>__-Sequenz die __Alle-Spieler-Map__.
 
 
-`geben!` liefert also die Alle-Spieler-Map, den den Zustand der
-Spieler zu Spielbeginn repräsentiert.
+`geben!` liefert also die Alle-Spieler-Map, die "den Zustand der
+Spieler zu Spielbeginn" repräsentiert.
 
 ---
 
@@ -1003,7 +1014,52 @@ Spieler zu Spielbeginn repräsentiert.
 
 ---
 
-__TODO__: `legt`
+`legt` liefert die Karte, die ein Spieler auf den Tisch legt, wenn er
+an der Reihe ist. `legt` ist eine Arity-1-Funktion, die als
+__einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
+`:tisch` erwartet.
+
+  Wir hätten die Funktion auch als Ariry-2-Funktion mit
+  `[hand tisch]`-Parametern implementieren können. In diesem Fall
+  würde man von __positional__ __parameters__ sprechen. D.h. die
+  Zuordnung der __Argumente__ zu den formalen __Parametern__ der
+  Funktion erfolgt aufgrund der __Reihenfolge__, in der die
+  __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand>
+  <tisch>)`. Das hat aber den Nachteil, dass man an der Aufrufstelle
+  nicht direkt sieht, dass das erste Argument "die Hand" ist bzw. sein
+  muss und das zweite Argument "der Tisch". Und da Clojure aufgrund
+  der fehlenden Typinformation das auch nicht weiß, ist es durchaus
+  möglich, dass jemand die Argumente in der Reihenfolge versehentlich
+  vertauscht.
+
+  Wenn wir aber eine Map als Argument haben, dann sieht die
+  Aufrufstelle eher so aus: `(legt {:tisch <tisch> :hand <hand>})`. In
+  diesem Fall sind die __Argumente__ an der Aufrufstelle __benannt__,
+  daher spricht man auch von __named parameters__.
+
+  Das Problem, dass __positional parameters__ aufgrund von
+  Verwechslungen mit falschen Werten bestückt werden, kennt man auch
+  in Java, wenn man z.B. mehrere `null` Werte als Argument
+  angibt. Denn in diesem Fall kann auch der Comiler nicht mehr helfen,
+  weil `null` ja ein untypisierter Wert ist. Frage: was macht der
+  folgende Aufruf?  `AdressenService.verlegeBeginn(1, 911, null, true,
+  null)`. Und hätte es nicht `AdressenService.verlegeBeginn(911, 1,
+  null, null, true)` heißen müssen? Wer weiß. Der Compiler hilft eben
+  nur bedingt. Natürlich kann man auf __benannt__ Parameter mit
+  falschen Werten belegen, aber man bekommt zumindest beim Lesen eine
+  Ahnung davon, was der Code wohl tuen wird bzw. tuen soll.
+
+  Aber __positional parameters__ habe auch ihre Stärken. In der
+  Funktionalen Programmierung und auch in Clojure benutzt man
+  "partielle Funktionsauswertung" (sowas ähnliches wie __currying__;
+  z.B. `(partial str "LOG:")`), um aus Funktionen neue Funktionen zu
+  erzeugen, deren "ersten n" Parameter schon mit Argumenten besetzt
+  sind. Aus diesem Grund verwenden die Funktionen, die in
+  `clojure.core` geliefert werden, wohl alle __positional parameter__.
+
+
+
+
 
 ---
 
