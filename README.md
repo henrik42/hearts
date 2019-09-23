@@ -51,9 +51,9 @@ Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
 Ich versuche, die Regeln des Spiels möglichst knapp zu formulieren und
 dabei auch schon Ausdrücke zu benutzen, die sich später im Code
-wiederfinden. So entwickelt sich eine _ubiquotious language_ (__TODO__
-Schreibung?!) ("allgegenwärtige Sprache"), in der wir uns über unsere
-Domäne unterhalten können.
+wiederfinden. So entwickelt sich eine _ubiquitous language_
+("allgegenwärtige Sprache"), in der wir uns über unsere Domäne
+unterhalten können.
 
 * _Hearts_ ist ein __Karten-Spiel__ mit 52 (= 4 x 13) Spielkarten.
 
@@ -226,8 +226,8 @@ hier nicht.
 einen String) an einen __Namen__ (hier durch Symbol `hr` angegeben) im
 __aktuellen__ __Namensraum__. Die Form `hr` wird also in diesem Fall
 __nicht__ zu ihrem gebundenen Wert __ausgewertet__ (vgl. oben),
-sondern sie wird als __Name__ für die Bindung verwendet (__TODO__:
-Java L-value vs R-value).
+sondern sie wird als __Name__ für die Bindung verwendet (so ähnlich
+wie ein __lvalue__ -- sprich "el-value" -- in Java [1]).
 
 Es handelt sich um einen "Java String" vom Typ
 `java.lang.String`. Clojure übernimmt komplett die `java.lang`
@@ -243,6 +243,8 @@ Wertzuweisung an eine Variable in Java entspricht; tatsächlich ist es
 aber völlig anders, aber das soll hier nicht im Detail erläutert
 werden). Diese Bindungen sind also eher wie `static final` Felder in
 Java zu verwenden (aber wie schon gesagt: es ist völlig anders!).
+
+[1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html
 
 ---
 
@@ -987,10 +989,10 @@ Bedeutung.
   also 4x jeweils 13 Karten.
 
 
-* die HOF `mapv` wendet eine Funktion (erstes Argument) auf die
-  Elemente mehrere Sequenzen an, wobei erst die ersten Element
-  genommen werden, dann die zweiten usw. Das Ergebnis von `mapv` ist
-  ein Vektor mit den Funktionswerten.
+* die HOF `map` kann nicht nur auf eine Sequenz sondern auch auf
+  mehrere Sequenzen angewendet werden. In dem Fall wendet sie die
+  Funktion (erstes Argument) auf die jeweils ersten Elemente mehrere
+  Sequenzen an (als n Argumente) und dann die jeweils zweiten usw.
 
   Hier wird also die Funktion auf `spieler` und die aufgeteilten
   Karten-Partition angewendet.
@@ -999,8 +1001,7 @@ Bedeutung.
 * die Arity-2-Funktion liefert ein Tupel mit `%1` (dem Spieler; erstes
   Argument) und einer Map mit dem Schlüssel `:hand` und (via `into`)
   dem Wert "Karten-Menge" (`%2` ist ja das zweite Argument, das von
-  `mapv` mit den Elementen aus der Karten-Partition bestückt
-  wird).
+  `map` mit den Elementen aus der Karten-Partition bestückt wird).
 
   Diese Map ist die anfängliche __Ein-Spieler-Map__. Sie hat nur den
   Schlüssel `:hand`. In `rang-liste` wird auf den Schlüssel `:stiche`
@@ -1010,9 +1011,6 @@ Bedeutung.
   zugefügt werden, ohne dass wir dafür jetzt schon einen "Leereintrag"
   bräuchten. Das kann man so machen, muss man aber nicht. Es ist eine
   Designentscheidung.
-
-__TODO:__ map anstatt mapv!!!
-
 
 * durch `into` in eine Map wird aus der
   __<Spieler,Ein-Spieler-Map>__-Sequenz die __Alle-Spieler-Map__.
@@ -1027,7 +1025,7 @@ Spieler zu Spielbeginn" repräsentiert.
       (->> (keys karten->punkte)
            shuffle
            (partition 13)
-           (mapv #(-> [%1 {:hand (into #{} %2)}]) spieler)
+           (map #(-> [%1 {:hand (into #{} %2)}]) spieler)
            (into {})))
 
 ---
@@ -1120,7 +1118,7 @@ __TODO__: `runde`
 
 ---
 
-__TODO__: `runde`
+__TODO__: `spiel`
 
 ---
 

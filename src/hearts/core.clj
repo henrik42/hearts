@@ -9,7 +9,7 @@
                       (map-indexed #(-> [%2 %1]))
                       (into {})))
 
-(def karten
+(def karten->punkte
   (->> (for [f [:kreuz :pik :herz :karo]
              b bilder]
          [f b])
@@ -42,7 +42,7 @@
 
 (defn punkte [stiche]
   (->> (flatten stiche)
-       (map (comp karten :karte))
+       (map (comp karten->punkte :karte))
        (apply +)))
 
 (defn rang-liste [s-map]
@@ -61,10 +61,10 @@
        second))
 
 (defn geben! []
-  (->> (keys karten)
+  (->> (keys karten->punkte)
        shuffle
        (partition 13)
-       (mapv #(-> [%1 {:hand (into #{} %2)}]) spieler)
+       (map #(-> [%1 {:hand (into #{} %2)}]) spieler)
        (into {})))
 
 (defn legt [{:keys [hand tisch]}]

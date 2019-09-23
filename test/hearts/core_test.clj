@@ -6,7 +6,7 @@
   (testing "geben"
     (let [x (geben!)]
       (is (= spieler (keys x)))
-      (is (= (->> (map first karten) (into #{}))
+      (is (= (->> (map first karten->punkte) (into #{}))
              (->> (vals x)
                   (mapcat :hand)
                   (into #{})))))))
