@@ -36,21 +36,14 @@ ausprobieren, während du die folgende Beschreibung durchliest:
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
 Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
-[1] https://de.wikipedia.org/wiki/Hearts
-
-[2] https://clojure.org/
-
-[3] https://kiosk.entwickler.de/java-magazin/java-magazin-9-2019/hearts-ist-trumpf/
-
-[4] https://clojure.org/community/downloads
-
-[5] https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/clojure-1.8.0.jar
-
-[6] https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj
-
-[7] https://clojure.org/guides/repl/introduction
-
-[8] https://github.com/henrik42/solo
+[1] https://de.wikipedia.org/wiki/Hearts  
+[2] https://clojure.org/  
+[3] https://kiosk.entwickler.de/java-magazin/java-magazin-9-2019/hearts-ist-trumpf/  
+[4] https://clojure.org/community/downloads  
+[5] https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/clojure-1.8.0.jar  
+[6] https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj  
+[7] https://clojure.org/guides/repl/introduction  
+[8] https://github.com/henrik42/solo  
 
 -----------------------------------------------------------------------
 
