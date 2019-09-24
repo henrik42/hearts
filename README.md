@@ -1226,11 +1226,12 @@ Zahl, welche Runde gerade gespielt wird. Diese Zahl brauchen wir aber
 nur für eine Ausgabe, die wir während des Spiels erzeugen möchten. Für
 die Spiellogik ist `:runde` völlig irrelevent.
 
-`runde` liefert als Ergebnis eine Map mit der Alle-Spieler-Map
-(`:spieler`) und der Angabe, welcher Spieler (Keyword) diese Runde
-__sticht__ (`:sticht`). Falls aber gar keine Runde mehr gespielt wird
-(weil die Spieler keine Karte mehr auf der Hand haben; vgl. unten),
-liefert `runde` den Wert `nil`.
+`runde` liefert als Ergebnis eine Map mit der (aktualisierten ---
+jemand hat ja den Stich bekommen) Alle-Spieler-Map (`:spieler`) und
+der Angabe, welcher Spieler (Keyword) diese Runde __sticht__
+(`:sticht`). Falls aber gar keine Runde mehr gespielt wird (weil die
+Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
+`runde` den Wert `nil`.
 
 * mit `(-> s first second :hand empty?)` wird geprüft, ob der erste
   Spieler überhaupt noch eine Karte auf der Hand hat. Damit prüfen wir
@@ -1255,7 +1256,7 @@ liefert `runde` den Wert `nil`.
 * falls `when-not` also _truthy_ ist (nämlich die Liste der Spieler),
   wird diese Liste via `when-let` an den lokalen Namen `xs`
   (gesprochen "ix-es") gebunden und es geht mit dem "then"-Zweig von
-  `when-let` weiter. Anderfalls (wenn also keine Runde mehr gespielt
+  `when-let` weiter. Andernfalls (wenn also keine Runde mehr gespielt
   wird) liefert die Funktion `runde` den Wert `nil`.
 
   __Anmerkung__: `when` und `when-let` unterscheiden sich von `if`
@@ -1319,13 +1320,14 @@ liefert `runde` den Wert `nil`.
   eine neue Map erzeugt!), und zwar in dem Eintrag/Wert, der über `b`
   und `:stiche` referenziert wird.
 
-  Dies ist am Ende der Wert `nil`! Wir haben in `geben!` nur den
+  Dies ist zu Beginn der Wert `nil`! Wir haben in `geben!` nur den
   `:hand`-Eintrag der Ein-Spieler-Map gesetzt, nicht aber den
   `:stiche`-Eintrag. Mit `(fnil conj [])` erzeugen wir eine Funktion,
   die das erste Argument durch `[]` ersetzt, falls es `nil` ist und
   sich ansonsten wie `conj` verhält. Dadurch schafft man eine
   Funktion, die ihre eigene Initialisierung (nämlich ein leerer
-  Vektor) durchführt. 
+  Vektor) durchführt. `conj` (_conjoin_) fügt ein Element zu einer
+  Collection. 
 
   `runde` liefert also eine Map mit dem Spieler `b`, der `:sticht` und
   der Alle-Spieler-Map, in der `b` den `tisch` in `:stiche` (ein
@@ -1335,11 +1337,11 @@ liefert `runde` den Wert `nil`.
 * falls wir in `x` aber noch einen Spieler haben, der nun legen muss,
   ermitteln wir erst was er auf der `hand` hat und dann welche Karte
   `k` er legen will. Der `tisch` ist entweder noch leer (erster
-  Schleifendurchlauf) oder hat schon Karten (vgl. unten). Nun fügen
-  wir dem `tisch` eine neue "gelegte Karte" mit `:karte k` und
-  `:spieler b` zu (und binden diesen Wert an einen neuen lokalen Namen
-  `tisch`. Schließlich "updaten" wir noch die `:hand` des Spielers `x`
-  und "entziehen" (`disj`) ihm die Karte `k`.
+  Schleifendurchlauf) oder hat schon Karten. Nun fügen wir dem `tisch`
+  eine neue "gelegte Karte" mit `:karte k` und `:spieler b` zu (und
+  binden diesen Wert an einen neuen lokalen Namen
+  `tisch`). Schließlich "updaten" wir noch die `:hand` des Spielers
+  `x` und "entziehen" (`disj`) ihm die Karte `k`.
 
 * damit haben wir das "Delta" an unserem Spielzustand
   (Alle-Spieler-Map `s` und dem `tisch`) berechnet und können nun mit
@@ -1347,8 +1349,8 @@ liefert `runde` den Wert `nil`.
 
   Dazu rufen wir die `loop` Schleife via `recur` mit den neuen
   Argumentwerten für die `loop`-Bindungen auf: also den verbleibenden
-  Spielern `xs`, der neuen Alle-Spieler-Map `s` und dem
-  aktuallisierten `tisch`.
+  Spielern `xs`, der neuen Alle-Spieler-Map `s` und dem aktualisierten
+  `tisch`.
 
   Der Aufruf sieht so aus, als wenn hier eine "Rekursion" erfolgen
   würde. Und Rekursion "kostet Stack-Space" und führt irgendwann zum
