@@ -1400,7 +1400,33 @@ ist. Und damit laufen wir nicht mehr in das `recur`.
 
 ---
 
-__TODO__: `spiel`
+`defn` unterstützt auch die Definition von mehreren Arities. `spiel`
+hat die Arity-0 und die Arity-1. Die Arity-0-Variante ruft die
+Arity-1-Variante mit `(spiel (geben!))` auf. D.h. die Arity-1-Variante
+hat als Argument `gegeben` die Alle-Spieler-Map zu Spielbeginn nach
+dem Geben. Diese Variante habe ich eingeführt, um die Funktion besser
+testen zu können.
+
+Auch das `spiel` läuft in Schleifen, nämlich über die Runden. `s` wird
+zu Beginn an die Alle-Spieler-Map `gegeben` gebunden, `b` an den
+Spieler, der `beginnt` und der Rundenzähler `r` bekommt den Wert `1`.
+
+* `if-let` wird benutzt, um die `runde` mit dem aktuellen Spielzustand
+  aufzurufen. Falls `runde` _truthy_ ist, werden (die lokalen Namen
+  von `if-let`) `s` und `b` an die neuen Werte aus der `runde`
+  gebunden und es wird sofort mit diesen Werten via `recur` der
+  nächste Schleifendurchlauf gemacht.
+
+  Falls `runde` _falsy_ ist, werden die Namen ja __nicht__ neu
+  gebunden, so dass in `let` die Alle-Spieler-Map `s` nach der letzten
+  Runde (in `loop` gebunden!) verwendet werden kann, um zu ermitteln,
+  wer das Spiel `gewinnt`.
+
+Der Gewinner wird im Ergebnis `erg` als `:gewinnt` geliefert und der
+finale Zustand der Spieler mit ihren Stichen wird durch `:spieler` als
+Alle-Spieler-Map im Ergebnis geliefert.
+
+Fertig.
 
 ---
 
@@ -1420,7 +1446,9 @@ __TODO__: `spiel`
 
 ---
 
-__TODO__: `-main`
+Die Funktion `-main` ist der "Programmeinstieg von außen", so wie man
+es von Java mit der `static void main(String[] args)` kennt. Die
+Funktion hat aber mit dem Spiel an sich nichts zu tun.
 
 ---
 
