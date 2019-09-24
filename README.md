@@ -1030,30 +1030,41 @@ Spieler zu Spielbeginn" repräsentiert.
 
 ---
 
-`legt` liefert die Karte, die ein Spieler auf den Tisch legt, wenn er
+`legt` liefert jene Karte, die ein Spieler auf den Tisch legt, wenn er
 an der Reihe ist. `legt` ist eine Arity-1-Funktion, die als
 __einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
 `:tisch` erwartet. Die inhaltliche Zuordnung der Argument-Teil-Werte
-zu den Namen in der Funktion erfolgt über die (benannten) Schlüssel.
+(also die Werte der Map) zu den Namen in der Funktion (also `hand` und
+`tisch`) erfolgt (via Destructuring) über die (__benannten__)
+Schlüssel.
 
-  Wir hätten die Funktion auch als Arity-2-Funktion mit `[hand tisch]`-Parametern
-  implementieren können. In diesem Fall
+  Wir hätten die Funktion auch als Arity-2-Funktion mit
+  `[hand tisch]`-Parametern implementieren können. In diesem Fall
   würde man von __positional__ __parameters__ sprechen. D.h. die
   Zuordnung der __Argumente__ zu den formalen __Parametern__ der
-  Funktion erfolgt aufgrund der __Reihenfolge__, in der
-  die __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand> <tisch>)`.
+  Funktion erfolgt aufgrund der __Reihenfolge__, in der die
+  __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand>
+  <tisch>)`. So macht man es z.B. auch in Java.
   
-  Das hat aber den Nachteil, dass man an der Aufrufstelle
-  nicht direkt sieht, dass das erste Argument "die Hand" ist bzw. sein
-  muss und das zweite Argument "der Tisch". Und da Clojure aufgrund
-  der fehlenden Typinformation das auch nicht weiß, ist es durchaus
-  möglich, dass jemand die Argumente in der Reihenfolge versehentlich
-  vertauscht.
+  __Positional Parameter__ haben aber den Nachteil, dass man an der
+  __Aufrufstelle__ nicht direkt sieht, dass das erste Argument "die
+  Hand" ist (bzw. sein muss) und das zweite Argument "der Tisch". Und
+  da Clojure aufgrund der __fehlenden__ __Typinformation__ das auch
+  nicht weiß bzw. prüfen kann, ist es durchaus möglich, dass jemand
+  die Argumente in der Reihenfolge versehentlich __vertauscht__.
 
   Wenn wir aber eine Map als Argument haben, dann sieht die
   Aufrufstelle eher so aus: `(legt {:tisch <tisch> :hand <hand>})`. In
   diesem Fall sind die __Argumente__ an der Aufrufstelle __benannt__,
   daher spricht man auch von __named parameters__.
+
+  __Anmerkung__: von __named parameter__ spricht man eigentlich, wenn
+  die Funktion so aufgerufen würde: `(legt :tisch <tisch> :hand
+  <hand>)` (also nicht mit __einer__ __Map__ sondern mit einer Folge
+  von Name-Wert-Paaren). __Quizfrage__: wie müssen die Parameter in
+  der Funktionsdefinition definiert werden, damit die Angabe an der
+  Aufrufstelle wie gezeigt mit mehreren Argumenten erfolgt? Hinweis:
+  die Lösung ist eine Kombination auf Vektor- und Map-Destructuring.
 
   Das Problem, dass __positional parameters__ aufgrund von
   Verwechslungen mit falschen Werten bestückt werden, kennt man auch
