@@ -176,15 +176,22 @@ auf. Es wird nichts ausgelassen.
 
 Los geht's.
 
-Clojure ist eine funktionale Programmiersprache. Clojure-Code ist in
-_Namespaces_ (__Namensräumen__) organisiert (ähnlich wie Packages in
-Java). I.d.R. entspricht jeder Namensraum einer __Datei__. Diese Datei
-muss in einem __Verzeichnis__ liegen, dessen Name zum Namensraum
-"passt". Der Namesraum `hearts.core` findet sich in der Datei
-`src/hearts/core.clj`. Die Dateien und Namensräume bilden eine
-__hierarchische__ __Struktur__. Diese __Hierarchie__ ist für Clojure
-jedoch ohne Bedeutung. Sie dient allein der Strukturierung der
-Code-Basis und hat keine Auswirkung auf Sichtbarkeit oder
+Clojure ist eine __funktionale__ __Programmiersprache__. Was das genau
+bedeutet, kann ich leider nicht aufschreiben. Erwähnt werden sollte
+aber, dass funktionale Programmiersprachen durchaus auch Aspekte der
+"Objekt-orientierten Programmiersprachen" enthalten. Die beiden also
+kein echter Gegensatz sind. Somit sind "das Gegenteil" zu funktionalen
+Programmiersprachen am ehesten die __imperativen__
+Programmiersprachen.
+
+Clojure-Code ist in _Namespaces_ (__Namensräumen__) organisiert
+(ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
+einer __Datei__. Diese Datei muss in einem __Verzeichnis__ liegen,
+dessen Name zum Namensraum "passt". Der Namesraum `hearts.core` findet
+sich in der Datei `src/hearts/core.clj`. Die Dateien und Namensräume
+bilden eine __hierarchische__ __Struktur__. Diese __Hierarchie__ ist
+für Clojure jedoch ohne Bedeutung. Sie dient allein der Strukturierung
+der Code-Basis und hat keine Auswirkung auf Sichtbarkeit oder
 ähnliches. I.d.R. "schneidet" man Namensräume nach
 fachlichen/inhaltlichen Gesichtspunkten. Namensräume dienen ebenfalls
 als Mittel um __Namenskollisionen__ zu vermeiden und um die
