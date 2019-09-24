@@ -1160,6 +1160,27 @@ Aber jetzt zum Code:
   Andernfalls wird der __Namen__ __nicht__ __gebunden__ und das
   `if-let`-Ergebnis ergibt sich aus dem Wert des "else"-Zweiges.
 
+* mit der HOF `filter` erzeugen wir eine Sequenz von Karten (`hand`),
+  deren `(farbe %)` der Farbe der ersten Karte auf dem Tisch (`(->
+  tisch first :karte farbe)`) entspricht (`=`). Das sind also alle
+  Karten, mit denen man die Eröffnungskarte __bedienen__ könnte (und
+  dann ja auch __müsste__). Von denen währen wir uns wieder eine
+  beliebige aus (`shuffle first`).
+
+  __Anmerkung__: in `#(...)` Formen kann man `%<i>` benutzen, um die
+  Argumente über ihre 1-basierte Position zu "adressieren"
+  (vgl. oben). Wenn man einfach nur `%` verwendet, so "zählt" Clojure
+  die Indexe selbständig hoch. D.h. die erste `%`-Form wird zu `%1`,
+  die zweite zu `%2` usw. 
+
+* Falls es nun eine solche Karte gibt (also `k` _truthy_ ist), liefern
+  wir diese Karte.
+
+* Ansonsten liefern wir eine beliebige Karte (wie in dem
+  Leerer-Tisch-Fall).
+
+Fertig.
+
 [1] https://de.wikipedia.org/wiki/Currying  
 [2] https://practicalli.github.io/clojure/thinking-functionally/partial-functions.html  
 
