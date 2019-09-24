@@ -1191,7 +1191,8 @@ Fertig.
         (or (hand [:kreuz 2])            
             (-> hand shuffle first))     
         (if-let [k (->> hand
-                        (filter #(= (-> tisch first :karte farbe) (farbe %)))
+                        (filter #(= (farbe %)
+                                    (-> tisch first :karte farbe)))
                         shuffle
                         first)]           
           k                              
