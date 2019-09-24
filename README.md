@@ -1157,7 +1157,7 @@ Aber jetzt zum Code:
   "then"-Ausdrucks/Zweig. In diesem Zweig kann man über den lokalen
   Namen auch auf den zuvor gebundenen Wert zugreifen.
 
-  Andernfalls wird der Namen __nicht__ gebunden und das
+  Andernfalls wird der __Namen__ __nicht__ __gebunden__ und das
   `if-let`-Ergebnis ergibt sich aus dem Wert des "else"-Zweiges.
 
 [1] https://de.wikipedia.org/wiki/Currying  
@@ -1169,11 +1169,11 @@ Aber jetzt zum Code:
       (if (empty? tisch)                 
         (or (hand [:kreuz 2])            
             (-> hand shuffle first))     
-        (if-let [k (-> (filter #(= (-> (first tisch) :karte farbe) (farbe %)) hand)
+        (if-let [k (-> (filter #(= (-> tisch first :karte farbe) (farbe %)) hand)
                        shuffle
                        first)]           
           k                              
-          (-> (shuffle hand) first))))   
+          (-> hand shuffle first))))   
 
 ---
 

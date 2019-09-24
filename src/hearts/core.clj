@@ -71,11 +71,11 @@
   (if (empty? tisch)                 
     (or (hand [:kreuz 2])            
         (-> hand shuffle first))     
-    (if-let [k (-> (filter #(= (-> (first tisch) :karte farbe) (farbe %)) hand)
+    (if-let [k (-> (filter #(= (-> tisch first :karte farbe) (farbe %)) hand)
                    shuffle
                    first)]           
       k                              
-      (-> (shuffle hand) first))))   
+      (-> hand shuffle first))))   
 
 (defn runde [{s :spieler b :beginnt r :runde}]
   (when-let [xs (when-not (-> s first second :hand empty?)
