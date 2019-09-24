@@ -179,9 +179,9 @@ Los geht's.
 Clojure ist eine __funktionale__ __Programmiersprache__. Was das genau
 bedeutet, kann ich leider nicht aufschreiben. Erwähnt werden sollte
 aber, dass funktionale Programmiersprachen durchaus auch Aspekte der
-"Objekt-orientierten Programmiersprachen" enthalten. Die beiden also
-kein echter Gegensatz sind. Somit sind "das Gegenteil" zu funktionalen
-Programmiersprachen am ehesten die __imperativen__
+__Objekt-orientierten__ __Programmiersprachen__ enthalten. Die beiden
+also kein echter Gegensatz sind. Somit sind "das Gegenteil" zu
+funktionalen Programmiersprachen am ehesten die __imperativen__
 Programmiersprachen.
 
 Clojure-Code ist in _Namespaces_ (__Namensräumen__) organisiert
@@ -227,9 +227,9 @@ Die Auswertung von Listen erfolgt durch __Auswertung__ der
 Listen-Element-Formen (die Listen-Element-Formen können wiederum
 Listen sein; __rekursive Auswertung__), wobei das erste Element zu
 einem __Funktor__ auswerten __muss__, und der Anwendung des Funktors
-auf die restlichen (Auswertungs-)Werte (Argumente).
+auf die restlichen (Auswertungs-)Werte (__Argumente__).
 
-Es gibt einige Sonderfälle, die eine andere Auswertungsregel
+Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel
 haben. Und es gibt auch Funktoren, die __Seiteneffekte__ haben, also
 im funktionalen Sinn nicht __pure__ sind.
 
@@ -241,9 +241,9 @@ gilt.
 
 Mit `ns` wird das Makro (mehr zu Makros weiter unten)
 `clojure.core/ns` benannt. Dieses Makro sorgt dafür, dass der
-angegebene Namensraum "aufgemacht". Das Makro kann noch eine Menge
-mehr, wie z.B. andere Namensräume "importieren", aber das brauchen wir
-hier nicht.
+angegebene Namensraum "aufgemacht" wird. Das Makro kann noch eine
+Menge mehr, wie z.B. andere Namensräume "importieren", aber das
+brauchen wir hier nicht.
 
 	(ns hearts.core)
 
@@ -260,7 +260,7 @@ Es handelt sich um einen "Java String" vom Typ
 `java.lang.String`. Clojure übernimmt komplett die `java.lang`
 Datentypen, anders als z.B. Jython, das mit Wrapper-Datentypen
 arbeitet. Dadurch lässt sich Clojure sehr elegant mit anderen Java
-Klassen/Bibliotheken integrieren; sog. "Java interop".
+Klassen/Bibliotheken integrieren; sog. "Java interop" [2].
 
 Als Java-Entwickler denkt man bei diesen "globalen Namen" vielleicht
 an __Variablen__. Es ist jedoch unüblich (wenn auch möglich), während
@@ -271,7 +271,8 @@ aber völlig anders, aber das soll hier nicht im Detail erläutert
 werden). Diese Bindungen sind also eher wie `static final` Felder in
 Java zu verwenden (aber wie schon gesagt: es ist völlig anders!).
 
-[1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html
+[1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html  
+[2] https://clojure.org/reference/java_interop  
 
 ---
 
