@@ -33,6 +33,23 @@ ausprobieren, während du die folgende Beschreibung durchliest:
     [:gabi :peter :paul :sonja]
     hearts.core=> ^D
 
+Über [11] kannst du dich auch über deinen Browser mit einer REPL
+verbinden und über ein Web-Interfaces mit dieser interagieren.
+
+Du kannst Clojure bzw. eine REPL aber auch __in__ __deinem__
+__Browser__ __ausführen__ [9]. Es gibt nämlich einen
+Clojurescript->JavaScript Transpiler, der in deinem Browser läuft und
+aus Clojurescript [10] JavaScript macht und das läuft dann in deinem
+Browser. So brauchst du weder JDK/Java noch den Code auf deinem
+Rechner.
+
+__Hinweis:__ um in [9] den Code aus den folgenden Beispielen via
+_copy_ _&_ _paste_ einzufügen, musst du in der GUI über das
+Tastatur-Symbol den "input mode" auf `none` oder `indent-mode`
+setzen. `paren-mode` funktioniert nicht, weil er dazu führt, dass am
+Zeilenende automatisch die schließenden Klamern zugefügt werden und
+das führt dann wiederum zu Syntaxfehlern.
+
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
 Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
@@ -44,6 +61,9 @@ Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 [6] https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj  
 [7] https://clojure.org/guides/repl/introduction  
 [8] https://github.com/henrik42/solo  
+[9] https://clojurescript.io/  
+[10] https://clojurescript.org/  
+[11] https://repl.it/languages/clojure
 
 -----------------------------------------------------------------------
 
@@ -1121,9 +1141,7 @@ Aber jetzt zum Code:
   Werten aufgerufen. Bei `or` soll aber die Auswertung nur erfolgen,
   falls alle "links daneben stehenden Argument" _falsy_ sind. Mit
   dieser Auswertungssemantik kann man z.B. auch `null`-Checks
-  implementieren. Man kann `or` mit zwei Argumenten auch mittels `if`
-  ausdrücken: `(or a b)` entspricht (fast) `(if a b)` (denn: was
-  liefern die beiden Formen, wenn `a` _falsy_ ist?)
+  implementieren.
 
 * `(hand [:kreuz 2])` liefert `[:kreuz 2]`, falls diese Karte in der
   Menge `hand` ist (der Spieler also mit dieser Karte eröffnen
@@ -1180,6 +1198,8 @@ Aber jetzt zum Code:
   Leerer-Tisch-Fall).
 
 Fertig.
+
+__Aufgabe__: Könnte man das `if-let` durch ein `or` ersetzen?
 
 [1] https://de.wikipedia.org/wiki/Currying  
 [2] https://practicalli.github.io/clojure/thinking-functionally/partial-functions.html  
