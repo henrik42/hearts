@@ -1079,29 +1079,30 @@ Schlüssel.
   Werten belegen, aber man bekommt zumindest beim Lesen eine Ahnung
   davon, was der Code wohl tuen wird bzw. tuen soll.
 
-  Aber __positional parameters__ habe auch ihre Stärken. In der
+  Aber __positional parameters__ haben auch ihre Stärken. In der
   Funktionalen Programmierung und auch in Clojure benutzt man
-  "partielle Funktionsauswertung" (sowas ähnliches wie __currying__ [1, 2];
-  z.B. `(partial str "LOG:")`), um aus Funktionen neue Funktionen zu
-  erzeugen, deren "ersten n" Parameter schon mit Argumenten besetzt
-  sind. Aus diesem Grund verwenden die Funktionen, die
-  in `clojure.core` geliefert werden, wohl alle __positional parameter__,
-  damit man sie eben zusammen mit `partial` verwenden kann. Außerdem ist die Gefahr der
-  Verwechslung bei 1 oder 2 Parametern noch nicht so groß wie bei 4 oder 5.
+  "partielle Funktionsauswertung" (sowas ähnliches wie __currying__
+  [1, 2]; z.B. `(partial str "LOG:")`), um aus Funktionen neue
+  Funktionen zu erzeugen, deren "ersten n" Parameter schon mit
+  Argumenten besetzt sind. Aus diesem Grund verwenden die Funktionen,
+  die in `clojure.core` geliefert werden, wohl alle __positional
+  parameter__, damit man sie eben zusammen mit `partial` verwenden
+  kann. Außerdem ist die Gefahr der Verwechslung bei 1 oder 2
+  Parametern noch nicht so groß wie bei 4 oder 5.
 
 Aber jetzt zum Code:
 
 * `hand` ist eine Menge von Karten-Vektoren (also die Karten, die der
   legende Spieler auf der Hand hat) und `tisch` ist eine Liste/Sequenz
-  von "in diese Reihenfolge auf den Tisch gelegten Karten" (eine Map
-  mit `:spieler` und `:karte`).
+  von "bisher in diese Reihenfolge auf den Tisch gelegten Karten"
+  (eine Map mit `:spieler` und `:karte`).
 
 * `if` wertet das erste Argument aus und falls dieses _truthy_ ist,
   liefert `if` als Ergebnis das Ergebnis der Auswertung des zweiten
   Arguments ("then-Fall"). Ansonsten liefert `if` das Ergebnis der
   Auswertung des dritten Elements ("else"-Fall). Das dritte Argument
   ist __optional__. Falls es nicht angegeben ist, entspricht das dem
-  Wert `nil`. Es werden als immer nur jene zwei Argumente von `if`
+  Wert `nil`. Es werden also immer nur jene zwei Argumente von `if`
   ausgewertet, die nötig sind, um das Ergebnis liefern/berechnen zu
   können.
 
@@ -1109,7 +1110,7 @@ Aber jetzt zum Code:
   auch als leer). Wenn der Tisch noch leer ist, muss ja entweder mit
   der Kreuz-2 eröffnet werden oder es kann eine beliebige Karte gelegt
   werden. Insbesondere braucht zu Beginn, wenn der Tisch noch leer
-  ist, keine Farbe bedient zu werden.
+  ist, keine Farbe __bedient__ zu werden.
 
 * `or` (ein Makro) liefert das erste seiner n (ausgewerteten)
   __Argumente__(!!!), das _truthy_ ist. Die Argumente werden der Reihe
@@ -1121,11 +1122,13 @@ Aber jetzt zum Code:
   falls alle "links daneben stehenden Argument" _falsy_ sind. Mit
   dieser Auswertungssemantik kann man z.B. auch `null`-Checks
   implementieren. Man kann `or` mit zwei Argumenten auch mittels `if`
-  ausdrücken: `(or a b)` entspricht `(if a b)`.
+  ausdrücken: `(or a b)` entspricht (fast) `(if a b)` (denn: was
+  liefern die beiden Formen, wenn `a` _falsy_ ist?)
 
 * `(hand [:kreuz 2])` liefert `[:kreuz 2]`, falls diese Karte in der
-  Menge `hand` ist und `(-> hand shuffle first)` liefert die erste
-  Karte der "gemischten Hand" --- also eine zufällig aus der Hand
+  Menge `hand` ist (der Spieler also mit dieser Karte eröffnen
+  __muss__) und `(-> hand shuffle first)` liefert die erste Karte der
+  "gemischten Hand" --- also eine __beliebige__, zufällig aus der Hand
   gewählten Karte.
 
   An dieser Stelle merkt man, dass unsere Spieler nicht sonderlich
@@ -1142,18 +1145,20 @@ Aber jetzt zum Code:
   Der "then"-Zweig für den leeren Tisch liefert also entweder die
   Kreuz-2 oder eine beliebige Karte des eröffnenden Spielers.
 
-* `if-let` ist eine Kombination aus `let` und `if`: mit `let` wird in
-  lokaler Namensraum aufgemacht, in dem Werte an Namen gebunden
-  werden. Diese Name-Wert-Paare stehen in einem Vektor (binding
-  vector). Ein `if-let` hat immer genau ein Name-Wert-Paar.
+* `if-let` ist eine Kombination aus `let` und `if`: mit `let` wird ein
+  __lokaler__ (geschachtelter; _nested_) __Namensraum__ aufgemacht, in
+  dem Werte an Namen gebunden werden. Diese Name-Wert-Paare stehen in
+  einem Vektor (_binding vector_). Ein `if-let` hat immer genau ein
+  Name-Wert-Paar.
 
-  Der Wert-Ausdruck/Form wird ausgewertet und __falls__ er _truthy_
-  ist, wird er an den Namen gebunden und das `if-let`-Ergebnis ist der
-  Wert des folgenden "then"-Ausdrucks/Zweig.
+  Der Wert-Ausdruck/Form hinter dem lokalen Namen wird ausgewertet und
+  __falls__ er _truthy_ ist, wird er an den __Namen__ __gebunden__ und
+  das `if-let`-Ergebnis ist der Wert des folgenden
+  "then"-Ausdrucks/Zweig. In diesem Zweig kann man über den lokalen
+  Namen auch auf den zuvor gebundenen Wert zugreifen.
 
   Andernfalls wird der Namen __nicht__ gebunden und das
-  `if-let`-Ergebnis
-
+  `if-let`-Ergebnis ergibt sich aus dem Wert des "else"-Zweiges.
 
 [1] https://de.wikipedia.org/wiki/Currying  
 [2] https://practicalli.github.io/clojure/thinking-functionally/partial-functions.html  
