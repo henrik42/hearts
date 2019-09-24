@@ -1033,14 +1033,16 @@ Spieler zu Spielbeginn" repräsentiert.
 `legt` liefert die Karte, die ein Spieler auf den Tisch legt, wenn er
 an der Reihe ist. `legt` ist eine Arity-1-Funktion, die als
 __einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
-`:tisch` erwartet.
+`:tisch` erwartet. Die inhaltliche Zuordnung der Argument-Teil-Werte
+zu den Namen in der Funktion erfolgt über die (benannten) Schlüssel.
 
-  Wir hätten die Funktion auch als Ariry-2-Funktion mit `[hand tisch]`-Parametern
+  Wir hätten die Funktion auch als Arity-2-Funktion mit `[hand tisch]`-Parametern
   implementieren können. In diesem Fall
   würde man von __positional__ __parameters__ sprechen. D.h. die
   Zuordnung der __Argumente__ zu den formalen __Parametern__ der
   Funktion erfolgt aufgrund der __Reihenfolge__, in der
   die __Argumente__ __angegeben__ sind. Also z.B. `(legt <hand> <tisch>)`.
+  
   Das hat aber den Nachteil, dass man an der Aufrufstelle
   nicht direkt sieht, dass das erste Argument "die Hand" ist bzw. sein
   muss und das zweite Argument "der Tisch". Und da Clojure aufgrund
@@ -1062,19 +1064,88 @@ __einziges__ __Argument__ eine __Map__ mit den Schlüsseln `:hand` und
   Frage: was macht der folgende Aufruf? `AdressenService.verlegeBeginn(1, 911, null, true, null)`.
   Und hätte es nicht `AdressenService.verlegeBeginn(911, 1, null, null, true)`
   heißen müssen? Wer weiß. Der Compiler hilft eben nur
-  bedingt. Natürlich kann man auf __benannt__ Parameter mit falschen
+  bedingt. Natürlich kann man auch __benannt__ Parameter mit falschen
   Werten belegen, aber man bekommt zumindest beim Lesen eine Ahnung
   davon, was der Code wohl tuen wird bzw. tuen soll.
 
   Aber __positional parameters__ habe auch ihre Stärken. In der
   Funktionalen Programmierung und auch in Clojure benutzt man
-  "partielle Funktionsauswertung" (sowas ähnliches wie __currying__;
+  "partielle Funktionsauswertung" (sowas ähnliches wie __currying__ [1, 2];
   z.B. `(partial str "LOG:")`), um aus Funktionen neue Funktionen zu
   erzeugen, deren "ersten n" Parameter schon mit Argumenten besetzt
   sind. Aus diesem Grund verwenden die Funktionen, die
   in `clojure.core` geliefert werden, wohl alle __positional parameter__,
-  damit man sich eben zusammen mit `partial` verwenden kann. Außerdem ist die Gefahr der
+  damit man sie eben zusammen mit `partial` verwenden kann. Außerdem ist die Gefahr der
   Verwechslung bei 1 oder 2 Parametern noch nicht so groß wie bei 4 oder 5.
+
+Aber jetzt zum Code:
+
+* `hand` ist eine Menge von Karten-Vektoren (also die Karten, die der
+  legende Spieler auf der Hand hat) und `tisch` ist eine Liste/Sequenz
+  von "in diese Reihenfolge auf den Tisch gelegten Karten" (eine Map
+  mit `:spieler` und `:karte`).
+
+* `if` wertet das erste Argument aus und falls dieses _truthy_ ist,
+  liefert `if` als Ergebnis das Ergebnis der Auswertung des zweiten
+  Arguments ("then-Fall"). Ansonsten liefert `if` das Ergebnis der
+  Auswertung des dritten Elements ("else"-Fall). Das dritte Argument
+  ist __optional__. Falls es nicht angegeben ist, entspricht das dem
+  Wert `nil`. Es werden als immer nur jene zwei Argumente von `if`
+  ausgewertet, die nötig sind, um das Ergebnis liefern/berechnen zu
+  können.
+
+* `empty?` liefert _truthy_, falls das Argument "leer ist" (`nil` gilt
+  auch als leer). Wenn der Tisch noch leer ist, muss ja entweder mit
+  der Kreuz-2 eröffnet werden oder es kann eine beliebige Karte gelegt
+  werden. Insbesondere braucht zu Beginn, wenn der Tisch noch leer
+  ist, keine Farbe bedient zu werden.
+
+* `or` (ein Makro) liefert das erste seiner n (ausgewerteten)
+  __Argumente__(!!!), das _truthy_ ist. Die Argumente werden der Reihe
+  nach ausgewertet, bis ein _truthy_ Wert vorliegt und dieser wird
+  dann geliefert. Nochmal zu Erinnerung: die "normale" Auswertung
+  läuft so an, dass __erst__ __alle__ Argumente/Elemente einer Liste
+  ausgewertet werden und __dann__ wird der Funktor mit eben diesen
+  Werten aufgerufen. Bei `or` soll aber die Auswertung nur erfolgen,
+  falls alle "links daneben stehenden Argument" _falsy_ sind. Mit
+  dieser Auswertungssemantik kann man z.B. auch `null`-Checks
+  implementieren. Man kann `or` mit zwei Argumenten auch mittels `if`
+  ausdrücken: `(or a b)` entspricht `(if a b)`.
+
+* `(hand [:kreuz 2])` liefert `[:kreuz 2]`, falls diese Karte in der
+  Menge `hand` ist und `(-> hand shuffle first)` liefert die erste
+  Karte der "gemischten Hand" --- also eine zufällig aus der Hand
+  gewählten Karte.
+
+  An dieser Stelle merkt man, dass unsere Spieler nicht sonderlich
+  "intelligent" handeln. Denn diese "zufällige Legestrategie" ist
+  suboptimal. Falls es dir Spaß macht, kannst du an dieser Stelle ja
+  eine "schlauere" Strategie implementieren.
+
+  Ein "echter" (d.h. menschlicher) Spieler würde auf alle Fälle auch
+  die bisherigen Stiche aller Spieler (nicht nur der eigenen!) in
+  seine Entscheidung einbeziehen, so dass die Funktion wohl eher als
+  `(defn legt [{:keys [hand tisch stiche-aller-spieler]}] ...)`
+  definiert sein sollte.
+
+  Der "then"-Zweig für den leeren Tisch liefert also entweder die
+  Kreuz-2 oder eine beliebige Karte des eröffnenden Spielers.
+
+* `if-let` ist eine Kombination aus `let` und `if`: mit `let` wird in
+  lokaler Namensraum aufgemacht, in dem Werte an Namen gebunden
+  werden. Diese Name-Wert-Paare stehen in einem Vektor (binding
+  vector). Ein `if-let` hat immer genau ein Name-Wert-Paar.
+
+  Der Wert-Ausdruck/Form wird ausgewertet und __falls__ er _truthy_
+  ist, wird er an den Namen gebunden und das `if-let`-Ergebnis ist der
+  Wert des folgenden "then"-Ausdrucks/Zweig.
+
+  Andernfalls wird der Namen __nicht__ gebunden und das
+  `if-let`-Ergebnis
+
+
+[1] https://de.wikipedia.org/wiki/Currying  
+[2] https://practicalli.github.io/clojure/thinking-functionally/partial-functions.html  
 
 ---
 
