@@ -279,7 +279,7 @@ brauchen wir hier nicht.
 
 ---
 
-`def` (`clojure.core/def`; auch ein Makro) bindet einen __Wert__ (hier
+`def` (`clojure.core/def` [3]; auch ein Makro) bindet einen __Wert__ (hier
 einen String) an einen __Namen__ (hier durch Symbol `hr` angegeben) im
 __aktuellen__ __Namensraum__. Die Form `hr` wird also in diesem Fall
 __nicht__ zu ihrem gebundenen Wert __ausgewertet__ (vgl. oben),
@@ -301,8 +301,19 @@ aber völlig anders, aber das soll hier nicht im Detail erläutert
 werden). Diese Bindungen sind also eher wie `static final` Felder in
 Java zu verwenden (aber wie schon gesagt: es ist völlig anders!).
 
+Wenn man die `def` Zeile in der REPL eingegeben hat, kann man sich
+anschließend den gebundenen Wert ausgeben lassen:
+
+	hearts.core=> hr
+	"\n------------------------------------\n"
+	hearts.core=> (type hr)
+	java.lang.String
+	hearts.core=> (.getClass hr)
+	java.lang.String
+
 [1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html  
 [2] https://clojure.org/reference/java_interop  
+[3] https://clojuredocs.org/clojure.core/def  
 
 ---
 
