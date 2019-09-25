@@ -340,6 +340,13 @@ Interpreter__ sondern einen __Compiler__, der zur __Laufzeit__ läuft;
 also __just in time__. Es gibt aber auch __ahead of time__ (AOT), wie
 bei Java, um die Startup-Zeit von Clojure-Programmen zu verkürzen.
 
+__REPL__:
+
+	hearts.core=> first
+	#object[clojure.core$first__4339 0x78997c33 "clojure.core$first__4339@78997c33"]
+	hearts.core=> (type first)
+	clojure.core$first__4339
+
 Wir führen hier also einfach nur einen __Alias__ für eine Funktion ein
 (denn wir binden ja einen __zweiten Namen__ an __denselben(!!!!)__
 Wert), weil `farbe` Teil unser Domänensprache ist (anders als `first`,
@@ -348,10 +355,19 @@ keine besondere Bedeutung hat). Das Gleiche machen wir auch für `bild`
 mit der Funktion `clojure.core/second`. Warum wir diese Aliase
 einführen, erläutern wir weiter unten.
 
-Mit `first` benennen wir `clojure.core/first` ohne den Namensraum
-`clojure.core` angeben zu müssen. Das liegt daran, dass der Namenraum
-`clojure.core` via `ns` "importiert" wurde und damit zur Verfügung
-steht (mehr sagen wir hier nicht zu Namensräumen).
+__REPL__:
+
+	hearts.core=> farbe
+	#object[clojure.core$first__4339 0x78997c33 "clojure.core$first__4339@78997c33"]
+	hearts.core=> first
+	#object[clojure.core$first__4339 0x78997c33 "clojure.core$first__4339@78997c33"]
+	hearts.core=> (identical? farbe first)
+	true
+
+Mit `first` referenzieren wir `clojure.core/first` __ohne__ den
+Namensraum `clojure.core` angeben zu müssen. Das liegt daran, dass der
+Namenraum `clojure.core` via `ns` "importiert" wurde und damit zur
+Verfügung steht (mehr sagen wir hier nicht zu Namensräumen).
 
 ---
 
