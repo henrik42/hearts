@@ -53,6 +53,8 @@ das führt dann wiederum zu Syntaxfehlern.
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
 Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
+Einführungen in Clojure findest du natürlich auch massenhaft im NETZ [12].
+
 [1] https://de.wikipedia.org/wiki/Hearts  
 [2] https://clojure.org/  
 [3] https://kiosk.entwickler.de/java-magazin/java-magazin-9-2019/hearts-ist-trumpf/  
@@ -63,7 +65,8 @@ Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 [8] https://github.com/henrik42/solo  
 [9] https://clojurescript.io/  
 [10] https://clojurescript.org/  
-[11] https://repl.it/languages/clojure
+[11] https://repl.it/languages/clojure  
+[12] http://hitchhikersclojure.com/blog/hitchhikers-guide-to-clojure/  
 
 -----------------------------------------------------------------------
 
@@ -196,7 +199,7 @@ __Werten__. Das ist ein riesiger Unterschied und wie so ein
 funktionales Programm "sich anfühlt", wird hoffentlich durch den
 folgenden Text deutlich.
 
-Clojure-Code ist in _Namespaces_ (__Namensräumen__) organisiert
+Clojure-Code ist in _Namespaces_ (__Namensräumen__ [6]) organisiert
 (ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
 einer __Datei__. Diese Datei muss in einem __Verzeichnis__ liegen,
 dessen Name zum Namensraum "passt". Der Namesraum `hearts.core` findet
@@ -210,7 +213,7 @@ als Mittel um __Namenskollisionen__ zu vermeiden und um die
 __Sichtbarkeit__ einzuschränken (durch "private Namen").
 
 Clojure-Code (d.h. eine Clojure-Datei) besteht i.d.R. aus Folgen von
-sog. _S-Expressions_. Dabei handelt es sich um __geschachtelte__
+sog. _S-Expressions_ [7]. Dabei handelt es sich um __geschachtelte__
 (hierarchische) Klammerausdrücke (__Listen__).
 
 Beispiel: `(str "Hello," "world")`
@@ -219,7 +222,7 @@ Die __Elemente__ dieser Listen sind _Forms_ (__Formen__). Es gibt eine
 ganze Reihe von Formen (Symbole, _Keywords_, Zahlen, Listen, Vektoren,
 Strings, etc.), von denen wir weiter unten einige kennenlernen
 werden. Das ist im Prinzip alles, was man zur __Syntax__ von Clojure
-sagen kann.
+sagen kann [8].
 
 Die folgende Liste (erste Codezeile von `core.clj`) hat als erstes
 Element das Symbol `ns` und als zweites Element das Symbol
@@ -228,7 +231,7 @@ ausführbares" (__Funktor__; z.B. eine Funktion oder ein Makro) und die
 folgenden Elemente bilden die __Argumente__ des Funktors.
 
 Die Bedeutung (__Sematik__) der Formen ergibt sich durch Clojures
-_Auswertungs-Regeln_. Die meisten Formen "werten zu sich selbst
+_Auswertungs-Regeln_ [9]. Die meisten Formen "werten zu sich selbst
 aus". Das heißt, dass die __Auswertung__ der __Form__ `2` (Syntax) die
 __Zahl__ 2 (Semantik; vom Typ `java.lang.Integer`) ergibt.
 
@@ -241,15 +244,15 @@ Listen sein; __rekursive Auswertung__), wobei das erste Element zu
 einem __Funktor__ auswerten __muss__, und der Anwendung des Funktors
 auf die restlichen (Auswertungs-)Werte (__Argumente__).
 
-Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel
-haben. Und es gibt auch Funktoren, die __Seiteneffekte__ haben, also
-im funktionalen Sinn nicht __pure__ sind.
+Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel haben
+[10]. Und es gibt auch Funktoren, die __Seiteneffekte__ haben, also im
+funktionalen Sinn nicht __pure__ sind.
 
 Da Listen sowohl für "ausführbaren Code" als auch als Datenstruktur
-verwendet werden (sog. Homoiconicity; "code is data is code"), fällt
-es Clojure-Neulingen zu Beginn häufig schwer, zu erkennen, ob eine
-S-Expression/Form nun als "ausführbarer Code" oder als Daten-Wert
-gilt.
+verwendet werden (sog. Homoiconicity; "code is data is code"
+[12, 11]), fällt es Clojure-Neulingen zu Beginn häufig schwer, zu
+erkennen, ob eine S-Expression/Form nun als "ausführbarer Code" oder
+als Daten-Wert gilt.
 
 Mit `ns` wird das Makro (mehr zu Makros weiter unten)
 `clojure.core/ns` benannt. Dieses Makro sorgt dafür, dass der
@@ -260,8 +263,15 @@ brauchen wir hier nicht.
 [1] https://de.wikipedia.org/wiki/Funktionale_Programmierung  
 [2] https://de.wikipedia.org/wiki/Objektorientierte_Programmierung  
 [3] https://de.wikipedia.org/wiki/Datenkapselung_(Programmierung)  
-[4] https://de.wikipedia.org/wiki/Closure_(Funktion)
-[5] https://de.wikipedia.org/wiki/Imperative_Programmierung
+[4] https://de.wikipedia.org/wiki/Closure_(Funktion)  
+[5] https://de.wikipedia.org/wiki/Imperative_Programmierung  
+[6] https://clojure.org/reference/namespaces  
+[7] https://en.wikipedia.org/wiki/S-expression  
+[8] https://clojure.org/guides/learn/syntax  
+[9] https://clojure.org/reference/evaluation  
+[10] https://clojure.org/reference/special_forms  
+[11] http://blog.muhuk.com/2014/09/28/is_clojure_homoiconic.html#.XYuwxHtCRhE  
+[12] https://de.wikipedia.org/wiki/Homoikonizit%C3%A4t  
 
 ---
 
