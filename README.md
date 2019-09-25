@@ -176,13 +176,24 @@ auf. Es wird nichts ausgelassen.
 
 Los geht's.
 
-Clojure ist eine __funktionale__ __Programmiersprache__. Was das genau
-bedeutet, kann ich leider nicht aufschreiben. Erwähnt werden sollte
-aber, dass funktionale Programmiersprachen durchaus auch Aspekte der
-__Objekt-orientierten__ __Programmiersprachen__ enthalten. Die beiden
-also kein echter Gegensatz sind. Somit sind "das Gegenteil" zu
-funktionalen Programmiersprachen am ehesten die __imperativen__
-Programmiersprachen.
+Clojure ist eine __funktionale__ __Programmiersprache__ [1]. Was das
+genau bedeutet, kann ich leider nicht aufschreiben. Erwähnt werden
+sollte aber, dass funktionale Programmiersprachen durchaus auch
+Aspekte der __Objekt-orientierten__ __Programmiersprachen__ [2]
+enthalten (z.B. Datenkapselung [3]), nur tut sie das mit anderen
+Mitteln [4]. Die beiden sind also kein echter Gegensatz .
+
+Somit sind "das Gegenteil" zu funktionalen Programmiersprachen am
+ehesten die __imperativen__ Programmiersprachen [5]. In dem
+Wikiartikel wird zwar gesagt, dass die "deklarativen
+Programmiersprachen" (wie PROLOG) der Gegensatz zu den imperativen
+Programmiersprachen seien. Für mich entscheidend ist aber, dass die
+imperativen Programmiersprachen im wesentlichen auf Anweisungen
+(_Statements_) und __Zustandsänderungen__ (also die Änderung von
+Variablen bzw. __Speicherstellen__; von Neumann Rechner). Die
+funktionale Programmierung basiert auf __Namen__ und __Werten__. Das
+ist ein riesiger Unterschied und wie so ein funktionales Programm
+"sich anfühlt", wird hoffentlich durch den folgenden Text deutlich.
 
 Clojure-Code ist in _Namespaces_ (__Namensräumen__) organisiert
 (ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
@@ -244,6 +255,14 @@ Mit `ns` wird das Makro (mehr zu Makros weiter unten)
 angegebene Namensraum "aufgemacht" wird. Das Makro kann noch eine
 Menge mehr, wie z.B. andere Namensräume "importieren", aber das
 brauchen wir hier nicht.
+
+[1] https://de.wikipedia.org/wiki/Funktionale_Programmierung  
+[2] https://de.wikipedia.org/wiki/Objektorientierte_Programmierung  
+[3] https://de.wikipedia.org/wiki/Datenkapselung_(Programmierung)  
+[4] https://de.wikipedia.org/wiki/Closure_(Funktion)
+[5] https://de.wikipedia.org/wiki/Imperative_Programmierung
+
+---
 
 	(ns hearts.core)
 
