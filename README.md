@@ -190,10 +190,11 @@ Programmiersprachen" (wie PROLOG) der Gegensatz zu den imperativen
 Programmiersprachen seien. Für mich entscheidend ist aber, dass die
 imperativen Programmiersprachen im wesentlichen auf Anweisungen
 (_Statements_) und __Zustandsänderungen__ (also die Änderung von
-Variablen bzw. __Speicherstellen__; von Neumann Rechner). Die
-funktionale Programmierung basiert auf __Namen__ und __Werten__. Das
-ist ein riesiger Unterschied und wie so ein funktionales Programm
-"sich anfühlt", wird hoffentlich durch den folgenden Text deutlich.
+Variablen bzw. __Speicherstellen__; von Neumann Rechner) basieren. Die
+funktionale Programmierung basiert auf __Funktionen__, __Namen__ und
+__Werten__. Das ist ein riesiger Unterschied und wie so ein
+funktionales Programm "sich anfühlt", wird hoffentlich durch den
+folgenden Text deutlich.
 
 Clojure-Code ist in _Namespaces_ (__Namensräumen__) organisiert
 (ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
