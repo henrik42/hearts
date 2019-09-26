@@ -377,29 +377,44 @@ Verfügung steht (mehr sagen wir hier nicht zu Namensräumen).
 ---
 
 Wir binden einen Vektor mit den Vornamen unserer Spieler an den Namen
-`spieler`. Die Reihenfolge soll beschreiben, in welcher Reihenfolge
-unsere Spieler an dem gedachten, runden Tisch sitzen. Dabei ist
-unerheblich, welcher Spieler an welcher Position im Vektor steht. Wie
-schon gesagt: es ist ein gedachter Kreis.
+`spieler`. Die Reihenfolge der Elemente im Vektor soll beschreiben, in
+welcher Reihenfolge unsere Spieler an dem gedachten, runden Tisch
+sitzen. Dabei ist unerheblich, welcher Spieler an welcher Position im
+Vektor steht. Wie schon gesagt: es ist ein gedachter Kreis.
 
 In Clojure können Vektoren, Listen, Maps und Sets (und Reguläre
-Ausdrücke) direkt als __Literal__ aufgeschrieben werden (und man kann
-weitere eigene Literaltypen definieren -- sog. _tagged literals_). Die
-Elemente dieser _Collections_ brauchen nicht vom gleichen Typ zu sein
-und die ganzen Datenstrukturen sind __immutable__ (in Clojure-Sprech
-_persistent data structures_). D.h. wir können ihren Wert(!!)
-d.h. Inhalt/Zustand nicht ändern. Daher können wir sie auch ohne
-Gefahr mit anderen teilen, weil sie niemand _hinterrücks_ ändern kann
-(man braucht also keine "Clone" oder "defensive Kopien" und keine
-Synchronisation im Race-Conditions zu unterbinden).
+Ausdrücke) direkt als __Literal__ [2] aufgeschrieben werden (und man
+kann weitere eigene Literaltypen definieren -- sog. _tagged literals_
+[1]). Die Elemente dieser _Collections_ [4] brauchen nicht vom
+gleichen Typ zu sein und die ganzen Datenstrukturen sind __immutable__
+(in Clojure-Sprech _persistent data structures_ [3]). D.h. wir können
+ihren Wert(!!)  d.h. Inhalt/Zustand nicht ändern. Daher können wir sie
+auch ohne Gefahr mit anderen teilen, weil sie niemand _hinterrücks_
+ändern kann (man braucht also keine "Clone" oder "defensive Kopien"
+[5] und keine Synchronisation um Race-Conditions [6] zu unterbinden).
 
 Für die Vornamen unserer Spieler verwenden wir Clojure __Keywords__
-(natürlich ebenfalls immutable, genau wie die Java Datentypen in
+[7] (natürlich ebenfalls immutable, genau wie die Java Datentypen in
 `java.lang`!). Keywords verhalten sich so ähnlich die Java Enums (sie
 sind z.B. "identisch" und nicht nur "gleich"), nur dass man sie
 nirgends vorab definieren muss/kann (man kann sie also auch nicht
 enumerieren/aufzählen). Man schreibt sie einfach hin (und kann sich
 dabei auch verschreiben, ohne dass es der Compiler merkt ....)
+
+__REPL__:
+
+	hearts.core=> spieler
+	[:gabi :peter :paul :sonja]
+	hearts.core=> (type spieler)
+	clojure.lang.PersistentVector
+
+[1] https://clojure.org/reference/reader#tagged_literals  
+[2] https://clojure.org/reference/reader#_literals  
+[3] https://en.wikipedia.org/wiki/Persistent_data_structure#Clojure  
+[4] https://clojure.org/reference/data_structures#Collections  
+[5] http://www.javapractices.com/topic/TopicAction.do?Id=15  
+[6] https://www.baeldung.com/java-synchronized  
+[7] https://clojure.org/reference/data_structures#Keywords  
 
 ---
 
