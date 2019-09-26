@@ -478,15 +478,23 @@ verwendet:
   __Nochmal__: `->>` arbeitet/wirkt auf den __Programmcode__ (nicht
   aber auf den __Programmtext__, sondern auf den geparsten
   Programmtext, der als __Datenstruktur/AST__ [3] vorliegt!) und
-  __formt__ __diesen__ __um__. Das ist so ähnlich wie "Codegenerierung
-  zur Laufzeit" (und auch ein Grund dafür, dass man für Clojure keine
-  "vorgeschalteten Codegeneratoren" braucht. Man programmiert sich
-  seine "Codegenerierung" einfach mit Markos selber).
+  __formt__ __diesen__ __um__ (also den AST, der als
+  Listen-Datenstruktur vorliegt). Das ist so ähnlich wie
+  "Codegenerierung zur Laufzeit".
 
   Das nennt man __Meta-Programming__ (`->>`ist auch keine Funktion,
   sondern ein __Makro__ [2]). Makros sind normale Clojure Funktionen,
   die nur eben von Clojure in die __Compilephase__ eingebunden werden
-  und somit das zu kompilierende Programm beliebig umstellen können.
+  und somit das zu kompilierende Programm beliebig umstellen
+  können.
+
+  Das ist auch ein Grund dafür, dass man für Clojure keine
+  "vorgeschalteten Codegeneratoren" braucht. Man programmiert sich
+  seine "Codegenerierung" einfach mit Markos selber [5, 6]. Und zwar
+  in der Programmiersprache, mit der man sowieso schon unterwegs
+  ist. Keine Template-Sprache oder irgendein anderer
+  "Medienbruch". Makros sind also sowas wie eine __interne DSL__ [4]
+  für Codegenerierung.
 
   `->>` erlaubt es, den Code in der __Reihenfolge__
   __hinzuschreiben__, in der er __ausgeführt__ wird: die
@@ -499,7 +507,7 @@ verwendet:
 
   Das folgende Beispiel zeigt, wie man sich ausgeben lassen kann, zu
   welchem "Zielausdruck" ein Makro bzw. eine __Makro-Expansion__ (also
-  die __Anwenung__ des Makros auf den Programmcode) führt. Das kann
+  die __Anwendung__ des Makros auf den Programmcode) führt. Das kann
   man auch brauchen, wenn man selber mal ein Makro schreibt.
 
   __REPL:__
@@ -530,6 +538,12 @@ verwendet:
   wäre. `->` tut uns den Gefallen, den Code so umzuformen, dass der
   Vektor als Rückgabewert der anonymen Funktion gilt.
 
+  __REPL:__
+
+		hearts.core=> (clojure.walk/macroexpand-all '#([%2 %1]))
+		(fn* [p1__1444# p2__1443#] ([p2__1443# p1__1444#]))
+		hearts.core=> (clojure.walk/macroexpand-all '#(-> [%2 %1]))
+		(fn* [p1__1448# p2__1447#] [p2__1447# p1__1448#])
 
 * `map-indexed` ist eine HOF (higher order function): sie erwartet als
   erstes Argument eine __Funktion__ und als zweites eine Sequenz. Sie
@@ -569,6 +583,9 @@ Wie man auf diese Map zugreift, sehen wir weiter unten.
 [1] https://clojure.org/guides/threading_macros  
 [2] http://clojure-doc.org/articles/language/macros.html  
 [3] https://de.wikipedia.org/wiki/Syntaxbaum#Abstrakte_Syntaxb%C3%A4ume  
+[4] https://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache#Interne_bzw._eingebettete_DSLs_(internal_DSL)  
+[5] https://stackoverflow.com/a/1628255/10546451  
+[6] https://clojureverse.org/t/why-is-the-macro-systems-in-lisps-considered-so-valuable/2622  
 
 ---
 
