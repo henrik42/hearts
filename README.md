@@ -539,7 +539,7 @@ verwendet:
   mehrere Namen binden; vgl. oben). In diesem Sinne __besitzt__ eine
   Funktion an sich __keinen__ Namen.
 
-  `#(-> [%2 %1])` ist eine Funktion mit zwei Parameter, die einen
+  `#(-> [%2 %1])` ist eine Funktion mit zwei Parametern, die einen
   Vektor liefert, dessen erstes Element das zweite Argument der
   Funktion ist und dessen zweites Element das erste Argument der
   Funktion ist. In Clojure gibt es kein
@@ -558,8 +558,8 @@ verwendet:
 		hearts.core=> (clojure.walk/macroexpand-all '#(-> [%2 %1]))
 		(fn* [p1__1448# p2__1447#] [p2__1447# p1__1448#])
 
-* `map-indexed` ist eine HOF (_higher order function_): sie erwartet
-  als erstes Argument eine __Funktion__ und als zweites eine
+* `map-indexed` ist eine HOF (_higher order function_) [7]: sie
+  erwartet als erstes Argument eine __Funktion__ und als zweites eine
   Sequenz. Sie wendet dann die Funktion der Reihe nach auf die
   Elemente der Sequenz an. Dabei ruft sie die übergebene Funktion mit
   jeweils zwei Argumenten auf: das erste Argument ist der 0-basierte
@@ -590,6 +590,8 @@ verwendet:
 
 		hearts.core=> (into {} [[:a "A"] [:b "B"]])
 		{:a "A", :b "B"}
+		hearts.core=> bild->index
+		{7 5, 4 2, :koenig 11, 6 4, 3 1, :dame 10, 2 0, :ass 12, 9 7, 5 3, 10 8, :bube 9, 8 6}
 
 Die ganze Verarbeitung nimmt also `bilder`, macht eine Folge (in
 Clojure-Sprech _Sequence_) von 2-Tupeln [Bild, Bild-Position] daraus
@@ -604,6 +606,7 @@ Wie man auf diese Map zugreift, sehen wir weiter unten.
 [4] https://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache#Interne_bzw._eingebettete_DSLs_(internal_DSL)  
 [5] https://stackoverflow.com/a/1628255/10546451  
 [6] https://clojureverse.org/t/why-is-the-macro-systems-in-lisps-considered-so-valuable/2622  
+[7] https://de.wikipedia.org/wiki/Funktion_h%C3%B6herer_Ordnung  
 
 ---
 
