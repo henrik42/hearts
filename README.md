@@ -461,18 +461,27 @@ Bedeutung in Clojure.
 In dieser S-Expression werden eine Reihe weiterer Funktionen
 verwendet.
 
-* `->>` (_thread last_) nimmt das erste Element (hier `bilder`) und
-  fügt es an die letzte Argumentposition des zweiten Elements. Dadurch
-  entsteht in diesem Fall `(map-indexed #(-> [%2 %1]) bilder)` und
-  dann diesen Ausdruck/Form wieder an die letzte Argumentposition des
-  dritten Elements. Somit ergibt sich schließlich:
+* `->>` (_thread last_ [1]) nimmt das erste Element (hier `bilder`)
+  und fügt es an die __letzte__ __Argumentposition__ des zweiten
+  Elements. Dadurch entsteht in diesem Fall `(map-indexed #(->
+  [%2 %1]) bilder)` und dann diesen Ausdruck/Form wieder an die
+  __letzte__ __Argumentposition__ des dritten Elements. Somit ergibt
+  sich schließlich:
     
   `(into {} (map-indexed #(-> [%2 %1]) bilder))`  
 
-  Der Code wird also __umgestellt__, bevor er überhaupt
-  compiliert/ausgeführt/ausgewertet wird. Das nennt man
-  __Meta-Programming__ (`->>`ist auch keine Funktion, sondern ein
-  Makro).
+  Der Code wird also __umgestellt__, __bevor__ er überhaupt
+  compiliert/ausgeführt/ausgewertet wird.
+
+  __Nochmal__: `->>` arbeitet/wirkt auf dem __Programmcode__ (nicht
+  aber auf den __Programmtext__, sondern auf dem geparsten
+  Programmtext, der als __Datenstruktur/AST__ [3] vorliegt!) und formt
+  diesen um. Das ist so ähnlich wie "Codegenerierung zur Laufzeit".
+
+  Das nennt man __Meta-Programming__ (`->>`ist auch keine Funktion,
+  sondern ein __Makro__ [2]). Makros sind normale Clojure Funktionen,
+  die nur eben von Clojure in die __Compilephase__ eingebunden werden
+  und somit das zu kompilierende Programm beliebig umstellen können.
 
   `->>` erlaubt es, den Code in der __Reihenfolge__
   __hinzuschreiben__, in der er __ausgeführt__ wird: die
@@ -483,6 +492,10 @@ verwendet.
   __Umstellung__ __des__ __Codes__, bevor er an den Compiler gegeben
   wird.
 
+  __REPL:__
+
+		hearts.core=> (macroexpand-1 '(->> bilder (map-indexed #(-> [%2 %1])) (into {})))
+		(into {} (map-indexed (fn* [p1__1420# p2__1419#] (-> [p2__1419# p1__1420#])) bilder))
 
 * Mit `#(....)` wird eine Funktion definiert. Man sagt auch "anonyme
   Funktion", weil sie an keinen Namen gebunden wird. Die Benennung
@@ -540,6 +553,10 @@ und fügt diese als __&lt;Key,Value>__ in eine Map, die wir an den Namen
 `bild->index` binden.
 
 Wie man auf diese Map zugreift, sehen wir weiter unten.
+
+[1] https://clojure.org/guides/threading_macros  
+[2] http://clojure-doc.org/articles/language/macros.html  
+[3] https://de.wikipedia.org/wiki/Syntaxbaum#Abstrakte_Syntaxb%C3%A4ume  
 
 ---
 
