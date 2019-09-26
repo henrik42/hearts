@@ -660,7 +660,7 @@ __REPL:__
 	([x])
 	  Returns a number one greater than num. Does not auto-promote
 	  longs, will throw on overflow. See also: inc'
-	  nil
+	nil
     hearts.core=> (map inc [1 21 42])
 	(2 22 43)
 
@@ -714,7 +714,7 @@ __REPL:__
 
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
   __&lt;&lt;Farbe,Bild>,Punkte>__ Tupeln in eine Map
-  __&lt;Farbe,Bild>--><Punkte>__ zu überführen.
+  __&lt;Farbe,Bild>-->&lt;Punkte>__ zu überführen.
 
 [1] https://de.wikipedia.org/wiki/List_Comprehension  
 [2] https://clojure.org/guides/destructuring  
