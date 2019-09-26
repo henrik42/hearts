@@ -376,11 +376,12 @@ Verfügung steht (mehr sagen wir hier nicht zu Namensräumen).
 
 ---
 
-Wir binden einen Vektor mit den Vornamen unserer Spieler an den Namen
-`spieler`. Die Reihenfolge der Elemente im Vektor soll beschreiben, in
-welcher Reihenfolge unsere Spieler an dem gedachten, runden Tisch
-sitzen. Dabei ist unerheblich, welcher Spieler an welcher Position im
-Vektor steht. Wie schon gesagt: es ist ein gedachter Kreis.
+Wir binden einen Vektor [8] mit den Vornamen unserer Spieler an den
+Namen `spieler`. Die Reihenfolge der Elemente im Vektor soll
+beschreiben, in welcher Reihenfolge unsere Spieler an dem gedachten,
+runden Tisch sitzen. Dabei ist unerheblich, welcher Spieler an welcher
+Position im Vektor steht. Wie schon gesagt: es ist ein gedachter
+__Kreis__.
 
 In Clojure können Vektoren, Listen, Maps und Sets (und Reguläre
 Ausdrücke) direkt als __Literal__ [2] aufgeschrieben werden (und man
@@ -415,6 +416,7 @@ __REPL__:
 [5] http://www.javapractices.com/topic/TopicAction.do?Id=15  
 [6] https://www.baeldung.com/java-synchronized  
 [7] https://clojure.org/reference/data_structures#Keywords  
+[8] https://clojure.org/reference/data_structures#Vectors  
 
 ---
 
@@ -433,6 +435,15 @@ mehr; man kann sich erstmal eine Liste vorstellen) mit den Elementen
 Die Reihenfolge bzw. die Position der Bilder in der Liste bestimmt
 später, wenn es darum geht, wer einen Stich bekommt, welche Karte
 einen "höheren Rang hat" als die andere.
+
+__REPL:__
+
+	hearts.core=> bilder
+	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
+	hearts.core=> (type bilder)
+	clojure.lang.LazySeq
+	hearts.core=> (range 3 5)
+	(3 4)
 
 ---
 
