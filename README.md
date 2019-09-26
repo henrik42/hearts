@@ -459,10 +459,12 @@ beliebig gewählt, das `->` in dem Namen hat hier keine besondere
 Bedeutung in Clojure.
 
 In dieser S-Expression werden eine Reihe weiterer Funktionen
-verwendet.
+verwendet:
 
-* `->>` (_thread last_ [1]) nimmt das erste Element (hier `bilder`)
-  und fügt es an die __letzte__ __Argumentposition__ des zweiten
+
+* `->>` (sog. _thread last_) [1] nimmt das erste Element (hier
+  `bilder`) und fügt es an die __letzte__ (daher _last_; es gibt auch
+  _thread_ _first_ `->`) __Argumentposition__ des zweiten
   Elements. Dadurch entsteht in diesem Fall `(map-indexed #(->
   [%2 %1]) bilder)` und dann diesen Ausdruck/Form wieder an die
   __letzte__ __Argumentposition__ des dritten Elements. Somit ergibt
@@ -473,10 +475,13 @@ verwendet.
   Der Code wird also __umgestellt__, __bevor__ er überhaupt
   compiliert/ausgeführt/ausgewertet wird.
 
-  __Nochmal__: `->>` arbeitet/wirkt auf dem __Programmcode__ (nicht
-  aber auf den __Programmtext__, sondern auf dem geparsten
-  Programmtext, der als __Datenstruktur/AST__ [3] vorliegt!) und formt
-  diesen um. Das ist so ähnlich wie "Codegenerierung zur Laufzeit".
+  __Nochmal__: `->>` arbeitet/wirkt auf den __Programmcode__ (nicht
+  aber auf den __Programmtext__, sondern auf den geparsten
+  Programmtext, der als __Datenstruktur/AST__ [3] vorliegt!) und
+  __formt__ __diesen__ __um__. Das ist so ähnlich wie "Codegenerierung
+  zur Laufzeit" (und auch ein Grund dafür, dass man für Clojure keine
+  "vorgeschalteten Codegeneratoren" braucht. Man programmiert sich
+  seine "Codegenerierung" einfach mit Markos selber).
 
   Das nennt man __Meta-Programming__ (`->>`ist auch keine Funktion,
   sondern ein __Makro__ [2]). Makros sind normale Clojure Funktionen,
@@ -491,6 +496,11 @@ verwendet.
   nicht verändert -- es handelt sich wirklich nur um eine
   __Umstellung__ __des__ __Codes__, bevor er an den Compiler gegeben
   wird.
+
+  Das folgende Beispiel zeigt, wie man sich ausgeben lassen kann, zu
+  welchem "Zielausdruck" ein Makro bzw. eine __Makro-Expansion__ (also
+  die __Anwenung__ des Makros auf den Programmcode) führt. Das kann
+  man auch brauchen, wenn man selber mal ein Makro schreibt.
 
   __REPL:__
 
