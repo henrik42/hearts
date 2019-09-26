@@ -454,9 +454,22 @@ __REPL:__
 Anstatt später immer wieder die "Position" einer Karte in `bilder` zu
 ermitteln (also ihren __Rang__), erzeugen wir __einmalig__ eine
 Abbildung `bild->index` (eine `java.util.Map`) von den Bildern auf die
-jeweilige Position des Bilds in `bilder`. Der Name `bild->index` ist
-beliebig gewählt, das `->` in dem Namen hat hier keine besondere
-Bedeutung in Clojure.
+jeweilige Position des Bilds in `bilder`.
+
+__REPL:__
+
+	hearts.core=> (doc instance?)
+	-------------------------
+	clojure.core/instance?
+	([c x])
+	  Evaluates x and tests if it is an instance of the class
+		c. Returns true or false
+	nil
+	hearts.core=> (instance? java.util.Map bild->index)
+	true
+
+Der Name `bild->index` ist beliebig gewählt, das `->` in dem Namen hat
+hier keine besondere Bedeutung in Clojure.
 
 In dieser S-Expression werden eine Reihe weiterer Funktionen
 verwendet:
