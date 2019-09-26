@@ -545,15 +545,15 @@ verwendet:
 		hearts.core=> (clojure.walk/macroexpand-all '#(-> [%2 %1]))
 		(fn* [p1__1448# p2__1447#] [p2__1447# p1__1448#])
 
-* `map-indexed` ist eine HOF (higher order function): sie erwartet als
-  erstes Argument eine __Funktion__ und als zweites eine Sequenz. Sie
-  wendet dann die Funktion der Reihe nach auf die Elemente der Sequenz
-  an. Dabei ruft sie die übergebene Funktion mit jeweils zwei
-  Argumenten auf: das erste Argument ist der 0-basierte Index des
-  Elements der Sequenz (und dieser Index ist genau das, was wir als
-  "Position" benötigen; vgl. oben), das gerade verarbeitet wird und
-  das zweite Argument ist das Element selbst. Das Ergebnis von
-  `map-indexed` ist wiederum die Sequenz aus den
+* `map-indexed` ist eine HOF (_higher order function_): sie erwartet
+  als erstes Argument eine __Funktion__ und als zweites eine
+  Sequenz. Sie wendet dann die Funktion der Reihe nach auf die
+  Elemente der Sequenz an. Dabei ruft sie die übergebene Funktion mit
+  jeweils zwei Argumenten auf: das erste Argument ist der 0-basierte
+  Index des Elements der Sequenz (und dieser Index ist genau das, was
+  wir als "Position" benötigen; vgl. oben), das gerade verarbeitet
+  wird und das zweite Argument ist das Element selbst. Das Ergebnis
+  von `map-indexed` ist wiederum die Sequenz aus den
   Funktions-Aufruf-Ergebnissen. Beispiel: `(map-indexed str [1 2 3])`
   liefert `("01" "12" "23")` (`str` liefert den String/Konkatenation
   der Argumente). Wir verwenden aber `#(-> [%2 %1])` und erzeugen
@@ -567,11 +567,16 @@ verwendet:
   neuer Wert des gleichen Typen erzeugt und diese neue Struktur ist
   dann das Ergebnis von `into`. Bei `{}` handelt es sich um eine
   Map. Und wenn man einer Map 2-elementige Vektoren (2-Tupel) zufügt,
-  dann wird das jeweils erste Element als Schlüssel (Key) und das
-  jeweils zweite Element als Wert (Value) des Map-Entries
-  verwendet. Somit fügt `into` alle [Bild, Position]-Tupel als
-  __&lt;Key,Value>__ in die leere Map und liefert das Ergebnis als
+  dann wird das jeweils erste Element des 2-Tupels als __Schlüssel__
+  (Key) und das jeweils zweite Element als __Wert__ (Value) des
+  Map-Entries verwendet. Somit fügt `into` alle [Bild, Position]-Tupel
+  als __&lt;Key,Value>__ in die leere Map und liefert das Ergebnis als
   Rückgabewert.
+
+  __REPL:__
+
+		hearts.core=> (into {} [[:a "A"] [:b "B"]])
+		{:a "A", :b "B"}
 
 Die ganze Verarbeitung nimmt also `bilder`, macht eine Folge (in
 Clojure-Sprech _Sequence_) von 2-Tupeln [Bild, Bild-Position] daraus
