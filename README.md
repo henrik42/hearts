@@ -494,8 +494,10 @@ verwendet.
 
   __REPL:__
 
-		hearts.core=> (macroexpand-1 '(->> bilder (map-indexed #(-> [%2 %1])) (into {})))
-		(into {} (map-indexed (fn* [p1__1420# p2__1419#] (-> [p2__1419# p1__1420#])) bilder))
+		hearts.core=> (macroexpand '(->> bilder (map-indexed #(-> [%2 %1])) (into {})))
+		(into {} (map-indexed (fn* [p1__1436# p2__1435#] (-> [p2__1435# p1__1436#])) bilder))
+		hearts.core=> (clojure.walk/macroexpand-all '(->> bilder (map-indexed #(-> [%2 %1])) (into {})))
+		(into {} (map-indexed (fn* [p1__1432# p2__1431#] [p2__1431# p1__1432#]) bilder))
 
 * Mit `#(....)` wird eine Funktion definiert. Man sagt auch "anonyme
   Funktion", weil sie an keinen Namen gebunden wird. Die Benennung
