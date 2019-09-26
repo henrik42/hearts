@@ -622,11 +622,6 @@ __Kreuzprodukt__ über die Farben `:kreuz`, `:pik`, `:herz` und `:karo`
 (die wiederum als Keywords dargestellt werden) und den Bildern
 (`bilder`).
 
-	hearts.core=> (for [f [:kreuz :pik :herz :karo]
-         #_=>                  b bilder]
-         #_=>              [f b])
-		 ([:kreuz 2] [:kreuz 3] [:kreuz 4] [:kreuz 5] [:kreuz 6] [:kreuz 7] [:kreuz 8] [:kreuz 9] [:kreuz 10] [:kreuz :bube] [:kreuz :dame] [:kreuz :koenig] [:kreuz :ass] [:pik 2] [:pik 3] [:pik 4] [:pik 5] [:pik 6] [:pik 7] [:pik 8] [:pik 9] [:pik 10] [:pik :bube] [:pik :dame] [:pik :koenig] [:pik :ass] [:herz 2] [:herz 3] [:herz 4] [:herz 5] [:herz 6] [:herz 7] [:herz 8] [:herz 9] [:herz 10] [:herz :bube] [:herz :dame] [:herz :koenig] [:herz :ass] [:karo 2] [:karo 3] [:karo 4] [:karo 5] [:karo 6] [:karo 7] [:karo 8] [:karo 9] [:karo 10] [:karo :bube] [:karo :dame] [:karo :koenig] [:karo :ass])
-
 Die Karten sind also einfach nur 2-Tupel/Vektoren
 __&lt;Farbe,Bild>__. Wir haben weder explizit einen __Datentyp__
 definiert (in Java hätte man wohl eine Klasse eingeführt) noch
@@ -641,7 +636,14 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   und der Bilder, die der Reihe nach --- also "für jeden Durchlauf"
   --- an die Namen `f` und `b` gebunden werden) das angegebene
   Ergebnis `[f b]` (also das 2-Tupel) als __Sequenz__. Der Mechanismus
-  wird _list comprehension_ (etwa "Listenerzeugung") genannt.
+  wird _list comprehension_ (etwa "Listenerzeugung" [1]) genannt.
+
+  __REPL:__
+
+		hearts.core=> (for [f [:kreuz :pik :herz :karo]
+			 #_=>           b bilder]
+			 #_=>        [f b])
+			 ([:kreuz 2] [:kreuz 3] [:kreuz 4] [:kreuz 5] [:kreuz 6] [:kreuz 7] [:kreuz 8] [:kreuz 9] [:kreuz 10] [:kreuz :bube] [:kreuz :dame] [:kreuz :koenig] [:kreuz :ass] [:pik 2] [:pik 3] [:pik 4] [:pik 5] [:pik 6] [:pik 7] [:pik 8] [:pik 9] [:pik 10] [:pik :bube] [:pik :dame] [:pik :koenig] [:pik :ass] [:herz 2] [:herz 3] [:herz 4] [:herz 5] [:herz 6] [:herz 7] [:herz 8] [:herz 9] [:herz 10] [:herz :bube] [:herz :dame] [:herz :koenig] [:herz :ass] [:karo 2] [:karo 3] [:karo 4] [:karo 5] [:karo 6] [:karo 7] [:karo 8] [:karo 9] [:karo 10] [:karo :bube] [:karo :dame] [:karo :koenig] [:karo :ass])
 
 
 * Diese Sequenz von __&lt;Farbe,Bild>__ "fädeln" wir nun via `->>` durch
@@ -650,15 +652,25 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   Arguments anwendet und als Ergebnis wiederum eine __Sequenz__ mit
   den Funktionswerten liefert.
 
+__REPL:__
 
-* Wir definieren hier ("in place"; also ohne sie an einen Namen zu
-  binden) mit `fn` die benötigte Arity-1-Funktion. `fn` ist der
-  _kanonische_ Weg, eine Funktion zu definieren. Die Alternative
-  `#(....)`, die oben vorgestellt wurde, ist eine Kurzschreibweise
-  (sog. "reader macro"), in der sich die Arity aus der
-  Nennung/Verwendung der "durchnummerierten Parameter-Formen" `%<i>`
-  ergibt. Bei `fn` müssen die (_formalen_) Parameter hingegen explizit
-  angegeben werden.
+	hearts.core=> (doc inc)
+	-------------------------
+	clojure.core/inc
+	([x])
+	  Returns a number one greater than num. Does not auto-promote
+	  longs, will throw on overflow. See also: inc'
+	  nil
+    hearts.core=> (map inc [1 21 42])
+	(2 22 43)
+
+* Wir definieren hier (anonym; also ohne sie an einen Namen zu binden)
+  mit `fn` die benötigte Arity-1-Funktion. `fn` ist der _kanonische_
+  Weg, eine Funktion zu definieren. Die Alternative `#(....)`, die
+  oben vorgestellt wurde, ist eine Kurzschreibweise (sog. "reader
+  macro"), in der sich die Arity aus der Nennung/Verwendung der
+  "durchnummerierten Parameter-Formen" `%<i>` ergibt. Bei `fn` müssen
+  die (_formalen_) Parameter hingegen explizit angegeben werden.
 
   Wir geben als Parameter aber anstatt eines __Namen__ einen
   __Vektor__ mit zwei Elementen/Namen `f` und `b` an. Dieser Vektor
@@ -666,8 +678,8 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   Funktionsaufruf wird das Argument (also z.B. ein Vektor oder eine
   Liste) anhand des Musters __zerlegt__ und die Parameternamen `f` und
   `b` werden in diesem Fall an das erste bzw. zweite Element des
-  Arguments gebunden. Dieser Mechanismus wird _destructuring_ (oder
-  allgemeiner _pattern matching_) genannt. Man könnte es auch
+  Arguments gebunden. Dieser Mechanismus wird _destructuring_ [2]
+  (oder allgemeiner _pattern matching_) genannt. Man könnte es auch
   "muster-basierte rekursive Strukturzerlegung mit Namensbindung"
   nennen.
 
@@ -683,7 +695,7 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   und deren zweites Element der Punkte-Wert der Karte ist.
 
 * `cond` verhält sich wie die (neue) `switch`-__Expression__ (NICHT
-  `switch`-__Statement__!) in Java 12. Die Argument-Paare aus
+  `switch`-__Statement__!) in Java 12 [3]. Die Argument-Paare aus
   _Prädikat_ (Form) und Ergebnis (Form) werden der Reihe nach
   ausgewertet. Dabei wird immer nur die Prädikats-Form ausgewertet!
   (das ist wichtig, weil die Auswertung der Ergebnis-Form ja
@@ -701,8 +713,12 @@ Punktwert ermittelt und damit die gewünschte Map erzeugt.
   "logisch unwahr" meint.
 
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
-  __&lt;<Farbe,Bild>,Punkte>__ Tupeln in eine Map
+  __&lt;&lt;Farbe,Bild>,Punkte>__ Tupeln in eine Map
   __&lt;Farbe,Bild>--><Punkte>__ zu überführen.
+
+[1] https://de.wikipedia.org/wiki/List_Comprehension  
+[2] https://clojure.org/guides/destructuring  
+[3] https://openjdk.java.net/jeps/325  
 
 ---
 
