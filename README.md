@@ -622,6 +622,11 @@ __Kreuzprodukt__ über die Farben `:kreuz`, `:pik`, `:herz` und `:karo`
 (die wiederum als Keywords dargestellt werden) und den Bildern
 (`bilder`).
 
+	hearts.core=> (for [f [:kreuz :pik :herz :karo]
+         #_=>                  b bilder]
+         #_=>              [f b])
+([:kreuz 2] [:kreuz 3] [:kreuz 4] [:kreuz 5] [:kreuz 6] [:kreuz 7] [:kreuz 8] [:kreuz 9] [:kreuz 10] [:kreuz :bube] [:kreuz :dame] [:kreuz :koenig] [:kreuz :ass] [:pik 2] [:pik 3] [:pik 4] [:pik 5] [:pik 6] [:pik 7] [:pik 8] [:pik 9] [:pik 10] [:pik :bube] [:pik :dame] [:pik :koenig] [:pik :ass] [:herz 2] [:herz 3] [:herz 4] [:herz 5] [:herz 6] [:herz 7] [:herz 8] [:herz 9] [:herz 10] [:herz :bube] [:herz :dame] [:herz :koenig] [:herz :ass] [:karo 2] [:karo 3] [:karo 4] [:karo 5] [:karo 6] [:karo 7] [:karo 8] [:karo 9] [:karo 10] [:karo :bube] [:karo :dame] [:karo :koenig] [:karo :ass])
+
 Die Karten sind also einfach nur 2-Tupel/Vektoren
 __&lt;Farbe,Bild>__. Wir haben weder explizit einen __Datentyp__
 definiert (in Java hätte man wohl eine Klasse eingeführt) noch
