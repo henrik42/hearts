@@ -129,15 +129,15 @@ Nun spielen die drei anderen Spieler der __Reihe nach__ (vgl. oben
 _gedachter Kreis_) auch jeweils eine Karte offen aus. Falls ein
 Spieler eine oder mehrere Karte mit der gleichen __Farbe__ wie die
 Eröffnungskarte auf der Hand hat, __muss__ er eine dieser Karten
-ausspielen (es muss also die Farbe der Eröffnungskarte _bedient_
-werden). Andernfalls kann er eine beliebige Karte von seiner Hand
+ausspielen. Es muss also die Farbe der Eröffnungskarte _bedient_
+werden. Andernfalls kann er eine beliebige Karte von seiner Hand
 spielen (_abwerfen_).
 
 Nachdem alle Spieler ihre Karte in der Runde gespielt haben, erhält
 derjenige Spieler die gespielten Karten (den __Stich__), der die Karte
 mit der __Farbe der Eröffnungskarte__ mit dem __höchsten Rang__
-gespielt hat. Er legt den Stich verdeckt auf seinen __Haufen__ (er
-nimmt sie also __nicht__ auf seine __Hand__).
+gespielt hat. Er legt den Stich verdeckt auf seinen __Haufen__. Er
+nimmt sie also __nicht__ auf seine __Hand__.
 
 Es kann natürlich vorkommen, dass der eröffnende Spieler selbst den
 Stich erhält. Dies ist der Fall, falls alle anderen Spieler
@@ -147,7 +147,7 @@ haben, die unter dem Rang der Eröffnungskarte ist.
 Damit ist die Runde beendet.
 
 Durch das Erhalten des Stichs sammeln die Spieler über die Runden also
-Stiche an, die sie auf ihren __Haufen__ (vor sich auf dem Tisch)
+Stiche an, die sie auf ihren __Haufen__ "vor sich auf dem Tisch"
 legen, der zu Beginn leer ist.
 
 ### Spielende
@@ -249,7 +249,7 @@ Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel haben
 funktionalen Sinn nicht __pure__ sind.
 
 Da Listen sowohl für "ausführbaren Code" als auch als Datenstruktur
-verwendet werden (sog. Homoiconicity; "code is data is code"
+verwendet werden (sog. _Homoiconicity_; "code is data is code"
 [12, 11]), fällt es Clojure-Neulingen zu Beginn häufig schwer, zu
 erkennen, ob eine S-Expression/Form nun als "ausführbarer Code" oder
 als Daten-Wert gilt.
@@ -304,7 +304,7 @@ wie `static final` Felder in Java zu verwenden. Aber wie schon gesagt:
 es ist völlig anders! [4]
 
 Wenn man die `def` Zeile in der REPL eingegeben hat (bzw. mit `-i
-core.clj` die Datei laden hat), kann man sich anschließend den
+core.clj` die Datei geladen hat), kann man sich anschließend den
 gebundenen Wert ausgeben lassen.
 
 Die REPL liest Formen ein, wertet sie aus und "druckt" das Ergebnis
@@ -366,7 +366,7 @@ __REPL__:
 	clojure.core$first__4339
 
 Wir führen hier also einfach nur einen __Alias__ für eine Funktion
-ein, denn wir binden ja einen __zweiten Namen__ an __denselben(!!!!)__
+ein, denn wir binden ja einen __zweiten Namen__ an __denselben(!)__
 Wert.
 
 `farbe` ist Teil unser Domänensprache (vgl. oben), anders als `first`,
@@ -409,12 +409,12 @@ runden Tisch sitzen. Dabei ist unerheblich, welcher Spieler an welcher
 Position im Vektor steht. Wie schon gesagt: es ist ein gedachter
 __Kreis__.
 
-In Clojure können Vektoren, Listen, Maps und Sets (und Reguläre
-Ausdrücke) direkt als __Literal__ [2] aufgeschrieben werden (und man
-kann weitere eigene Literaltypen definieren -- sog. _tagged literals_
-[1]). Die Elemente dieser _Collections_ [4] brauchen nicht vom
-gleichen Typ zu sein und die ganzen Datenstrukturen sind __immutable__
-(in Clojure-Sprech _persistent data structures_ [3]). D.h. wir können
+In Clojure können Vektoren, Listen, Maps, Sets und Reguläre Ausdrücke
+direkt als __Literal__ [2] aufgeschrieben werden (und man kann weitere
+eigene Literaltypen definieren -- sog. _tagged literals_ [1]). Die
+Elemente dieser _Collections_ [4] brauchen nicht vom gleichen Typ zu
+sein und die ganzen Datenstrukturen sind __immutable__ (in
+Clojure-Sprech _persistent data structures_ [3]). D.h. wir können
 ihren Wert(!!)  d.h. Inhalt/Zustand nicht ändern. Daher können wir sie
 auch ohne Gefahr mit anderen __teilen__, weil sie niemand
 _hinterrücks_ ändern kann. Man braucht also keine "Clone" oder
@@ -423,10 +423,10 @@ _hinterrücks_ ändern kann. Man braucht also keine "Clone" oder
 
 Für die Vornamen unserer Spieler verwenden wir Clojure __Keywords__
 [7]. Diese sind natürlich ebenfalls immutable, genau wie die Java
-Datentypen in `java.lang`!. Keywords verhalten sich so ähnlich wie
-Java Enums. Sie sind z.B. "identisch" und nicht nur "gleich". Man kann
-sie jedoch nirgends __vorab__ __definieren__ --- es gibt keine
-"Klammer" wie die Enum Klassen in Java. Daher kann man sie auch nicht
+Datentypen in `java.lang`! Keywords verhalten sich so ähnlich wie Java
+Enums. Sie sind z.B. "identisch" und nicht nur "gleich". Man kann sie
+jedoch nirgends __vorab__ __definieren__ --- es gibt keine "Klammer"
+wie die Enum Klassen in Java. Daher kann man sie auch nicht
 enumerieren/aufzählen. Man schreibt sie einfach hin und kann sich
 dabei auch verschreiben, ohne dass es der Compiler merkt ....
 
@@ -534,18 +534,17 @@ verwendet:
   Der Code wird also __umgestellt__, __bevor__ er überhaupt
   compiliert/ausgeführt/ausgewertet wird.
 
-  __Nochmal__: `->>` arbeitet/wirkt auf den __Programmcode__ (nicht
-  aber auf den __Programmtext__, sondern auf den geparsten
-  Programmtext, der als __Datenstruktur/AST__ [3] vorliegt!) und
-  __formt__ __diesen__ __um__ (also den AST, der als
-  Listen-Datenstruktur vorliegt). Das ist so ähnlich wie
-  "Codegenerierung zur Laufzeit".
+  `->>` arbeitet/wirkt auf den __Programmcode__, nicht aber auf den
+  __Programmtext__, sondern auf den geparsten Programmtext, der als
+  __Datenstruktur/AST__ [3] vorliegt und __formt__ __diese__
+  __Datenstruktur__ __um__ (also den AST, der als Listen-Datenstruktur
+  vorliegt). Das ist so ähnlich wie "Codegenerierung zur Laufzeit".
 
-  Das nennt man __Meta-Programming__ (`->>`ist auch keine Funktion,
-  sondern ein __Makro__ [2]). Makros sind normale Clojure Funktionen,
-  die nur eben von Clojure in die __Compilephase__ eingebunden werden
-  und somit das zu kompilierende Programm beliebig umstellen
-  können.
+  Das nennt man __Meta-Programming__. `->>`ist auch keine Funktion,
+  sondern ein __Makro__ [2]. Makros sind "fast" normale Clojure
+  Funktionen, die nur eben von Clojure in die __Compilephase__
+  eingebunden werden und somit das __zu__ __kompilierende__
+  __Programm__ beliebig __umstellen__ können.
 
   Das ist auch ein Grund dafür, dass man für Clojure keine
   "vorgeschalteten Codegeneratoren" braucht. Man programmiert sich
@@ -581,8 +580,8 @@ verwendet:
   "anonym" ist aber irreführend, weil Funktionen __niemals__ einen
   Namen haben und in dem Sinne __immer__ anonym sind. Durch `def` gibt
   man eben einer Funktion auch __keinen__ __Namen__ sondern __bindet__
-  die Funktion an einen __Namen__ (und man kann sie eben auch an
-  mehrere Namen binden; vgl. oben). In diesem Sinne __besitzt__ eine
+  die Funktion an einen __Namen__ und man kann sie eben auch an
+  mehrere Namen binden (vgl. oben). In diesem Sinne __besitzt__ eine
   Funktion an sich __keinen__ Namen.
 
   `#(-> [%2 %1])` ist eine Funktion mit zwei Parametern, die einen
@@ -590,8 +589,8 @@ verwendet:
   Funktion ist und dessen zweites Element das erste Argument der
   Funktion ist. In Clojure gibt es kein
   `return`-Statement. Stattdessen liefert eine Funktion immer den
-  Auswertungswert der "letzten Form" (welche das genau ist, besprechen
-  wir im Code). `->` ist das _thread first_ Makro, das ich hier
+  Auswertungswert der "letzten Form". Welche das genau ist, besprechen
+  wir im Code. `->` ist das _thread first_ Makro, das ich hier
   verwende, weil der Ausdruck `#([%2 %1])` von Clojure so
   interpretiert wird, als wenn der Vektor eine Funktion (Funktor)
   wäre. `->` tut uns den Gefallen, den Code so umzuformen, dass der
@@ -607,17 +606,22 @@ verwendet:
 * `map-indexed` ist eine HOF (_higher order function_) [7]: sie
   erwartet als erstes Argument eine __Funktion__ und als zweites eine
   Sequenz. Sie wendet dann die Funktion der Reihe nach auf die
-  Elemente der Sequenz an. Dabei ruft sie die übergebene Funktion mit
-  jeweils zwei Argumenten auf: das erste Argument ist der 0-basierte
-  Index des Elements der Sequenz (und dieser Index ist genau das, was
-  wir als "Position" benötigen; vgl. oben), das gerade verarbeitet
-  wird und das zweite Argument ist das Element selbst. Das Ergebnis
-  von `map-indexed` ist wiederum die Sequenz aus den
-  Funktions-Aufruf-Ergebnissen. Beispiel: `(map-indexed str [1 2 3])`
-  liefert `("01" "12" "23")` (`str` liefert den String/Konkatenation
-  der Argumente). Wir verwenden aber `#(-> [%2 %1])` und erzeugen
-  somit für jedes Bild (d.h. Element von `bilder`) ein 2-Tupel
-  [Bild, Position].
+  Elemente der Sequenz an.
+
+  Dabei ruft sie die übergebene Funktion mit jeweils zwei Argumenten
+  auf: das erste Argument ist der __0-basierte__ __Index__ des
+  Elements der Sequenz, das gerade verarbeitet wird und dieser Index
+  ist genau das, was wir als "Position" benötigen (vgl. oben).
+
+  Das zweite Argument ist das Element selbst.
+
+  Das Ergebnis von `map-indexed` ist wiederum die Sequenz aus den
+  Funktions-Aufruf-Ergebnissen.
+
+  Beispiel: `(map-indexed str [1 2 3])` liefert `("01" "12" "23")`
+  (`str` liefert den String/Konkatenation der Argumente). Wir
+  verwenden aber `#(-> [%2 %1])` und erzeugen somit für jedes Bild
+  (d.h. Element von `bilder`) ein 2-Tupel [Bild, Position].
 
 
 * `(into {} .....)` sorgt dafür, dass die __Elemente__ des zweiten
