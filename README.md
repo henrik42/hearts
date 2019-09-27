@@ -584,17 +584,27 @@ verwendet:
   mehrere Namen binden (vgl. oben). In diesem Sinne __besitzt__ eine
   Funktion an sich __keinen__ Namen.
 
+  __REPL:__
+
+		hearts.core=> #(str % "-" %)
+		#object[hearts.core$eval1622$fn__1623 0x54ef29c7 "hearts.core$eval1622$fn__1623@54ef29c7"]
+		hearts.core=> (#(str %1 "-" %2) "foo" :bar)
+		"foo-:bar"
+
   `#(-> [%2 %1])` ist eine Funktion mit zwei Parametern, die einen
   Vektor liefert, dessen erstes Element das zweite Argument der
   Funktion ist und dessen zweites Element das erste Argument der
-  Funktion ist. In Clojure gibt es kein
-  `return`-Statement. Stattdessen liefert eine Funktion immer den
-  Auswertungswert der "letzten Form". Welche das genau ist, besprechen
-  wir im Code. `->` ist das _thread first_ Makro, das ich hier
-  verwende, weil der Ausdruck `#([%2 %1])` von Clojure so
-  interpretiert wird, als wenn der Vektor eine Funktion (Funktor)
-  wäre. `->` tut uns den Gefallen, den Code so umzuformen, dass der
-  Vektor als Rückgabewert der anonymen Funktion gilt.
+  Funktion ist.
+
+  In Clojure gibt es kein `return`-Statement. Stattdessen liefert eine
+  Funktion immer den Auswertungswert der "letzten Form". Welche das
+  genau ist, besprechen wir im Code.
+
+  `->` ist das _thread first_ Makro, das ich hier verwende, weil der
+  Ausdruck `#([%2 %1])` von Clojure so interpretiert wird, als wenn
+  der Vektor eine Funktion (Funktor) wäre (vgl. folgende
+  __REPL__). `->` tut uns den Gefallen, den Code so umzuformen, dass
+  der Vektor als Rückgabewert der anonymen Funktion gilt.
 
   __REPL:__
 
@@ -626,15 +636,20 @@ verwendet:
 
 * `(into {} .....)` sorgt dafür, dass die __Elemente__ des zweiten
   Arguments in die Datenstruktur (erstes Argument) __zugefügt__
-  werden. Natürlich wird dabei nichts verändert, sondern es wird ein
-  neuer Wert des gleichen Typen erzeugt und diese neue Struktur ist
-  dann das Ergebnis von `into`. Bei `{}` handelt es sich um eine
-  Map. Und wenn man einer Map 2-elementige Vektoren (2-Tupel) zufügt,
-  dann wird das jeweils erste Element des 2-Tupels als __Schlüssel__
-  (Key) und das jeweils zweite Element als __Wert__ (Value) des
-  Map-Entries verwendet. Somit fügt `into` alle [Bild, Position]-Tupel
-  als __&lt;Key,Value>__ in die leere Map und liefert das Ergebnis als
-  Rückgabewert.
+  werden.
+
+  Natürlich wird dabei nichts verändert, sondern es wird ein neuer
+  Wert des gleichen Typen erzeugt und diese neue Struktur ist dann das
+  Ergebnis von `into`.
+
+  Bei `{}` handelt es sich um eine Map. Und wenn man einer Map
+  2-elementige Vektoren (2-Tupel) zufügt, dann wird das jeweils
+  __erste__ Element des 2-Tupels als __Schlüssel__ (Key) und das
+  jeweils __zweite__ Element als __Wert__ (Value) des Map-Entries
+  verwendet.
+
+  Somit fügt `into` alle [Bild, Position]-Tupel als __&lt;Key,Value>__
+  in die leere Map und liefert das Ergebnis als Rückgabewert.
 
   __REPL:__
 
