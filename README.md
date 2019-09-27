@@ -688,21 +688,30 @@ __Kreuzprodukt__ über die Farben `:kreuz`, `:pik`, `:herz` und `:karo`
 (`bilder`).
 
 Die Karten sind also einfach nur 2-Tupel/Vektoren
-__&lt;Farbe,Bild>__. Wir haben weder explizit einen __Datentyp__
-definiert (in Java hätte man wohl eine Klasse eingeführt) noch
+__&lt;Farbe,Bild>__. Wir haben __keinen__ __Datentyp__ definiert. In
+Java hätte man wohl eine Klasse eingeführt. Wir haben auch nicht
 irgendwie anders ausgedrückt, dass das erste Element des 2-Tupels die
-Farbe der Karte ist oder dass das zweite Element das Bild der Karte
+Farbe der Karte ist und dass das zweite Element das Bild der Karte
 ist. Die Bedeutung ergibt sich also nur "durch den Code" bzw. die
-__Verwendung__ der 2-Tupel. Zu jeder Karte wird dann noch ihr
-Punktwert ermittelt und damit die gewünschte Map erzeugt.
+__Verwendung__ der 2-Tupel.
 
-* Das Makro `for` __liefert__ für jede Kombination/Permutation
-  (Kreuzprodukt) ihrer Argumente (hier die Elemente des Farb-Vektors
-  und der Bilder, die der Reihe nach --- also "für jeden Durchlauf"
-  --- an die Namen `f` und `b` gebunden werden) das angegebene
-  Ergebnis `[f b]` (also das 2-Tupel) als __Sequenz__. Der Mechanismus
-  wird _list comprehension_ (etwa "Listenerzeugung" [1]) genannt.
+Wir haben oben aber die Aliase `farbe` und `bild` eingeführt, um diese
+Namen für den Zugriff auf die entsprechenden Vektor-Elemente zu
+verwenden. Dadurch erhöhen wir die Lesbarkeit und Verständlichkeit des
+Codes.
 
+Zu jeder Karte wird dann noch ihr Punktwert ermittelt und damit die
+gewünschte Map erzeugt.
+
+* Das Makro `for` __liefert__ für jede Kombination (Kreuzprodukt
+  __Farben__ __x__ __Bilder__) ihrer Argumente das angegebene Ergebnis
+  `[f b]` (also das 2-Tupel) als __Sequenz__. Der Mechanismus wird
+  _list comprehension_ (etwa "Listenerzeugung" [1]) genannt.
+
+  In vorliegenden Fall sind dies die Elemente des Farb-Vektors und der
+  Bilder, die der Reihe nach --- also "für jeden Durchlauf" --- an die
+  Namen `f` und `b` gebunden werden.
+  
   __REPL:__
 
         hearts.core=> (for [f [:kreuz :pik :herz :karo]
@@ -731,11 +740,13 @@ __REPL:__
 
 * Wir definieren hier (anonym; also ohne sie an einen Namen zu binden)
   mit `fn` die benötigte Arity-1-Funktion. `fn` ist der _kanonische_
-  Weg, eine Funktion zu definieren. Die Alternative `#(....)`, die
-  oben vorgestellt wurde, ist eine Kurzschreibweise (sog. "reader
-  macro"), in der sich die Arity aus der Nennung/Verwendung der
-  "durchnummerierten Parameter-Formen" `%<i>` ergibt. Bei `fn` müssen
-  die (_formalen_) Parameter hingegen explizit angegeben werden.
+  Weg, eine Funktion zu definieren.
+
+  Die Alternative `#(....)`, die oben vorgestellt wurde, ist eine
+  Kurzschreibweise (sog. "reader macro"), in der sich die Arity aus
+  der Nennung/Verwendung der "durchnummerierten Parameter-Formen"
+  `%<i>` ergibt. Bei `fn` müssen die (_formalen_) Parameter hingegen
+  explizit angegeben werden.
 
   Wir geben als Parameter aber anstatt eines __Namen__ einen
   __Vektor__ mit zwei Elementen/Namen `f` und `b` an. Dieser Vektor
