@@ -295,14 +295,26 @@ Klassen/Bibliotheken integrieren; sog. "Java interop" [2].
 Als Java-Entwickler denkt man bei diesen "globalen Namen" vielleicht
 an __Variablen__. Es ist jedoch unüblich (wenn auch möglich), während
 eines Programmlaufs einen Namen nacheinander bzw. __wiederholt__ an
-(verschiedene) Werte zu binden (was in einem gewissen Sinne der
-Wertzuweisung an eine Variable in Java entspricht; tatsächlich ist es
-aber völlig anders, aber das soll hier nicht im Detail erläutert
-werden). Diese Bindungen sind also eher wie `static final` Felder in
-Java zu verwenden (aber wie schon gesagt: es ist völlig anders!).
+(verschiedene) Werte zu binden.
 
-Wenn man die `def` Zeile in der REPL eingegeben hat, kann man sich
-anschließend den gebundenen Wert ausgeben lassen:
+Dies entspricht in einem gewissen Sinne der Wertzuweisung an eine
+Variable in Java; tatsächlich ist es aber völlig anders, aber das soll
+hier nicht im Detail erläutert werden. Diese Bindungen sind also eher
+wie `static final` Felder in Java zu verwenden. Aber wie schon gesagt:
+es ist völlig anders! [4]
+
+Wenn man die `def` Zeile in der REPL eingegeben hat (bzw. mit `-i
+core.clj` die Datei laden hat), kann man sich anschließend den
+gebundenen Wert ausgeben lassen.
+
+Die REPL liest Formen ein, wertet sie aus und "druckt" das Ergebnis
+aus. Die Ausgabe erfolgt in einem Format, in dem diese Ausgabe auch
+wieder als __Eingabe__ genutzt werden kann. Daher werden die
+Zeilenumbrüche z.B. als `\n` ausgegeben und der ganze String inkl. der
+Anführungszeichen ausgegeben. Die Ausgabe erfolgt also im
+__Literal__-Format (mit einigen Ausnahmen).
+
+__REPL:__
 
 	hearts.core=> hr
 	"\n------------------------------------\n"
@@ -310,10 +322,15 @@ anschließend den gebundenen Wert ausgeben lassen:
 	java.lang.String
 	hearts.core=> (.getClass hr)
 	java.lang.String
+	hearts.core=> 42
+	42
+	hearts.core=> (type 42)
+	java.lang.Long
 
 [1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html  
 [2] https://clojure.org/reference/java_interop  
 [3] https://clojuredocs.org/clojure.core/def  
+[4] https://clojure.org/reference/vars  
 
 ---
 
@@ -336,9 +353,10 @@ Gefahr von Unklarheit/Missverständnis besteht.
 
 Dieses Funktionsobjekt und die __zugehörige Klasse__ entsteht durch
 die __Kompilierung__ von S-Expressions. Clojure hat __keinen
-Interpreter__ sondern einen __Compiler__, der zur __Laufzeit__ läuft;
-also __just in time__. Es gibt aber auch __ahead of time__ (AOT), wie
-bei Java, um die Startup-Zeit von Clojure-Programmen zu verkürzen.
+Interpreter__ sondern einen __Compiler__ [1], der zur __Laufzeit__
+läuft; also __just in time__. Es gibt aber auch __ahead of time__
+(AOT), wie bei Java, um die Startup-Zeit von Clojure-Programmen zu
+verkürzen.
 
 __REPL__:
 
@@ -347,13 +365,18 @@ __REPL__:
 	hearts.core=> (type first)
 	clojure.core$first__4339
 
-Wir führen hier also einfach nur einen __Alias__ für eine Funktion ein
-(denn wir binden ja einen __zweiten Namen__ an __denselben(!!!!)__
-Wert), weil `farbe` Teil unser Domänensprache ist (anders als `first`,
-was eher ein technischer/generischer Name ist, der in unserer Domäne
-keine besondere Bedeutung hat). Das Gleiche machen wir auch für `bild`
-mit der Funktion `clojure.core/second`. Warum wir diese Aliase
-einführen, erläutern wir weiter unten.
+Wir führen hier also einfach nur einen __Alias__ für eine Funktion
+ein, denn wir binden ja einen __zweiten Namen__ an __denselben(!!!!)__
+Wert.
+
+`farbe` ist Teil unser Domänensprache (vgl. oben), anders als `first`,
+was eher ein technischer/generischer Name ist. `first` hat in unserer
+Domäne keine besondere Bedeutung. Das Gleiche machen wir auch für
+`bild` mit der Funktion `clojure.core/second`.
+
+Mit diesen Namen bzw. den an sie gebundenen Funktionen werden wir
+später auf unsere Daten, d.h. auf die Farben und die Bilder unserer
+Spielkarten, zugreifen.
 
 __REPL__:
 
@@ -365,9 +388,12 @@ __REPL__:
 	true
 
 Mit `first` referenzieren wir `clojure.core/first` __ohne__ den
-Namensraum `clojure.core` angeben zu müssen. Das liegt daran, dass der
-Namenraum `clojure.core` via `ns` "importiert" wurde und damit zur
-Verfügung steht (mehr sagen wir hier nicht zu Namensräumen).
+Namensraum `clojure.core` explizit angeben zu müssen. Das liegt daran,
+dass der Namenraum `clojure.core` via `ns` "importiert" [2] wurde und
+damit zur Verfügung steht (mehr sagen wir hier nicht zu Namensräumen).
+
+[1] https://clojure.org/reference/compilation  
+[2] https://8thlight.com/blog/colin-jones/2010/12/05/clojure-libs-and-namespaces-require-use-import-and-ns.html  
 
 ---
 
@@ -390,21 +416,29 @@ kann weitere eigene Literaltypen definieren -- sog. _tagged literals_
 gleichen Typ zu sein und die ganzen Datenstrukturen sind __immutable__
 (in Clojure-Sprech _persistent data structures_ [3]). D.h. wir können
 ihren Wert(!!)  d.h. Inhalt/Zustand nicht ändern. Daher können wir sie
-auch ohne Gefahr mit anderen teilen, weil sie niemand _hinterrücks_
-ändern kann (man braucht also keine "Clone" oder "defensive Kopien"
-[5] und keine Synchronisation um Race-Conditions [6] zu unterbinden).
+auch ohne Gefahr mit anderen __teilen__, weil sie niemand
+_hinterrücks_ ändern kann. Man braucht also keine "Clone" oder
+"defensive Kopien" [5] und keine Synchronisation um Race-Conditions
+[6] zu unterbinden.
 
 Für die Vornamen unserer Spieler verwenden wir Clojure __Keywords__
-[7] (natürlich ebenfalls immutable, genau wie die Java Datentypen in
-`java.lang`!). Keywords verhalten sich so ähnlich die Java Enums (sie
-sind z.B. "identisch" und nicht nur "gleich"), nur dass man sie
-nirgends vorab definieren muss/kann (man kann sie also auch nicht
-enumerieren/aufzählen). Man schreibt sie einfach hin (und kann sich
-dabei auch verschreiben, ohne dass es der Compiler merkt ....)
+[7]. Diese sind natürlich ebenfalls immutable, genau wie die Java
+Datentypen in `java.lang`!. Keywords verhalten sich so ähnlich wie
+Java Enums. Sie sind z.B. "identisch" und nicht nur "gleich". Man kann
+sie jedoch nirgends __vorab__ __definieren__ --- es gibt keine
+"Klammer" wie die Enum Klassen in Java. Daher kann man sie auch nicht
+enumerieren/aufzählen. Man schreibt sie einfach hin und kann sich
+dabei auch verschreiben, ohne dass es der Compiler merkt ....
 
 __REPL__:
 
-	hearts.core=> spieler
+	hearts.core=> :foo
+	:foo
+	hearts.core=> (type :foo)
+	clojure.lang.Keyword
+	hearts.core=> (identical? :foo (keyword "foo"))
+	true
+    hearts.core=> spieler
 	[:gabi :peter :paul :sonja]
 	hearts.core=> (type spieler)
 	clojure.lang.PersistentVector
@@ -424,10 +458,22 @@ __REPL__:
 
 ---
 
-`bilder` ist eine Liste (genauer eine _Sequenz_, aber dazu später
-mehr; man kann sich erstmal eine Liste vorstellen) mit den Elementen
-(Zahlen) 2 bis 10 und den Elementen (Keywords) `:bube`, `:dame`,
-`:koenig` und `:ass`.
+`bilder` ist eine Liste [1, 2] mit den Elementen (Zahlen) 2 bis 10 und
+den Elementen (Keywords) `:bube`, `:dame`, `:koenig` und `:ass`.
+
+Tatsächlich ist `bilder` eine _Sequenz_ [3], aber dazu später mehr;
+man kann sich erstmal eine Liste vorstellen.
+
+__REPL:__
+
+	hearts.core=> bilder
+	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
+	hearts.core=> (type bilder)
+	clojure.lang.LazySeq
+	hearts.core=> (list? bilder)
+	false
+	hearts.core=> (seq? bilder)
+	true
 
 `(range x y)` liefert eine Liste mit den Zahl-Elementen x bis y-1 und
 `concat` verbindet die beiden Listen zu einer Liste.
@@ -438,12 +484,12 @@ einen "höheren Rang hat" als die andere.
 
 __REPL:__
 
-	hearts.core=> bilder
-	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
-	hearts.core=> (type bilder)
-	clojure.lang.LazySeq
 	hearts.core=> (range 3 5)
 	(3 4)
+
+[1] https://clojure.org/guides/learn/sequential_colls#_lists  
+[2] https://clojure.org/reference/data_structures#Lists  
+[3] https://clojure.org/reference/sequences  
 
 ---
 
