@@ -1102,12 +1102,12 @@ Fertig.
 
 ---
 
-__Anmerkung__: es fällt auf, dass Clojure-Programme wenig
+  __Anmerkung__: es fällt auf, dass Clojure-Programme wenig
   __Verzweigungen__ haben. Bisher haben wir `cond` und `when` als
   Fallunterscheidung/Verzweigung kennengelernt. Viele Dinge, die man
   in Java mit `if-then-else-if-else` machen würde, macht man in
-  Clojure mit Sequenzen (und den Funktionen) auf diesen und HOFs. Ob
-  das "einfacher" oder "besser" ist, ist noch eine andere Frage.
+  Clojure mit Sequenzen und den Funktionen auf diesen und HOFs. Ob das
+  "einfacher" oder "besser" ist, ist noch eine andere Frage.
 
   Ich finde, dass Clojure-Programme sehr "kompakt" bzw. "dicht"
   wirken. Als Clojure-Anfänger empfand ich das schon fast als "Schmerz
@@ -1118,8 +1118,8 @@ __Anmerkung__: es fällt auf, dass Clojure-Programme wenig
 
   Das führt meiner Meinung nach auch dazu, dass Clojure-Programm
   einfach "kurz sind". Sie haben i.d.R. weniger Zeilen als Java-Code
-  und weniger Verzeigungen. Beides sind Faktoren, die effektiv zu
-  einer höheren Testabdeckung (branch coverage) führen.
+  und weniger Verzweigungen. Beides sind Faktoren, die effektiv zu
+  einer höheren Testabdeckung (_branch coverage_) führen.
 
   Aber das ist nur meine subjktive Meinung.
 
