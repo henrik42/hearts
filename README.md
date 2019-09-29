@@ -1056,6 +1056,20 @@ Nun aber zur Umsetzung von `beginnt`:
   jene Funktionsergebniswerte durch `keep` geliefert werden, für die
   der `when`-Ausdruck non-`nil` ist.
 
+  In bestimmten Situationen kann man anstatt eines `when` auch `and`
+  verwenden. Zu `and` kommen wir noch. Hier nur ein Beispiel:
+
+  __REPL:__
+
+		hearts.core=> (when (#{[:kreuz 2]} [:kreuz 2]) "jupp")
+		"jupp"
+		hearts.core=> (when (#{[:kreuz 2]} [:kreuz 3]) "jupp")
+		nil
+		hearts.core=> (and (#{[:kreuz 2]} [:kreuz 3]) "jupp")
+		nil
+		hearts.core=> (and (#{[:kreuz 2]} [:kreuz 2]) "jupp")
+		"jupp"
+
 
 * `h` wird an die Hand-Menge gebunden (vgl. oben). In der Form `(h
   [:kreuz 2])` ist diese Menge der __Funktor__ (weil erstes Element
