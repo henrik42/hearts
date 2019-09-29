@@ -770,7 +770,7 @@ __REPL:__
   2-Tupel/Vektor, dessen erstes Element die Karte __&lt;Farbe,Bild>__ ist
   und deren zweites Element der Punkte-Wert der Karte ist.
 
-* `cond` verhält sich wie die (neue) `switch`-__Expression__ (NICHT
+* `cond` verhält sich fast wie die neue `switch`-__Expression__ (NICHT
   `switch`-__Statement__!) in Java 12 [3]. Die Argument-Paare aus
   _Prädikat_ (Form) und Ergebnis (Form) werden der Reihe nach
   ausgewertet. Dabei wird immer nur die Prädikats-Form ausgewertet!
@@ -785,16 +785,124 @@ __REPL:__
   als __unwahr__. Alle anderen Werte (inkl. `(new java.lang.Boolean
   false)` gelten als __wahr__. Um _logisch_ _wahr_ von `true` zu
   unterscheiden (denn sie sind __nicht__ __dasselbe__), sagt man
-  i.d.R. _truthy_, wenn man "logisch wahr" meint und _falsy_, wenn man
-  "logisch unwahr" meint.
+  i.d.R. _truthy_ [4], wenn man "logisch wahr" meint und _falsy_, wenn
+  man "logisch unwahr" meint.
 
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
   __&lt;&lt;Farbe,Bild>,Punkte>__ Tupeln in eine Map
   __&lt;Farbe,Bild>-->&lt;Punkte>__ zu überführen.
 
+
+__Sequenzen und Listen__
+
+Oben haben wir mit `for` eine __Sequenz__ erzeugt, obwohl der
+Mechanismus _list comprehension_ heißt ....
+
+Eine __Liste__ ist eine __endliche__ __Datenstruktur__. D.h. eine
+Liste hat immer eine bekannte Anzahl von Elementen. Da Listen vom
+Compiler als __Funktionsaufrufe__, d.h. als __auszuwertende__ __Form__
+verstanden werden, muss man Listen-Formen __quoten__ (`quote`) und
+damit ausdrücken, dass man diese Liste als Datenstruktur _meint_. Das
+einfache Anführungszeichen (`'`) ist die Kurzform von `quote`. Mit
+`list` kann man Listen auch aus den Elementen konstruieren.
+
+__REPL:__
+
+	hearts.core=> (str :f \r 3 \d)
+	":fr3d"
+	hearts.core=> (quote (str :f \r 3 \d))
+	(str :f \r 3 \d)
+	hearts.core=> '(str :f \r 3 \d)
+	(str :f \r 3 \d)
+	hearts.core=> (str :f \r (inc 2) "d")
+	":fr3d"
+	hearts.core=> '(str :f \r (inc 2) "d")
+	(str :f \r (inc 2) "d")
+	hearts.core=> (list :f \r (inc 2) \d)
+	(:f \r 3 \d)
+
+Eine __Sequence__ entspricht eher einer __Folge__ von
+__Berechnungsergebnissen__, so wie die Erzeugung des Kreuzprodukts via
+`for`. Diese Folge kann abhängig vom Berechnungsprozess endlich oder
+"unendlich" sein.
+
+Natürlich ist nichts in einem Computer wirklich unendlich. Aber mit
+Sequenzen kann man __nicht__ __endende__ __Berechnungsprozesse__ so
+weit "treiben", wie man möchte. In diesem Sinne sind sie __beliebig__
+__lang__.
+
+So berechnet z.B. `(range)` alle natürlichen Zahlen. Man sollte diese
+Form __nicht__ in die REPL eingeben, denn die REPL würde versuchen,
+den __Wert__ dieses nicht endenden Berechnungsprozesses zu ermitteln,
+um ihn dann auszugeben und das geht eben nicht.
+
+Sequenzen werden __lazy__ [5] berechnet. D.h. der Berechnungsprozess
+wird gerade so weit getrieben (und manchmal etwas weiter....), wie es
+nötig ist, um die geforderte Anzahl von Sequenzelementen zu
+liefern. D.h. man kann eine __unendliche__ Sequenz erzeugen, man kann
+jedoch immer nur __endlich__, aber __beliebig__ __viele__ dieser
+Elemente "konsumieren".
+
+Daher kann man z.B. folgendes tun:
+
+__REPL:__
+
+	hearts.core=> (def foo (range))
+	#'hearts.core/foo
+	hearts.core=> (take 4 foo)
+	(0 1 2 3)
+	hearts.core=> (take 4 foo)
+	(0 1 2 3)
+	hearts.core=> (take 2 foo)
+	(0 1)
+	hearts.core=> (take 5 foo)
+	(0 1 2 3 4)
+
+Listen und Sequenzen werden beide auf die gleiche Weise in der REPL
+ausgegeben. Das macht auch Sinn: ausgeben kann man ja nur den
+__endlichen__ __Wert__, der den ersten n Elementen einer
+möglicherweise unendlichen Sequenz entspricht. Und dieser __Wert__
+__ist__ (d.h. verhält sich wie) __eine__ __Liste__.
+
+Das folgende Beispiel zeigt, dass man bei der Umwandlung von Sequenzen
+in Strings sorgsam sein muss.
+
+	hearts.core=> (->> (range) (take 3))
+	(0 1 2)
+	hearts.core=> (->> (range) (take 3) type)
+	clojure.lang.LazySeq
+	hearts.core=> (->> (range) (take 3) str)
+	"clojure.lang.LazySeq@7480"
+	hearts.core=> (->> (range) (take 3) seq str)
+	"(0 1 2)"
+	hearts.core=> (->> (range) (take 3) pr-str)
+	"(0 1 2)"
+
+Und wenn du absichtlich einen Seiteneffekt in den Berechnungsprozess
+einbaust (hier das `print`), kann du auch erkennen, in welchen
+Situationen welche Dinge passieren. Wann also der Berechnungsprozess
+wirklich __abläuft__.
+
+__REPL:__
+
+	hearts.core=> (def bar (for [x (range)] (do (print (format "[%s]" x)) x)))
+	#'hearts.core/bar
+	hearts.core=> (take 2 bar)
+	(0 1)[0][1]
+	hearts.core=> (take 2 bar)
+	(0 1)
+	hearts.core=> (take 3 bar)
+	(0 1 2)[2]
+	hearts.core=> (take 3 bar)
+	(0 1 2)
+	hearts.core=> (take 10 bar)
+	(0 1 2 3 4 5 6 7 8 9)[3][4][5][6][7][8][9]
+
 [1] https://de.wikipedia.org/wiki/List_Comprehension  
 [2] https://clojure.org/guides/destructuring  
 [3] https://openjdk.java.net/jeps/325  
+[4] https://clojure.org/guides/learn/flow#_truth  
+[5] http://clojure-doc.org/articles/language/laziness.html  
 
 ---
 
