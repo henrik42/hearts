@@ -920,15 +920,15 @@ __REPL:__
 
 ---
 
-Bis jetzt haben wir (mit Ausnahme der beiden Aliase) nur "Daten"
-(d.h. Werte) definiert und sie an Namen gebunden. Der Code (also die
-S-Expressions) wird beim Laden des Namensraum `hearts.core`
+Bis jetzt haben wir mit Ausnahme der beiden Aliase nur "Daten"
+(d.h. Werte) definiert und sie an Namen gebunden. Der Code, d.h. die
+S-Expressions, wird beim Laden des Namensraum `hearts.core`
 ausgewertet und führt eben dazu, dass die Werte an die Namen gebunden
 werden. Dieser Vorgang findet nur einmalig statt. Also immer nur das
 eine Mal, wenn der Namensraum geladen wird. Man kann aber "erzwingen",
 dass ein Namensraum wiederholt/mehrfach geladen wird. Dann werden auch
 die S-Expressions wiederholt ausgewertet und die Namen werden erneut
-an (neue) Werte gebunden.
+an neue Werte gebunden.
 
 Nun wollen wir aber mit `defn` eine __Funktion__ definieren.
 `(defn <name> [<parameter>...] <body>)` ist einfach eine Kurzform von
@@ -941,15 +941,16 @@ diesen Namen auf die Funktion zugreifen können.
 ---
 
 Die Funktion `beginnt` ermittelt, welcher Spieler die __erste__
-__Runde__ beginnt (nämlich jener mit der Kreuz-2) und liefert diesen
-als Keyword (also z.B: `:gabi`).
+__Runde__ beginnt. Dies ist jener Spieler mit der Kreuz-2. `beginnt`
+liefert diesen Spieler als Keyword (also z.B: `:gabi`).
 
 Das Argument ist eine Map. Diese nenne ich __Alle-Spieler-Map__. Die
 Alle-Spieler-Map bildet __&lt;spieler>__ wiederum auf eine Map
 ab. Diese nenne ich __Ein-Spieler-Map__. Die Ein-Spieler-Map hat
-u.a. den Key `:hand` und der (gemappte) Wert von `:hand` ist eine
+u.a. den Key `:hand` und der gemappte Wert von `:hand` ist eine
 __Menge__ (Set; Hand-Menge). Die Elemente der Hand-Menge sind
-__&lt;Farbe,Bild>__-Tupel/Vektoren (könnten wir __Karte-Vektor__ nennen).
+__&lt;Farbe,Bild>__-Tupel/Vektoren. Diese könnten wir __Karte-Vektor__
+nennen.
 
 Die Alle-Spieler-Map soll als Datenstruktur(-Wert) den Zustand aller
 Spieler während des Spiels repräsentieren. Es fehlen noch einige Dinge
@@ -957,22 +958,26 @@ Spieler während des Spiels repräsentieren. Es fehlen noch einige Dinge
 werden aber noch eingeführt (vgl. unten).
 
 Zu Beginn des Spiels werden alle Karten gemischt und auf die Spieler
-verteilt. `beginnt` wird also __einmalig__ (nach dem Verteilen der
-Karten) mit diesem _Start-Zustand_ der Alle-Spieler-Map aufgerufen, um
+verteilt. `beginnt` wird also __einmalig__ nach dem Verteilen der
+Karten mit diesem _Start-Zustand_ der Alle-Spieler-Map aufgerufen, um
 zu ermitteln, wer die erste Runde beginnt.
 
 In Java würde man wohl für Karte-Vektor, Ein-Spieler-Map und
 Alle-Spieler-Map separate __Klassen__ einführen, mit Konstruktor,
 lesenden und vielleicht schreibenden/mutierenden Methoden
-(getter/setter) und dann z.B. auch die Methode `beginnt` in die
+(Getter/Setter) und dann z.B. auch die Methode `beginnt` in die
 Alle-Spieler-Klasse tun.
 
 In Clojure kann man auch "Klassen" definieren, d.h. man definiert
 "Kontrakte" (sog. __Protokolle__) so wie man Interfaces in Java
 definiert. Und man definiert dann __Implementierungen__ zu diesen
-Protokollen. Aber man verwendet keine __Ableitung__ (man kann aber
+Protokollen. Aber man verwendet keine __Ableitung__. Man kann aber
 Java-Klassen ableiten und auch Java Interfaces implementieren;
-sog. "Java interop").
+sog. "Java interop".
+
+Es gibt einen endlosen Streit darüber, ob nun OOP oder Funktionale
+Sprachen der bessere Weg sind. Hier ein paar Sachen zum Lesen
+[1, 2, 3]. Und mehr will ich hier auch nicht dazu sagen.
 
 In der Implementation, die ich hier vorstelle, habe ich bewusst auf
 diese Konstrukte verzichtet, weil ich zeigen wollte, wie man in
@@ -992,14 +997,41 @@ Nun aber zur Umsetzung von `beginnt`:
   entstehende Sequenz aus __&lt;Key,Value>__ der Map-Entries. Hier also
   __&lt;Spieler,Ein-Spieler-Map>__.
 
+  Diese __Sequenzialisierung__ wird von allen Funktionen vorgenommen,
+  die auf Sequenzen arbeiten. Man braucht ihnen also selber gar keine
+  Sequenz direkt zu übergeben, sondern falls nötig machen sie sich
+  diese aus dem Wert, den man als Argument übergibt.
+
+  Das folgende Beispiel demonstriert dies anhand von `map`, Listen und
+  Maps. Die __Sequenzialisierung__ erfolgt immer über `seq`.
+
+  __REPL:__
+
+		hearts.core=> (map inc '(1 2 3))
+		(2 3 4)
+		hearts.core=> (map inc [1 2 3])
+		(2 3 4)
+		hearts.core=> (seq [1 2 3])
+		(1 2 3)
+		hearts.core=> (seq {:foo "FOO" :bar "BAR"})
+		([:foo "FOO"] [:bar "BAR"])
+		hearts.core=> (map second {:foo "FOO" :bar "BAR"})
+		("FOO" "BAR")
 
 * `keep` wendet eine Funktion (erstes Argument) auf die Elemente des
-  zweiten Arguments (also der __&lt;Spieler,Ein-Spieler-Map>__-Sequenz)
-  an und liefert all jene Funktions-Rückgabe-Werte/Ergebnisse, die
-  _truthy_ (vgl. oben) sind. `keep` ist sowas ähnliches wie ein
-  Filter, nur dass es nicht die __Eingabelemente__ liefert, sondern
-  deren truthy __"abgebildeten" Wert__.
+  zweiten Arguments (also der
+  __&lt;Spieler,Ein-Spieler-Map>__-Sequenz) an und liefert all jene
+  Funktions-Rückgabe-Werte/Ergebnisse, die non-`nil` sind. `keep` ist
+  sowas ähnliches wie ein Filter, nur dass es nicht die
+  __Eingabelemente__ liefert, sondern deren non-`nil` __"abgebildeten"
+  Wert__.
 
+  __REPL:__
+
+		hearts.core=> (filter #(and % (format "[%s]" %)) [:foo true false nil])
+		(:foo true)
+		hearts.core=> (keep #(and % (format "[%s]" %)) [:foo true false nil])
+		("[:foo]" "[true]" false)
 
 * Für die Definition der Parameter unserer "Abbildungsfunktion" (`fn`)
   verwenden wir diesmal ein komplexeres (geschachteltes) "Muster": wir
@@ -1020,10 +1052,9 @@ Nun aber zur Umsetzung von `beginnt`:
   das zweite Argument ausgewertet und dieser Wert als Ergebnis
   geliefert.
 
-  Das `when-else`-Fall `nil` (`nil` ist _falsy_; nicht _truthy_)
-  bewirkt zusammen mit `keep`, dass nur jene Funktionsergebniswerte
-  durch `keep` geliefert werden, für die der `when`-Ausdruck _truthy_
-  ist.
+  Das `when-else`-Fall-`nil` bewirkt zusammen mit `keep`, dass nur
+  jene Funktionsergebniswerte durch `keep` geliefert werden, für die
+  der `when`-Ausdruck non-`nil` ist.
 
 
 * `h` wird an die Hand-Menge gebunden (vgl. oben). In der Form `(h
@@ -1039,12 +1070,25 @@ Nun aber zur Umsetzung von `beginnt`:
   aus, falls `[:kreuz 2]` Element von `h` ist oder zu `nil`
   andernfalls.
 
+  __REPL:__
+
+		hearts.core=> (#{42 :foo "bar" [:kreuz 2]} 42)
+		42
+		hearts.core=> (#{42 :foo "bar" [:kreuz 2]} :foo)
+		:foo
+		hearts.core=> (#{42 :foo "bar" [:kreuz 2]} [:kreuz 2])
+		[:kreuz 2]
+
   Da `[:kreuz 2]` _truthy_ ist, liefert die `fn` die bzw. den Spieler,
   der die Kreuz-2 auf der Hand hat. Und da immer genau ein Spieler
   diese Karte auf der Hand hat, können wir aus der Sequenz via `first`
   einfach das erste (und einzige) Element als Ergebnis liefern.
 
 Fertig.
+
+[1] http://www.smashcompany.com/uncategorized/object-oriented-programming-is-an-expensive-disaster-which-must-end  
+[2] http://blog.cleancoder.com/uncle-bob/2019/08/22/WhyClojure.html  
+[3] https://8thlight.com/blog/myles-megyesi/2012/04/26/polymorphism-in-clojure.html  
 
 ---
 
@@ -1059,7 +1103,7 @@ Fertig.
 ---
 
 __Anmerkung__: es fällt auf, dass Clojure-Programme wenig
-  __Verzeigungen__ haben. Bisher haben wir `cond` und `when` als
+  __Verzweigungen__ haben. Bisher haben wir `cond` und `when` als
   Fallunterscheidung/Verzweigung kennengelernt. Viele Dinge, die man
   in Java mit `if-then-else-if-else` machen würde, macht man in
   Clojure mit Sequenzen (und den Funktionen) auf diesen und HOFs. Ob
