@@ -681,11 +681,11 @@ Wie man auf diese Map zugreift, sehen wir weiter unten.
 
 ---
 
-`karten->punkte` soll eine Abbildung (Map) von den Karten auf die
-Punkte einer jeden Karte sein. Die Karten ergeben sich als
-__Kartesisches__ __Produkt__ [6] über die Farben `:kreuz`, `:pik`,
+`karten->punkte` soll eine Abbildung (Map) von den __Karten__ auf die
+__Punkte__ einer jeden Karte sein. Die __Karten__ ergeben sich als
+__Kartesisches__ __Produkt__ [6] über die __Farben__ `:kreuz`, `:pik`,
 `:herz` und `:karo`, die wiederum als Keywords dargestellt werden, und
-den Bildern (`bilder`).
+den __Bildern__ (`bilder`).
 
 Die Karten sind also einfach nur 2-Tupel/Vektoren
 __&lt;Farbe,Bild>__. Wir haben __keinen__ __Datentyp__ definiert. In
