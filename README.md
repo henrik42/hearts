@@ -826,7 +826,7 @@ __REPL:__
 		hearts.core=> (into #{} xs)
 		#{[:foo "FOO"] [:foo "FRED"] [:bar "BAR"]}
 
-__Sequenzen und Listen__
+__Einschub: Sequenzen und Listen__
 
 Oben haben wir mit `for` eine __Sequenz__ erzeugt, obwohl der
 Mechanismus _list comprehension_ heißt ....
@@ -855,9 +855,9 @@ __REPL:__
 	(:f \r 3 \d)
 
 Eine __Sequence__ entspricht eher einer __Folge__ von
-__Berechnungsergebnissen__, so wie die Erzeugung des Kreuzprodukts via
-`for`. Diese Folge kann abhängig vom Berechnungsprozess endlich oder
-"unendlich" sein.
+__Berechnungsergebnissen__, so wie die Erzeugung des Kartesischen
+Produkts via `for`. Diese Folge/Sequenz kann abhängig vom
+Berechnungsprozess endlich oder "unendlich" sein.
 
 Natürlich ist nichts in einem Computer wirklich unendlich. Aber mit
 Sequenzen kann man __nicht__ __endende__ __Berechnungsprozesse__ so
@@ -876,7 +876,14 @@ liefern. D.h. man kann eine __unendliche__ Sequenz erzeugen, man kann
 jedoch immer nur __endlich__, aber __beliebig__ __viele__ dieser
 Elemente "konsumieren".
 
-Daher kann man z.B. folgendes tun:
+In dem folgenden Beispiel ist wichtig, dass die REPL den Aufruf von
+`(range)` durchführt und dieser Aufruf liefert eine __lazy__
+__sequence__. Die REPL versucht aber __nicht__, die Elemente dieser
+Sequenz zu lesen/konsumieren. `def` bindet den Wert (also die __lazy__
+__sequence__) an den Namen `foo`. Das __Ergebnis__ von `def` ist die
+_Variable_ (`var`; darauf will ich hier aber nicht weiter eingehen)
+mit dem Namen `hearts.core/foo`. Die REPL gibt also wie immer den Wert
+der ausgewerteten Form aus und die ist in diesem Fall die `def` Form.
 
 __REPL:__
 
