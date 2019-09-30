@@ -683,9 +683,9 @@ Wie man auf diese Map zugreift, sehen wir weiter unten.
 
 `karten->punkte` soll eine Abbildung (Map) von den Karten auf die
 Punkte einer jeden Karte sein. Die Karten ergeben sich als
-__Kreuzprodukt__ über die Farben `:kreuz`, `:pik`, `:herz` und `:karo`
-(die wiederum als Keywords dargestellt werden) und den Bildern
-(`bilder`).
+__Kartesisches__ __Produkt__ [6] über die Farben `:kreuz`, `:pik`,
+`:herz` und `:karo`, die wiederum als Keywords dargestellt werden, und
+den Bildern (`bilder`).
 
 Die Karten sind also einfach nur 2-Tupel/Vektoren
 __&lt;Farbe,Bild>__. Wir haben __keinen__ __Datentyp__ definiert. In
@@ -698,7 +698,8 @@ __Verwendung__ der 2-Tupel.
 Wir haben oben aber die Aliase `farbe` und `bild` eingeführt, um diese
 Namen für den Zugriff auf die entsprechenden Vektor-Elemente zu
 verwenden. Dadurch erhöhen wir die Lesbarkeit und Verständlichkeit des
-Codes.
+Codes. Sie sind Teil unserer _ubiquitous language_. Wir hätten
+stattdesse ja auch `first` und `second` verwenden können.
 
 Zu jeder Karte wird dann noch ihr Punktwert ermittelt und damit die
 gewünschte Map erzeugt.
@@ -903,6 +904,7 @@ __REPL:__
 [3] https://openjdk.java.net/jeps/325  
 [4] https://clojure.org/guides/learn/flow#_truth  
 [5] http://clojure-doc.org/articles/language/laziness.html  
+[6] https://de.wikipedia.org/wiki/Kartesisches_Produkt  
 
 ---
 
