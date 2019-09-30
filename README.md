@@ -815,15 +815,16 @@ __REPL:__
 
   __REPL:__
 
-		hearts.core=> (into {} [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]]))
-		{:foo "FRED", :bar "BAR"}
-		hearts.core=> (into [] [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		hearts.core=> (def xs [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		#'hearts.core/xs
+		hearts.core=> (into [] xs)
 		[[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]]
-		hearts.core=> (into '() [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		hearts.core=> (into {} xs)
+		{:foo "FRED", :bar "BAR"}
+		hearts.core=> (into '() xs)
 		([:foo "FRED"] [:bar "BAR"] [:foo "FOO"])
-		hearts.core=> (into #{} [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		hearts.core=> (into #{} xs)
 		#{[:foo "FOO"] [:foo "FRED"] [:bar "BAR"]}
-
 
 __Sequenzen und Listen__
 
