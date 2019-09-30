@@ -245,8 +245,8 @@ einem __Funktor__ auswerten __muss__, und der Anwendung des Funktors
 auf die restlichen (Auswertungs-)Werte (__Argumente__).
 
 Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel haben
-[10]. Und es gibt auch Funktoren, die __Seiteneffekte__ haben, also im
-funktionalen Sinn nicht __pure__ sind.
+[10]. Und es gibt auch Funktoren, die __Seiteneffekte__ [13] haben,
+also im funktionalen Sinn nicht __pure__ sind.
 
 Da Listen sowohl für "ausführbaren Code" als auch als Datenstruktur
 verwendet werden (sog. _Homoiconicity_; "code is data is code"
@@ -272,6 +272,7 @@ brauchen wir hier nicht.
 [10] https://clojure.org/reference/special_forms  
 [11] http://blog.muhuk.com/2014/09/28/is_clojure_homoiconic.html#.XYuwxHtCRhE  
 [12] https://de.wikipedia.org/wiki/Homoikonizit%C3%A4t  
+[13] https://de.wikipedia.org/wiki/Wirkung_(Informatik)  
 
 ---
 
@@ -699,15 +700,16 @@ Wir haben oben aber die Aliase `farbe` und `bild` eingeführt, um diese
 Namen für den Zugriff auf die entsprechenden Vektor-Elemente zu
 verwenden. Dadurch erhöhen wir die Lesbarkeit und Verständlichkeit des
 Codes. Sie sind Teil unserer _ubiquitous language_. Wir hätten
-stattdesse ja auch `first` und `second` verwenden können.
+stattdesse ja auch einfach direkt `first` und `second` verwenden
+können.
 
 Zu jeder Karte wird dann noch ihr Punktwert ermittelt und damit die
 gewünschte Map erzeugt.
 
-* Das Makro `for` __liefert__ für jede Kombination (Kreuzprodukt
-  __Farben__ __x__ __Bilder__) ihrer Argumente das angegebene Ergebnis
-  `[f b]` (also das 2-Tupel) als __Sequenz__. Der Mechanismus wird
-  _list comprehension_ (etwa "Listenerzeugung" [1]) genannt.
+* Das Makro `for` __liefert__ für jede Kombination (__Farben__ __x__
+  __Bilder__) ihrer Argumente das angegebene Ergebnis `[f b]` (also
+  das 2-Tupel) als __Sequenz__. Der Mechanismus wird _list
+  comprehension_ (etwa "Listenerzeugung" [1]) genannt.
 
   In vorliegenden Fall sind dies die Elemente des Farb-Vektors und der
   Bilder, die der Reihe nach --- also "für jeden Durchlauf" --- an die
@@ -760,9 +762,9 @@ __REPL:__
   "muster-basierte rekursive Strukturzerlegung mit Namensbindung"
   nennen.
 
-  Mit einem Vektor-Pattern kann man __sequentielle__ Argumente
+  Mit einem __Vektor__-Pattern kann man __sequentielle__ Argumente
   zerlegen (also Listen, Vektoren, Strings, Maps) und mit einem
-  Map-Pattern (kommt weiter unten noch) kann man __assioziative__
+  __Map__-Pattern (kommt weiter unten noch) kann man __assioziative__
   Dinge zerlegen (Maps). Destructuring erspart einem also, den Zugriff
   auf die Elemente explizit über Funktionsaufrufe (z.B. `first` und
   `second`) hinschreiben zu müssen.
@@ -773,10 +775,10 @@ __REPL:__
 
 * `cond` verhält sich fast wie die neue `switch`-__Expression__ (NICHT
   `switch`-__Statement__!) in Java 12 [3]. Die Argument-Paare aus
-  _Prädikat_ (Form) und Ergebnis (Form) werden der Reihe nach
+  _Prädikat_ [7] (Form) und Ergebnis (Form) werden der Reihe nach
   ausgewertet. Dabei wird immer nur die Prädikats-Form ausgewertet!
-  (das ist wichtig, weil die Auswertung der Ergebnis-Form ja
-  Seiteneffekte haben könnte!) Sobald die ausgewertete Prädikats-Form
+  Das ist wichtig, weil die Auswertung der Ergebnis-Form ja
+  Seiteneffekte haben könnte! Sobald die ausgewertete Prädikats-Form
   _wahrhaftig_ (_truthy_ bzw. logisch wahr; vgl. unten) ist/liefert,
   wird die zugehörige Ergebnis-Form ausgewertet und als Ergebnis von
   `cond` geliefert.
@@ -789,9 +791,38 @@ __REPL:__
   i.d.R. _truthy_ [4], wenn man "logisch wahr" meint und _falsy_, wenn
   man "logisch unwahr" meint.
 
+  Mit `or` und `and` kann man Wahrheitswerte verknüpfen. Dabei liefern
+  diese nicht `true` und `false` sondern konsequenterweise _truthy_
+  und _falsy_ Werte.
+
+  __REPL:__
+
+		hearts.core=> (and :foo nil :bar)
+		nil
+		hearts.core=> (or :foo nil :bar)
+		:foo
+		hearts.core=> (or false :bar :fred)
+		:bar
+		hearts.core=> (and 2 3 4)
+		4
+		hearts.core=> (not (and 2 3 4))
+		false
+
+
 * Schließlich verwenden wir wieder `into`, um die Sequenz von
   __&lt;&lt;Farbe,Bild>,Punkte>__ Tupeln in eine Map
   __&lt;Farbe,Bild>-->&lt;Punkte>__ zu überführen.
+
+  __REPL:__
+
+		hearts.core=> (into {} [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]]))
+		{:foo "FRED", :bar "BAR"}
+		hearts.core=> (into [] [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		[[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]]
+		hearts.core=> (into '() [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		([:foo "FRED"] [:bar "BAR"] [:foo "FOO"])
+		hearts.core=> (into #{} [[:foo "FOO"] [:bar "BAR"] [:foo "FRED"]])
+		#{[:foo "FOO"] [:foo "FRED"] [:bar "BAR"]}
 
 
 __Sequenzen und Listen__
@@ -905,6 +936,7 @@ __REPL:__
 [4] https://clojure.org/guides/learn/flow#_truth  
 [5] http://clojure-doc.org/articles/language/laziness.html  
 [6] https://de.wikipedia.org/wiki/Kartesisches_Produkt  
+[7] https://de.wikipedia.org/wiki/Pr%C3%A4dikat_(Logik)  
 
 ---
 
