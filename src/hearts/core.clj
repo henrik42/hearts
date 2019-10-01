@@ -56,7 +56,8 @@
        (sort-by first)))            
 
 (defn gewinnt [s-map]
-  (->> (rang-liste s-map)
+  (->> s-map
+       rang-liste
        first                        
        second))
 
