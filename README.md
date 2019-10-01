@@ -1867,93 +1867,208 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   schreiben zu können, um so via `print` Ausgaben auf STDOUT zu
   erzeugen.
 
+  __REPL:__
+
+		hearts.core=> (when true (println "x") :foo)
+		x
+		:foo
+		hearts.core=> (println "x")
+		x
+		nil
+		hearts.core=> (if true (println "x") :foo)
+		x
+		nil
+
+
 * die zweite Form von `when-let` ist `loop`. Bisher haben wir `reduce`
   verwendet, um __iterative__ __Berechnungen__ durchzuführen. In Java
-  hätte man dafür `for` oder `while` Schleifen verwenden. `loop`
-  bietet auch die Möglichkeit, eine Aggregation durchzuführen, jedoch
-  kann man auf einfach Weise am "Ende der Schleife" noch einen
-  Verarbeitungsschritt einbauen. Und genau das machen wir unten.
+  hätte man dafür `for` oder `while` Schleifen verwenden.
+
+  `loop` bietet auch die Möglichkeit, eine __Aggregation__
+  durchzuführen, jedoch kann man auf einfach Weise am "Ende der
+  Schleife" noch einen Verarbeitungsschritt einbauen.
+
+  Mit `reduce` ist das häufig nicht so einfach möglich, weil man nicht
+  leicht erkennen kann, wann das letzte Element verarbeitet wird. In
+  Java und bei der Verwendung von `reduce` muss man solche "finalen
+  Schritte" daher i.d.R. im Anschluss an die Schleife machen. Mit
+  `loop` kann man das eleganter und kompakter formulieren.
 
   `loop` eröffnet auch einen __lokalen__ __Namensraum__ (wie `let` und
-  `when-let`) und bindet Wert an lokale Namen. Der _binding_ _vector_
-  besteht aus Paaren von `<lokaler-name> <init-wert>`. Diese Bindung
-  (inkl. Destructuring) wird einmalig (zu Beginn der Schleife)
-  hergestellt.
+  `when-let`) und bindet Werte an lokale Namen. Der _binding_ _vector_
+  besteht aus Paaren von `<lokaler-name> <init-wert>`. Diese
+  __initiale__ Bindung (inkl. Destructuring) wird __einmalig__ zu
+  Beginn der Schleife hergestellt.
 
   Hier wird `x` an das erste Element von `xs` gebunden und `xr` an den
   _tail_ (Rest) von `xs`. Der lokale Name `s` wird an den Wert von `s`
   gebunden.
 
   __Achtung__: es handelt sich hierbei um zwei __verschiedene__
-  Name. Das linke `s` ist in der `loop` gebunden, das rechte `s` ist
+  Namen. Das linke `s` ist in der `loop` gebunden, das rechte `s` ist
   in `runde` gebunden und hier wird __der__ __Wert__ von diesem Namen
   an das `s` in `loop` gebunden. Innerhalb von `loop` "sieht" man mit
   `s` immer nur das "innere" `s`. Andere Namen, die in `runde`
   gebunden sind (wie z.B. `r`) können auch in `loop` gesehen
-  werden. Das "innere" `s` _verschattet_ also das äußere `s`.
+  werden. Das "innere" `s` _verschattet_ also das äußere `s`. Solche
+  Mehrfachverwendungen mit Namenverschattung sollte man vermeiden.
 
   `tisch` wird mit einem leeren Vektor gebunden.
 
   Die Bindung im _binding_ _vector_ ist die Bindung der Namen für den
   ersten Schleifendurchlauf. Die Schleife wird jedoch mehrfach
-  durchlaufen (wie das passiert, wird gleich gezeigt). Bei diesen
+  durchlaufen. Wie das passiert, wird gleich gezeigt. Bei diesen
   folgenden Schleifendurchläufen sind die Namen dann an andere Werte
-  gebunden.
+  gebunden (vgl. `recur` unten).
 
   Der Name `x` wird in jedem Schleifendurchlauf an den Namen
   desjenigen Spielers gebunden, der gerade legen muss. Wenn `x`
-  _falsy_ ist (also alle Spieler gelegt haben), ist die Runde
-  "fertig". Diesen Fall erkennen wir via `(if-not x ...)`.
+  _falsy_ ist (also alle Spieler gelegt haben und der _aktuelle_
+  _Spieler_ `nil` ist), ist die Runde "fertig". Diesen Fall erkennen
+  wir via `(if-not x ...)`.
+
+  __REPL:__
+
+		hearts.core=> (loop [[h & t] (range 5) r nil]
+		                 (if-not h (format ">%s<" r)
+		                           (recur t (str h r h))))
+		">4321001234<"
 
   Am Ende der Runde müssen wir via `(sticht tisch)` ermitteln, wer
   diese Runde sticht und wir "geben" die Karten auf dem `tisch` eben
-  diesem Spieler `b` in seine `:stiche` (sein Haufen). Das machen wir
-  dadurch, dass wir die Alle-Spieler-Map "updaten" (natürlich wird
-  eine neue Map erzeugt!), und zwar in dem Eintrag/Wert, der über `b`
-  und `:stiche` referenziert wird.
+  diesem Spieler `b` in seine `:stiche` (sein Haufen).
 
-  Dies ist zu Beginn der Wert `nil`! Wir haben in `geben!` nur den
-  `:hand`-Eintrag der Ein-Spieler-Map gesetzt, nicht aber den
-  `:stiche`-Eintrag. Mit `(fnil conj [])` erzeugen wir eine Funktion,
-  die das erste Argument durch `[]` ersetzt, falls es `nil` ist und
-  sich ansonsten wie `conj` verhält. Dadurch schafft man eine
-  Funktion, die ihre eigene Initialisierung (nämlich ein leerer
-  Vektor) durchführt. `conj` (_conjoin_) fügt ein Element zu einer
-  Collection. 
+  Das machen wir dadurch, dass wir die Alle-Spieler-Map "updaten"
+  (natürlich wird eine neue Map erzeugt!), und zwar in dem
+  Eintrag/Wert, der über den _Pfad_ `b` und `:stiche` referenziert
+  wird.
+
+  Der Wert dieses _Pfades_ ist zu Beginn der Wert `nil`! Wir haben in
+  `geben!` nur den `:hand`-Eintrag der Ein-Spieler-Map gesetzt, nicht
+  aber den `:stiche`-Eintrag.
+
+  __REPL:__
+
+		hearts.core=> (doc get-in)
+		-------------------------
+		clojure.core/get-in
+		([m ks] [m ks not-found])
+		  Returns the value in a nested associative structure,
+		  where ks is a sequence of keys. Returns nil if the key
+		  is not present, or the not-found value if supplied.
+		nil
+		hearts.core=> (def a {:foo {:bar "BAR" :fred "FRED"}})
+		#'hearts.core/a
+		hearts.core=> (get-in a [:foo :bar])
+		"BAR"
+		hearts.core=> (get-in a [:foo :oops] "oops")
+		"oops"
+		hearts.core=> (get-in a [:foo :oops])
+		nil
+
+
+  Mit `(fnil conj [])` erzeugen wir eine Funktion, die das erste
+  Argument durch `[]` ersetzt, falls es `nil` ist und sich ansonsten
+  wie `conj` verhält. Dadurch schafft man eine Funktion, die die
+  __Initialisierungslogik__ __mit__ __einschließt__: nämlich als
+  Start-Wert einen leeren Vektor zu verwenden. `conj` (_conjoin_) fügt
+  ein Element zu einer Collection.
+
+  __REPL:__
+
+		hearts.core=> (doc conj)
+		-------------------------
+		clojure.core/conj
+		([coll x] [coll x & xs])
+		  conj[oin]. Returns a new collection with the xs
+			'added'. (conj nil item) returns (item).  The 'addition' may
+			happen at different 'places' depending on the concrete type.
+		nil
+		hearts.core=> (conj [] :foo :bar)
+		[:foo :bar]
+		hearts.core=> (conj '() :foo :bar)
+		(:bar :foo)
+		hearts.core=> ((fnil conj []) nil :foo :bar)
+		[:foo :bar]
+		hearts.core=> ((fnil conj []) [:fred :quox] :foo :bar)
+		[:fred :quox :foo :bar]
+
+
+
+  Das Zusammenwirken von `update` und `fnil` führt dazu, dass der zu
+  Beginn nicht vorhandene `:stiche` Wert effektiv zu `[]` wird und
+  __diesem__ Wert dann der `tisch` hinzugefügt wird.
+
+  __REPL:__
+
+		hearts.core=> (doc update-in)
+		-------------------------
+		clojure.core/update-in
+		([m [k & ks] f & args])
+		  'Updates' a value in a nested associative structure, where ks is a
+		  sequence of keys and f is a function that will take the old value
+		  and any supplied args and return the new value, and returns a new
+		  nested structure.  If any levels do not exist, hash-maps will be
+		  created.
+		nil
+		hearts.core=> (update-in {:foo {}} [:foo :fred] (fnil conj []) :uh-oh :duh!)
+		{:foo {:fred [:uh-oh :duh!]}}
+		hearts.core=> (update-in {:foo {:fred [:bar]}} [:foo :fred] (fnil conj []) :uh-oh :duh!)
+		{:foo {:fred [:bar :uh-oh :duh!]}}
+
 
   `runde` liefert also eine Map mit dem Spieler `b`, der `:sticht` und
   der Alle-Spieler-Map, in der `b` den `tisch` in `:stiche` (ein
   Vektor) eingesammelt hat. `let` kann genau wie `when-let` mehrere
   Formen auswerten und liefert den Wert der letzten Form.
 
-* falls wir in `x` aber noch einen Spieler haben, der nun legen muss,
-  ermitteln wir erst was er auf der `hand` hat und dann welche Karte
-  `k` er legen will. Der `tisch` ist entweder noch leer (erster
+  __REPL:__
+
+		hearts.core=> (let [x 1] (println x) (inc x))
+		1
+		2
+
+
+* falls wir in `x` aber noch einen Spieler haben (`if-not`
+  "else"-Zweig) , der nun legen muss, ermitteln wir erst was er auf
+  der `hand` hat und dann welche Karte `k` er legen will.
+
+  Der `tisch` ist entweder noch leer (leerer Vektor `[]`; erster
   Schleifendurchlauf) oder hat schon Karten. Nun fügen wir dem `tisch`
-  eine neue "gelegte Karte" mit `:karte k` und `:spieler b` zu (und
-  binden diesen Wert an einen neuen lokalen Namen
-  `tisch`). Schließlich "updaten" wir noch die `:hand` des Spielers
-  `x` und "entziehen" (`disj`) ihm die Karte `k`.
+  eine neue "gelegte Karte" mit `:karte k` und `:spieler b` zu und
+  binden diesen Wert an einen neuen lokalen Namen `tisch`.
 
-* damit haben wir das "Delta" an unserem Spielzustand
-  (Alle-Spieler-Map `s` und dem `tisch`) berechnet und können nun mit
-  dem nächsten Spieler in dieser Runde fortfahren.
+  Schließlich "updaten" wir noch die `:hand` des Spielers `x` und
+  "entziehen" (`disj`) ihm die Karte `k`.
 
-  Dazu rufen wir die `loop` Schleife via `recur` mit den neuen
+* damit haben wir das "Delta" an unserem Spielzustand berechnet und in
+  Alle-Spieler-Map `s` und den `tisch` __eingebaut__ und können nun
+  mit dem nächsten Spieler in dieser Runde fortfahren.
+
+  __Wichtig:__ wir haben __nichts__ geändert, so wie man ein Objekt in
+  Java ändern würde. Wir haben ausschließlich __neue__
+  __unveränderliche__ __Objekte__ aus __bestehenden__
+  __unveränderlichen__ __Objekten__ konstruiert. Die __neuen__ `s` und
+  `tisch` sind unser neuer Aggregatszustand.
+
+  Nun rufen wir die `loop` Schleife via `recur` mit den neuen
   Argumentwerten für die `loop`-Bindungen auf: also den verbleibenden
   Spielern `xs`, der neuen Alle-Spieler-Map `s` und dem aktualisierten
   `tisch`.
 
-  Der Aufruf sieht so aus, als wenn hier eine "Rekursion" erfolgen
+  Der Aufruf sieht so aus, als wenn hier eine "Rekursion" [1] erfolgen
   würde. Und Rekursion "kostet Stack-Space" und führt irgendwann zum
-  Stackoverflow. In Funktionalen Programmiersprachen wird aber häufig
-  eine Optimierung durchgeführt, die sich __Endrekursion__
+  Stackoverflow.
+
+  In Funktionalen Programmiersprachen wird aber häufig eine
+  Optimierung durchgeführt, die sich __Endrekursion__ [2]
   nennt. Endrekursion führt zu einem __iterativen__
-  __Berechnungsprozess__ (nicht zu einem __rekurisven__) und dieser
-  benötigt __keinen__ __Stackspace__. `recur` ist so ein
-  __endrekrsiver__ __Rekursionsaufruf__. Er kann nur erfolgen, wenn
-  die `recur`-S-Expression die letzte ist, die ausgewertet
-  wird. Andernfalls kommmt es zu einem Compile-Fehler.
+  __Berechnungsprozess__ [3] (nicht zu einem __rekurisven__) und
+  dieser benötigt __keinen__ __Stackspace__.
+
+  `recur` ist so ein __endrekursiver__ __Rekursionsaufruf__. Er kann
+  nur erfolgen, wenn die `recur`-S-Expression die letzte ist, die
+  ausgewertet wird. Andernfalls kommmt es zu einem Compile-Fehler.
 
 Fertig.
 
@@ -1965,6 +2080,10 @@ terminiert garantiert, weil wir von `xs` immer ein Element
 __entfernen__ (und `xs` zu Beginn vier Elemente hat) und damit
 schließlich in einen Zustand kommen, in dem `x` _falsy_ (hier `nil`)
 ist. Und damit laufen wir nicht mehr in das `recur`.
+
+[1] https://de.wikipedia.org/wiki/Rekursion  
+[2] https://de.wikipedia.org/wiki/Endrekursion  
+[3] https://de.wikipedia.org/wiki/Iterative_Programmierung  
 
 ---
 
