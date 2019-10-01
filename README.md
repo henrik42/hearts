@@ -1525,8 +1525,9 @@ Als erstes wird __gegeben__.
 
 `geben!` ist eine "impure function". Sie liefert nämlich nicht immer
 bei gleicher Eingabe das gleiche Ergebnis (tatsächlich hat die
-Funktion gar keinen Parameter und somit auch keine "Eingabe"). Ein
-weiterer Umstand, der eine Funktion "impure" macht ist, wenn eine
+Funktion gar keinen Parameter und somit auch keine "Eingabe").
+
+Ein weiterer Umstand, der eine Funktion "impure" macht ist, wenn eine
 Funktion "Seiteneffekte" hat --- also z.B. eine globale Variable
 ändert (das kann man in Clojure machen, somit ist Clojure auch keine
 "reine funktionale Programmiersprache").
@@ -1537,12 +1538,19 @@ Leser). Aber dabei handelt es sich __nur__ __um__ __eine__
 __Konvention__. Ansonsten hat das `!` im Namen keine besondere
 Bedeutung.
 
+"Impure Functions" zu testen ist schwieriger als "reine Funktionen" zu
+testen. Da liegt eben daran, dass man entweder einen
+"Funktions-und-Argument-externen Zustand" kontrollieren muss und/oder
+"Zufälle kontrollieren muss" (wie z.B. beim Geben). Daher sollte man
+immer versuchen, einen möglichst großen Anteil seines Programms "pure
+functional" zu machen. Das kann man durchaus auch in Java so machen.
+
 
 * `keys` liefert die Sequenz mit den Schlüsslen der `karten->punkte`
   Map. Also die Karten.
 
 
-* `shuffle` ist eine Zufalls-Misch-Funktion.
+* `shuffle` ist eine __Zufalls-Misch-Funktion__.
 
 
 * `partition` ist das Gegenstück zu `flatten`: es macht aus einer
@@ -1552,12 +1560,17 @@ Bedeutung.
 
 
 * die HOF `map` kann nicht nur auf eine Sequenz sondern auch auf
-  mehrere Sequenzen angewendet werden. In dem Fall wendet sie die
-  Funktion (erstes Argument) auf die jeweils ersten Elemente mehrere
-  Sequenzen an (als n Argumente) und dann die jeweils zweiten usw.
+  __mehrere__ __Sequenzen__ angewendet werden. In dem Fall wendet sie
+  die Funktion (erstes Argument) auf die jeweils ersten Elemente
+  mehrere Sequenzen an (als n Argumente) und dann die jeweils zweiten
+  usw.
 
   Hier wird also die Funktion auf `spieler` und die aufgeteilten
   Karten-Partition angewendet.
+
+  __Übung:__ Schreibe die Funktion `karten->punkte` so um, dass sie
+  nur aus einem `map` Aufruf und `into` besteht. D.h. eliminiere das
+  `for`.
 
 
 * die Arity-2-Funktion liefert ein Tupel mit `%1` (dem Spieler; erstes
