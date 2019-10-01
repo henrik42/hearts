@@ -2111,22 +2111,29 @@ ist. Und damit laufen wir nicht mehr in das `recur`.
 
 ---
 
-`defn` unterstützt auch die Definition von mehreren Arities. `spiel`
-hat die Arity-0 und die Arity-1. Die Arity-0-Variante ruft die
-Arity-1-Variante mit `(spiel (geben!))` auf. D.h. die Arity-1-Variante
-hat als Argument `gegeben` die Alle-Spieler-Map zu Spielbeginn nach
-dem Geben. Diese Variante habe ich eingeführt, um die Funktion besser
-testen zu können.
+`defn` unterstützt auch die Definition von mehreren Arities. Die
+Funktion `spiel` hat die Arity-0 und die Arity-1.
 
-Auch das `spiel` läuft in Schleifen, nämlich über die Runden. `s` wird
-zu Beginn an die Alle-Spieler-Map `gegeben` gebunden, `b` an den
-Spieler, der `beginnt` und der Rundenzähler `r` bekommt den Wert `1`.
+Die Arity-0-Variante ruft die Arity-1-Variante mit `(spiel (geben!))`
+auf. D.h. die Arity-1-Variante hat als Argument `gegeben` die
+Alle-Spieler-Map zu Spielbeginn nach dem Geben. Diese Variante habe
+ich eingeführt, um die Funktion besser testen zu können.
+
+Auch das `spiel` läuft in `loop`-`recur`-Schleifen, nämlich über die
+Runden. `s` wird zu Beginn an die Alle-Spieler-Map `gegeben` gebunden,
+`b` an den Spieler, der `beginnt` und der Rundenzähler `r` bekommt den
+Wert `1`.
 
 * `if-let` wird benutzt, um die `runde` mit dem aktuellen Spielzustand
-  aufzurufen. Falls `runde` _truthy_ ist, werden (die lokalen Namen
-  von `if-let`) `s` und `b` an die neuen Werte aus der `runde`
+  aufzurufen. Falls `runde` _truthy_ ist, werden in `if-let` die
+  lokalen Namen `s` und `b` an die neuen Werte aus der `runde`
   gebunden und es wird sofort mit diesen Werten via `recur` der
   nächste Schleifendurchlauf gemacht.
+
+  __Wichtig:__ `recur` ist kein "imperatives goto", sonder es verhält
+  sich wie ein "Funktionsaufruf ohne Stackverbrauch", der Argumente
+  und einen Rückgabe-Wert hat und genau dieser Rückgabe-Wert wird
+  durch die `recur`-Form "geliefert".
 
   Falls `runde` _falsy_ ist, werden die Namen ja __nicht__ neu
   gebunden, so dass in `let` die Alle-Spieler-Map `s` nach der letzten
@@ -2154,16 +2161,5 @@ Fertig.
                         :gewinnt (gewinnt s)}]
                (println "Gewinner:" (:gewinnt erg) "\nSpieler:" s hr)
                erg)))))
-
----
-
-Die Funktion `-main` ist der "Programmeinstieg von außen", so wie man
-es von Java mit der `static void main(String[] args)` kennt. Die
-Funktion hat aber mit dem Spiel an sich nichts zu tun.
-
----
-
-    (defn -main [& args]
-      (spiel))
 
 ---
