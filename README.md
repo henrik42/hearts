@@ -1357,8 +1357,8 @@ Sequenzen!
   Funktionsobjekt. `comp` ("compose") liefert eine Arity-1-Funktion,
   die die angegebenen Funktionen der Reihe nach auf das Argument
   anwenden und als Ergebnis das Funktionsergebnis der letzten Funktion
-  liefert. Wichtig: die Funktionen werden "von rechts nach links"
-  angewendet.
+  liefert [2, 3, 4]. Wichtig: die Funktionen werden "von rechts nach
+  links" angewendet.
 
   Beispiel: `((comp h g f) x)` entspricht `(h (g (f x)))` oder auch
   `(-> (f x) g h)` bzw. `(-> x f g h)`.
@@ -1366,17 +1366,35 @@ Sequenzen!
   Hier erzeugen wir eine Funktion, die erst via `:karte` die Karte aus
   der gespielten Karte holt und darauf dann `karten->punkte` anwendet.
 
+  __REPL:__
+
+		hearts.core=> (comp inc second)
+		#object[clojure.core$comp$fn__4727 0x7a6fe31f "clojure.core$comp$fn__4727@7a6fe31f"]
+		hearts.core=> ((comp inc second) [:foo 41])
+		42
+		hearts.core=> ((comp pos? inc second) [:foo 41])
+		true
+		hearts.core=> ((comp str pos? inc second) [:foo 41])
+		"true"
+
 
 * Mit `map` bilden wir die Sequenz von gespielten Karten auf die
   Sequenz der zugehörigen Punkte ab.
 
 
-* `apply` wendet eine Funktion (erstes Argument) auf die Elemente des
-  zweiten Arguments an. Dabei stellt `apply` die Elemente aber an die
-  Argumentpositionen der aufgerufenen Funktion. D.h. wir übergeben
-  `apply` eine Sequenz mit n Werten und `apply` ruft die Funktion mit
-  n Argumenten auf. Das ist was komplett anderes, als die Funktion mit
-  einem Sequenz-Argument mit n Elementen aufzurufen!
+* `apply` wendet eine Funktion (erstes Argument) auf die
+  __Elemente(!)__ des zweiten Arguments (eine Sequence) an. Dabei
+  stellt `apply` die __Elemente__ aber an die __Argumentpositionen__
+  der __aufgerufenen__ __Funktion__. D.h. wir übergeben `apply` eine
+  Sequenz mit n __Werten/Elementen__ und `apply` ruft die Funktion mit
+  n __Argumenten__ auf. Das ist was komplett anderes, als die Funktion
+  mit __einem__ __Sequenz-Argument__ mit n Elementen aufzurufen!
+
+  __REPL:__
+
+		hearts.core=> (apply #(-> [%2 %1]) [:foo :bar])
+		[:bar :foo]
+
 
 * `+` ist eine Funktion, die beliebig viele Zahl-Argumente
   addiert. `(+)` ergibt `0`, `(+ 4)` ergibt `4` und `(+ 3 2 1)` ergibt
@@ -1396,7 +1414,10 @@ __Anmerkung__: Clojure-Programme haben schon dadurch weniger Fehler,
   fast immer auf der __Sequenz-Abstraktion__ und mit den
   API-Funktionen darauf.
 
-[1] https://de.wikipedia.org/wiki/Off-by-one-Error
+[1] https://de.wikipedia.org/wiki/Off-by-one-Error  
+[2] https://de.wikipedia.org/wiki/Komposition_(Mathematik)  
+[3] https://rosettacode.org/wiki/Function_composition#Clojure  
+[4] https://rosettacode.org/wiki/Function_composition#Java_8  
 
 ---
 
