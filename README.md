@@ -1177,13 +1177,11 @@ Fertig.
   und weniger Verzweigungen. Beides sind Faktoren, die effektiv zu
   einer höheren Testabdeckung (_branch coverage_) führen.
 
-  Aber das ist nur meine subjktive Meinung.
-
 ---
 
 `sticht` liefert den Spieler (Spieler-Keyword), der die Karten, die
-auf dem Tisch liegen bzw. ausgespielt wurden, erhält. Der also
-__den Stich macht__.
+auf dem Tisch liegen bzw. ausgespielt wurden, am Ende einer Runde
+erhält. Der also __den Stich macht__.
 
 Das Argument ist eine Sequenz. Die Elemente sind Maps mit den Keys
 `:spieler` und `:karte`. Diese geben an (also mappen zu Werten), wer
@@ -1196,9 +1194,9 @@ __erste__ Element (man spricht häufig vom _head_) wird an den Namen
 __Elemente__ (also auch wieder eine __Sequenz__; man spricht häufig
 vom _tail_) an den Namen `xs` gebunden.
 
-D.h. die Reihenfolge der Element in der Sequenz gibt an, in welcher
-Reihenfolge die Karten ausgespielt wurden. Daher gibt das erste
-Element an, mit welcher Karte die betreffende Runde __eröffnet__
+Die Reihenfolge der Element in der Sequenz gibt an, in welcher
+Reihenfolge die Karten ausgespielt wurden. Daher gibt das __erste__
+__Element__ an, mit welcher Karte die betreffende Runde __eröffnet__
 wurde.
 
 Die Implementation muss also beginnend von der Eröffnungskarte aus
@@ -1215,6 +1213,27 @@ gelegt hat.
   mit dem Key `:spieler` auf eine Map oder eine Menge/Set zugreift und
   den Ergebniswert (also entweder den Map-Value oder das Set-Element)
   liefert.
+
+  __REPL:__
+
+		hearts.core=> (get {:bar "BAR" :foo "FOO"} :foo)
+		"FOO"
+		hearts.core=> (get {:bar "BAR" :foo "FOO"} 42 "oops")
+		"oops"
+		hearts.core=> (:foo {:bar "BAR" :foo "FOO"})
+		"FOO"
+		hearts.core=> (:fred {:bar "BAR" :foo "FOO"})
+		nil
+		hearts.core=> (:fred {:bar "BAR" :foo "FOO"} "not-found")
+		"not-found"
+		hearts.core=> ({:bar "BAR" :foo "FOO"} :bar)
+		"BAR"
+		hearts.core=> (#{:bar :foo} :foo)
+		:foo
+		hearts.core=> (:bar #{:bar :foo})
+		:bar
+		hearts.core=> (:foo [:foo :bar])
+		nil
 
   Mit `:spieler` wird also auf den gemappten Wert der folgenden
   `reduce`-Form zugegriffen und dieser als Ergebnis geliefert. Damit
