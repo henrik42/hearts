@@ -1217,7 +1217,7 @@ alle anderen Karten betrachten und entscheiden, welches die
 gelegt hat.
 
 
-* das Keyword `:spieler` steht hier an der __Funktor__ Position in der
+* das Keyword `:spieler` steht hier an der __Funktor-Position__ in der
   S-Expression. So wie Mengen Funktionen auf ihren Elementen sind, so
   sind Keywords __Lookup-Funktionen__ auf __assoziativen__
   Datenstrukturen. D.h. `:spieler` verhält sich wie eine Funktion, die
@@ -1250,6 +1250,16 @@ gelegt hat.
   `reduce`-Form zugegriffen und dieser als Ergebnis geliefert. Damit
   soll am Ende eben der gesuchte Spieler geliefert werden.
 
+  __Anmerkung:__ beim Lesen dieser Beschreibung merkt man, dass hier
+  __erst__ der Zugrff via `:spieler` beschrieben wird, ob wohl dieser
+  __nach__ der Auswertung von `reduce` erfolgt. Das ist ja genau der
+  Grund, warum es das _threading macro_ gibt. Denn das erlaubt uns ja,
+  den Code in der Reihenfolge hinzuschreiben, in der er auch
+  ausgeführt wird. Wie müsste man den Code umstellen, damit er etwa so
+  aussieht?
+
+        (... xs .... :spieler)
+
 
 * `reduce` ist eine HOF, mit der man Werte (z.B. die Element einer
   Sequenz) __aggregieren__ kann. Die Aggregierungslogik steckt
@@ -1265,11 +1275,11 @@ gelegt hat.
   Aggregation) und dem zweiten Element von `xs` auf.
 
   Mit der Funktion können wir also einen Aggregatswert an `reduce`
-  liefern, den `reduce` beim anschließeden Funktionsaufruf wieder an
-  die Funktion gibt (das ist wie Ping-Pong).
+  liefern, den `reduce` beim anschließenden Funktionsaufruf wieder an
+  die Funktion gibt. Das ist wie Ping-Pong.
 
   Nach dem letzten Element von `xs` liefert `reduce` den Rückgabe-Wert
-  des letzen Funktionsaufrufs (also das "finale Aggregat").
+  des letzen Funktionsaufrufs --- also das "finale Aggregat".
 
   In Java gibt es mittlerweile ja auch ein `reduce` [1]. Früher hätte
   man in Java einfach eine `for` Schleife mit einer lokalen Variable
@@ -1282,7 +1292,7 @@ gelegt hat.
   des `:karte` Wertes und `b1` an das Bild.
 
   Hier verwende ich noch ein weiteres Destrukturierungs-Feature: mit
-  `:as` bindet man das ganze (unzerlegte) Argument an einen Namen --
+  `:as` bindet man das ganze, unzerlegte Argument an einen Namen --
   hier also `t`.
 
   Die Namen `f2`, `b2` und `s` binden wir an die Wertes des zweiten
@@ -1292,7 +1302,7 @@ gelegt hat.
   wurden __und__ ob der Rang von `s` __höher__ ist als der von `t`
   (für den ersten Aufruf wird `t` ja `eroeffnung` sein).
 
-  Falls dem so ist, wird `s` unser weiterer Aggregationszustand
+  Falls dem so ist, wird `s` unserer weiterer Aggregationszustand
   sein. Also jene Karte, die "sticht".
 
   Falls dem aber nicht so ist, "sticht" weiterhin die bisherige
@@ -1304,10 +1314,10 @@ liefert `sticht` den Spieler, der diese Karte gespielt hat.
 Fertig.
 
 __Hinweis__: man hätte auch `((reduce (fn....) eroeffnung) :spieler)`
-schreiben können (also die Map als Funktor und nicht das Keyword),
-aber es ist _idiomatisch_, für diesen Use-Case das Keyword als Funktor
-zu verwenden (und zwei öffnende Klammern direkt hintereinander sehen
-auch merkwürdig aus).
+schreiben können, also die Map als Funktor und nicht das Keyword, aber
+es ist _idiomatisch_, für diesen Use-Case das Keyword als Funktor zu
+verwenden. Und außerdem sehen zwei öffnende Klammern direkt
+hintereinander auch merkwürdig aus ;-)
 
 [1] https://www.baeldung.com/java-stream-reduce  
 [2] https://dev.solita.fi/2017/04/10/making-software-testing-easier-with-clojure.html  
