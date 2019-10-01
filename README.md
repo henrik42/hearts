@@ -1775,6 +1775,11 @@ Aber jetzt zum Code:
   (vgl. oben). Wenn man nur ein Argument hat, kann man auch einfach
   nur `%` schreiben.
 
+  __REPL:__
+
+		hearts.core=> (filter even? (range 10))
+		(0 2 4 6 8)
+
 
 * Falls es nun eine solche Karte gibt (also `k` _truthy_ ist), liefern
   wir diese Karte.
