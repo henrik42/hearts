@@ -1440,10 +1440,11 @@ __Anmerkung__: Clojure-Programme haben schon dadurch weniger Fehler,
 Liste/Sequenz von Spielern liefern. Da es auch einen Punktegleichstand
 geben kann, sind es Mengen von Spielern.
 
-* `s-map` ist wieder eine Alle-Spieler-Map. `rang-liste` wird nur
-  einmal pro Spiel aufgerufen, nämlich wenn nach der letzten Runde die
-  Stiche der Spieler ausgewertet werden, um festzustellen, wer
-  gewonnen hat.
+`rang-liste` wird nur einmal pro Spiel aufgerufen, nämlich wenn nach
+der letzten Runde die Stiche der Spieler ausgewertet werden, um
+festzustellen, wer gewonnen hat.
+
+* `s-map` ist wieder eine Alle-Spieler-Map. 
 
 
 * via `map` bilden wir die sequenzialisierte Alle-Spieler-Map (also
@@ -1451,10 +1452,10 @@ geben kann, sind es Mengen von Spielern.
   Sequenz von Maps mit den Schlüsseln `:spieler` und `:punkte`.
 
   An dieser Stelle hätten wir auch einfach ein
-  __&lt;Spieler,Punkte>__-Tupel anstatt der Map nehmen können (genau so,
-  wie wir unsere Karten ja als __&lt;Farbe,Bild>__-Tupel repräsentieren,
-  anstatt als Map mit `:farbe` und `:bild`. Das ist einfach eine
-  Designentscheidung.
+  __&lt;Spieler,Punkte>__-Tupel anstatt der Map nehmen können, genau
+  so, wie wir unsere Karten ja als __&lt;Farbe,Bild>__-Tupel
+  repräsentieren, anstatt als Map mit `:farbe` und `:bild`. Das ist
+  einfach eine Designentscheidung.
 
 
 * `group-by` ist eine HOF, die die Elemente der Sequenz (zweites
@@ -1465,6 +1466,11 @@ geben kann, sind es Mengen von Spielern.
 
   Hier ist `:punkte` die Funktion, durch die die Gruppierung nach den
   Punkten erfolgt.
+
+  __REPL:__
+
+		hearts.core=> (group-by even? (range 10))
+		{true [0 2 4 6 8], false [1 3 5 7 9]}
 
 
 * via `map` erzeugen wir eine Sequenz von
@@ -1504,10 +1510,11 @@ Keywords).
 
 ---
 
-    (defn gewinnt [s-map]
-      (->> (rang-liste s-map)
-           first
-           second))
+	(defn gewinnt [s-map]
+	  (->> s-map
+		   rang-liste
+		   first
+		   second))
 
 ---
 
