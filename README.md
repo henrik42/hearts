@@ -1177,6 +1177,16 @@ Fertig.
   und weniger Verzweigungen. Beides sind Faktoren, die effektiv zu
   einer höheren Testabdeckung (_branch coverage_) führen.
 
+  Und Clojure Programme bestehen meiner Meinung nach nur aus den
+  Teilen, die ich wirklich brauche, um mein Problem zu lösen. Nicht
+  weniger, aber eben auch nicht mehr. Das führt zu weniger Code und
+  weniger Bugs, obwohl Clojure keine statische Typprüfung besitzt [3].
+
+  Natürlich müssen auch Clojure Programme automatisch getestet werden
+  [2]. Da man aber schon __beim__ __Entwickeln__ ständig in der REPL
+  interaktive Ad-Hoc-Tests macht, sind Clojure Programm i.d.R. schon
+  sehr gut getestet, wenn man den Code fertig hat.
+
 ---
 
 `sticht` liefert den Spieler (Spieler-Keyword), der die Karten, die
@@ -1298,7 +1308,9 @@ aber es ist _idiomatisch_, für diesen Use-Case das Keyword als Funktor
 zu verwenden (und zwei öffnende Klammern direkt hintereinander sehen
 auch merkwürdig aus).
 
-[1] https://www.baeldung.com/java-stream-reduce
+[1] https://www.baeldung.com/java-stream-reduce  
+[2] https://dev.solita.fi/2017/04/10/making-software-testing-easier-with-clojure.html  
+[3] https://dev.to/danlebrero/the-broken-promise-of-static-typing  
 
 ---
 
