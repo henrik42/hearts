@@ -1390,19 +1390,27 @@ Sequenzen!
   n __Argumenten__ auf. Das ist was komplett anderes, als die Funktion
   mit __einem__ __Sequenz-Argument__ mit n Elementen aufzurufen!
 
-  __REPL:__
+  __REPL:__ die erste Form binden eine __Liste__ mit
+    __Rest-Argumenten__ an `xs`. In diesem Fall haben wir nur ein
+    Argument (den Vektor). Daher hat die Liste auch nur ein
+    Element. Die zweite Form ruft die Funktion mit __drei__ Argumenten
+    auf (den drei Elementen des Vektors). Daher enthält die
+    Rest-Argumenten-Liste in diesem Fall drei Elemente.
 
-		hearts.core=> (apply #(-> [%2 %1]) [:foo :bar])
-		[:bar :foo]
+		hearts.core=> ((fn [& xs] xs) [:foo :bar :fred])
+		([:foo :bar :fred])
+		hearts.core=> (apply (fn [& xs] xs) [:foo :bar :fred])
+		(:foo :bar :fred)
 
 
-* `+` ist eine Funktion, die beliebig viele Zahl-Argumente
+* `+` ist eine Funktion, die __beliebig__ __viele__ Zahl-Argumente
   addiert. `(+)` ergibt `0`, `(+ 4)` ergibt `4` und `(+ 3 2 1)` ergibt
   `6`.
 
 Mit `apply` können wir also auf einen Schlag (ohne aggregierende
 Schleife; vgl. oben) alle gemappten Punktwerte addieren und als
-Ergebnis liefern. `(apply + [1 2 3])` ist das gleiche wie `(+ 1 2 3)`.
+Ergebnis liefern. `(apply + [1 2 3])` ist das gleiche wie `(+ 1 2 3)`
+ist das gleiche wie `(reduce + [1 2 3])`.
 
 Fertig.
 
