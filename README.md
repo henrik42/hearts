@@ -1510,11 +1510,11 @@ Keywords).
 
 ---
 
-	(defn gewinnt [s-map]
-	  (->> s-map
-		   rang-liste
-		   first
-		   second))
+    (defn gewinnt [s-map]
+      (->> s-map
+           rang-liste
+           first
+           second))
 
 ---
 
