@@ -1180,7 +1180,8 @@ Fertig.
   Und Clojure Programme bestehen meiner Meinung nach nur aus den
   Teilen, die ich wirklich brauche, um mein Problem zu lösen. Nicht
   weniger, aber eben auch nicht mehr. Das führt zu weniger Code und
-  weniger Bugs, obwohl Clojure keine statische Typprüfung besitzt [3].
+  weniger Bugs, obwohl Clojure keine statische Typprüfung besitzt
+  [3, 4].
 
   Natürlich müssen auch Clojure Programme automatisch getestet werden
   [2]. Da man aber schon __beim__ __Entwickeln__ ständig in der REPL
@@ -1311,6 +1312,7 @@ auch merkwürdig aus).
 [1] https://www.baeldung.com/java-stream-reduce  
 [2] https://dev.solita.fi/2017/04/10/making-software-testing-easier-with-clojure.html  
 [3] https://dev.to/danlebrero/the-broken-promise-of-static-typing  
+[4] https://developers.slashdot.org/story/18/01/01/0242218/which-programming-languages-are-most-prone-to-bugs  
 
 ---
 
