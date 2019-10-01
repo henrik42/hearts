@@ -1635,11 +1635,13 @@ Schlüssel.
 
   __Anmerkung__: von __named parameter__ spricht man eigentlich, wenn
   die Funktion so aufgerufen würde: `(legt :tisch <tisch> :hand
-  <hand>)` (also nicht mit __einer__ __Map__ sondern mit einer Folge
-  von Name-Wert-Paaren). __Quizfrage__: wie müssen die Parameter in
-  der Funktionsdefinition definiert werden, damit die Angabe an der
-  Aufrufstelle wie gezeigt mit mehreren Argumenten erfolgt? Hinweis:
-  die Lösung ist eine Kombination auf Vektor- und Map-Destructuring.
+  <hand>)`. Also nicht mit __einer__ __Map__ angegeben sondern mit
+  einer Folge von Name-Wert-Paaren.
+
+  __Quizfrage__: wie müssen die Parameter in der Funktionsdefinition
+  definiert werden, damit die Angabe an der Aufrufstelle wie gezeigt
+  mit mehreren Argumenten erfolgt? Hinweis: die Lösung ist eine
+  Kombination auf Vektor- und Map-Destructuring.
 
   Das Problem, dass __positional parameters__ aufgrund von
   Verwechslungen mit falschen Werten bestückt werden, kennt man auch
@@ -1647,10 +1649,11 @@ Schlüssel.
   angibt. Denn in diesem Fall kann auch der Comiler nicht mehr helfen,
   weil `null` ja ein untypisierter Wert ist.
 
-  Frage: was macht der folgende Aufruf? `AdressenService.verlegeBeginn(1, 911, null, true, null)`.
-  Und hätte es nicht `AdressenService.verlegeBeginn(911, 1, null, null, true)`
-  heißen müssen? Wer weiß. Der Compiler hilft eben nur
-  bedingt. Natürlich kann man auch __benannt__ Parameter mit falschen
+  Frage: was macht der folgende Aufruf?
+  `AdressenService.verlegeBeginn(1, 911, null, true, null)`.  Und
+  hätte es nicht `AdressenService.verlegeBeginn(911, 1, null, null,
+  true)` heißen müssen? Wer weiß. Der Compiler hilft eben nur
+  bedingt. Natürlich kann man auch __benannte__ Parameter mit falschen
   Werten belegen, aber man bekommt zumindest beim Lesen eine Ahnung
   davon, was der Code wohl tuen wird bzw. tuen soll.
 
@@ -1667,36 +1670,61 @@ Schlüssel.
 
 Aber jetzt zum Code:
 
-* `hand` ist eine Menge von Karten-Vektoren (also die Karten, die der
-  legende Spieler auf der Hand hat) und `tisch` ist eine Liste/Sequenz
-  von "bisher in diese Reihenfolge auf den Tisch gelegten Karten"
-  (eine Map mit `:spieler` und `:karte`).
+* `hand` ist eine Menge von Karten-Vektoren, also die Karten, die der
+  legende Spieler auf der Hand hat, und `tisch` ist eine Liste/Sequenz
+  von "bisher in diese Reihenfolge auf den Tisch gelegten Karten":
+  eine Map mit `:spieler` und `:karte`.
 
-* `if` wertet das erste Argument aus und falls dieses _truthy_ ist,
-  liefert `if` als Ergebnis das Ergebnis der Auswertung des zweiten
-  Arguments ("then-Fall"). Ansonsten liefert `if` das Ergebnis der
-  Auswertung des dritten Elements ("else"-Fall). Das dritte Argument
-  ist __optional__. Falls es nicht angegeben ist, entspricht das dem
-  Wert `nil`. Es werden also immer nur jene zwei Argumente von `if`
-  ausgewertet, die nötig sind, um das Ergebnis liefern/berechnen zu
-  können.
+* `if` wertet das __erste__ __Argument__ aus und falls dieses _truthy_
+  ist, liefert `if` als Ergebnis das Ergebnis der Auswertung des
+  __zweiten__ Arguments ("then-Fall"). Ansonsten liefert `if` das
+  Ergebnis der Auswertung des __dritten__ Elements ("else"-Fall). Das
+  dritte Argument ist __optional__. Falls es nicht angegeben ist,
+  entspricht das dem Wert `nil`. Es werden also immer nur jene
+  __zwei__ Argumente von `if` ausgewertet, die __nötig__ sind, um das
+  Ergebnis liefern/berechnen zu können.
 
-* `empty?` liefert _truthy_, falls das Argument "leer ist" (`nil` gilt
-  auch als leer). Wenn der Tisch noch leer ist, muss ja entweder mit
-  der Kreuz-2 eröffnet werden oder es kann eine beliebige Karte gelegt
+  `if` hat also eine besondere Auswertungsregel. Wenn man das mit
+  einer Funktion machen würde, würde es nicht das gewünschte Ergebnis
+  bringen.
+
+  __REPL:__
+
+		hearts.core=> (if 42 "jupp" "nope")
+		"jupp"
+		hearts.core=> (if 42 (do (print "JUPP\n") :jupp) (do (print "NOPE!\n") :nope))
+		JUPP
+		:jupp
+		hearts.core=> (if nil (do (print "JUPP\n") :jupp) (do (print "NOPE!\n") :nope))
+		NOPE!
+		:nope
+		hearts.core=> (defn my-if [p a b] (if p a b))
+		#'hearts.core/my-if
+		hearts.core=> (my-if nil (do (print "JUPP\n") :jupp) (do (print "NOPE!\n") :nope))
+		JUPP
+		NOPE!
+		:nope
+
+* `empty?` liefert _truthy_, falls das Argument "leer ist". `nil` gilt
+  auch als leer.
+
+  Wenn der Tisch noch leer ist, muss ja entweder mit der Kreuz-2
+  eröffnet werden oder es kann eine beliebige Karte gelegt
   werden. Insbesondere braucht zu Beginn, wenn der Tisch noch leer
   ist, keine Farbe __bedient__ zu werden.
 
 * `or` (ein Makro) liefert das erste seiner n (ausgewerteten)
-  __Argumente__(!!!), das _truthy_ ist. Die Argumente werden der Reihe
-  nach ausgewertet, bis ein _truthy_ Wert vorliegt und dieser wird
-  dann geliefert. Nochmal zu Erinnerung: die "normale" Auswertung
-  läuft so an, dass __erst__ __alle__ Argumente/Elemente einer Liste
-  ausgewertet werden und __dann__ wird der Funktor mit eben diesen
-  Werten aufgerufen. Bei `or` soll aber die Auswertung nur erfolgen,
-  falls alle "links daneben stehenden Argument" _falsy_ sind. Mit
-  dieser Auswertungssemantik kann man z.B. auch `null`-Checks
-  implementieren.
+  __Argumente__(!!!), das _truthy_ ist. Die Argumente werden __der__
+  __Reihe__ __nach__ __ausgewertet__, bis ein _truthy_ Wert vorliegt
+  und dieser wird dann geliefert.
+
+  Zur Erinnerung: die "normale" Auswertung läuft so an, dass __erst__
+  __alle__ Argumente/Elemente einer Liste ausgewertet werden und
+  __dann__ wird der Funktor mit eben diesen Werten aufgerufen.
+
+  Bei `or` soll aber die Auswertung __nur__ erfolgen, __falls__
+  __alle__ "links daneben stehenden Argument" _falsy_ sind. Mit dieser
+  Auswertungssemantik kann man z.B. auch `null`-Checks implementieren.
 
 * `(hand [:kreuz 2])` liefert `[:kreuz 2]`, falls diese Karte in der
   Menge `hand` ist (der Spieler also mit dieser Karte eröffnen
@@ -1713,10 +1741,11 @@ Aber jetzt zum Code:
   die bisherigen Stiche aller Spieler (nicht nur der eigenen!) in
   seine Entscheidung einbeziehen, so dass die Funktion wohl eher als
   `(defn legt [{:keys [hand tisch stiche-aller-spieler]}] ...)`
-  definiert sein sollte.
+  definiert sein müsste.
 
   Der "then"-Zweig für den leeren Tisch liefert also entweder die
   Kreuz-2 oder eine beliebige Karte des eröffnenden Spielers.
+
 
 * `if-let` ist eine Kombination aus `let` und `if`: mit `let` wird ein
   __lokaler__ (geschachtelter; _nested_) __Namensraum__ aufgemacht, in
@@ -1727,30 +1756,33 @@ Aber jetzt zum Code:
   Der Wert-Ausdruck/Form hinter dem lokalen Namen wird ausgewertet und
   __falls__ er _truthy_ ist, wird er an den __Namen__ __gebunden__ und
   das `if-let`-Ergebnis ist der Wert des folgenden
-  "then"-Ausdrucks/Zweig. In diesem Zweig kann man über den lokalen
-  Namen auch auf den zuvor gebundenen Wert zugreifen.
+  "then"-Ausdrucks/Zweig. In __diesem__ __Zweig__ kann man über den
+  lokalen Namen auch auf den zuvor gebundenen Wert zugreifen.
 
   Andernfalls wird der __Namen__ __nicht__ __gebunden__ und das
   `if-let`-Ergebnis ergibt sich aus dem Wert des "else"-Zweiges.
+
 
 * mit der HOF `filter` erzeugen wir eine Sequenz von Karten (`hand`),
   deren `(farbe %)` der Farbe der ersten Karte auf dem Tisch (`(->
   tisch first :karte farbe)`) entspricht (`=`). Das sind also alle
   Karten, mit denen man die Eröffnungskarte __bedienen__ könnte (und
-  dann ja auch __müsste__). Von denen währen wir uns wieder eine
+  dann ja auch __müsste__). Von denen wählen wir uns wieder eine
   beliebige aus (`shuffle first`).
 
   __Anmerkung__: in `#(...)` Formen kann man `%<i>` benutzen, um die
   Argumente über ihre 1-basierte Position zu "adressieren"
-  (vgl. oben). Wenn man einfach nur `%` verwendet, so "zählt" Clojure
-  die Indexe selbständig hoch. D.h. die erste `%`-Form wird zu `%1`,
-  die zweite zu `%2` usw. 
+  (vgl. oben). Wenn man nur ein Argument hat, kann man auch einfach
+  nur `%` schreiben.
+
 
 * Falls es nun eine solche Karte gibt (also `k` _truthy_ ist), liefern
   wir diese Karte.
 
-* Ansonsten liefern wir eine beliebige Karte (wie in dem
-  Leerer-Tisch-Fall).
+
+* Ansonsten liefern wir wie in dem Leerer-Tisch-Fall eine beliebige
+  Karte, die der Spieler auf der Hand hat.
+
 
 Fertig.
 
