@@ -98,8 +98,26 @@ ausprobieren, während du die folgende Beschreibung durchliest:
     [:gabi :peter :paul :sonja]
     hearts.core=> ^D
 
+Oder via Leiningen:
+
+	lein repl
+	nREPL server started on port 64069 on host 127.0.0.1 - nrepl://127.0.0.1:64069
+	REPL-y 0.3.7, nREPL 0.2.12
+	Clojure 1.8.0
+	Java HotSpot(TM) 64-Bit Server VM 1.8.0_172-b11
+		Docs: (doc function-name-here)
+			  (find-doc "part-of-name-here")
+	  Source: (source function-name-here)
+	 Javadoc: (javadoc java-object-or-class-here)
+		Exit: Control+D or (exit) or (quit)
+	 Results: Stored in vars *1, *2, *3, an exception in *e
+
+	hearts.core=> bilder
+	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
+
+
 Über [11] kannst du dich auch über deinen Browser mit einer REPL
-verbinden und über ein Web-Interfaces mit dieser interagieren.
+verbinden und über ein Web-Interfaces mit dieser interagieren. 
 
 Du kannst Clojure bzw. eine REPL aber auch __in__ __deinem__
 __Browser__ __ausführen__ [9]. Es gibt nämlich einen
