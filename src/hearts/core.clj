@@ -115,7 +115,3 @@
                     :gewinnt (gewinnt s)}]
            (println "Gewinner:" (:gewinnt erg) "\nSpieler:" s hr)
            erg)))))
-
-(defn -main [& args]
-  (spiel))
-

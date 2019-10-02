@@ -8,21 +8,86 @@ Implementation in Haskell vorgestellt wurde.
 Um den Code laufen zu lassen, brauchst du erstmal ein __Java 8 JDK__
 (eine JRE sollte auch reichen).
 
-Dann braucht man __Clojure__ [4, 5]. Alles was man benötigt, ist die
-eine JAR Datei. Du kannst sie über deinen Browser runterladen oder
-auch per `wget`:
+Dann braucht man __Clojure__ [4, 5]. Alles was man benötigt, ist
+__die__ __eine__ JAR Datei. Du kannst sie über deinen Browser
+runterladen oder auch per `wget`:
 
 	wget https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/clojure-1.8.0.jar
 
-Und schließlich noch den __Quelltext__. Du kannst entweder das git
-Repo clonen oder downloaden oder einfach nur die eine Datei
-runterladen:
+Und schließlich noch den __Quelltext__. Du kannst entweder (a) das git
+Repo __clonen__ oder (b) den `master` Branch __downloaden__ oder (c)
+einfach nur die __eine__ __Datei__ runterladen.
 
-    wget https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj
+**(a) git Repo clonen**
 
-Nun kannst du das Programm starten:
+Falls du `git` auf deinem Rechner hast, kannst du das Repository
+_clonen_. Mit dem folgenden Befehl landet das Repo, inkl. der Historie
+der Commits etc. im aktuellen Verzeichnis unter `./hearts/`:
 
-	java -jar clojure-1.8.0.jar -i core.clj -e '(hearts.core/spiel)'
+	$ git clone https://github.com/henrik42/hearts.git
+	Cloning into 'hearts'...
+	remote: Enumerating objects: 71, done.
+	remote: Counting objects: 100% (71/71), done.
+	remote: Compressing objects: 100% (47/47), done.
+	Receiving objects: remote: Total 261 (delta 43), reused 49 (delta 22), pack-reused 190
+	Receiving objects: 100% (261/261), 115.45 KiB | 0 bytes/s, done.
+	Resolving deltas: 100% (152/152), done.
+	Checking connectivity... done.
+
+Und im aktuellen Verzeichnis ausführen:
+
+    $ java -jar clojure-1.8.0.jar -i hearts/src/hearts/core.clj -e '(hearts.core/spiel)'
+
+Falls du Leiningen [13] installiert hast, kannst du auch folgendes
+machen:
+
+	$ cd hearts
+	$ lein test
+	...
+	Ran 9 tests containing 20 assertions.
+	0 failures, 0 errors.
+	
+	$ lein run
+	...
+
+**(b) `master` Branch downloaden**
+
+Du kannst auch den aktuellen Stand des `master`-Branches
+runterladen. Das ist dann eine __Kopie__ __des__ __Quell-Stands__ ---
+aber __kein__ git __Repository__.
+
+Mit dem folgenden Befehl landet der Stand im aktuellen Verzeichnis
+unter `./hearts-master/`:
+
+	$ wget -qO- http://github.com/henrik42/hearts/archive/master.tar.gz | tar -vzxf -
+	hearts-master/
+	hearts-master/.gitignore
+	hearts-master/.lein-failures
+	hearts-master/README.md
+	hearts-master/project.clj
+	hearts-master/src/
+	hearts-master/src/hearts/
+	hearts-master/src/hearts/core.clj
+	hearts-master/test/
+	hearts-master/test/hearts/
+	hearts-master/test/hearts/core_test.clj
+
+Und ausführen.
+
+    $ java -jar clojure-1.8.0.jar -i hearts-master/src/hearts/core.clj -e '(hearts.core/spiel)'
+
+**(c) Download `core.clj`**
+
+Um die folgenden Beispiele alle nachzuvollziehen, reicht es,
+`core.clj` runterzuladen.
+
+    $ wget https://raw.githubusercontent.com/henrik42/hearts/master/src/hearts/core.clj
+
+Und ausführen.
+
+	$ java -jar clojure-1.8.0.jar -i core.clj -e '(hearts.core/spiel)'
+
+---
 
 Du kannst auch eine __interaktive REPL__ [7] starten und dann Dinge
 ausprobieren, während du die folgende Beschreibung durchliest:
@@ -67,6 +132,7 @@ Einführungen in Clojure findest du natürlich auch massenhaft im NETZ [12].
 [10] https://clojurescript.org/  
 [11] https://repl.it/languages/clojure  
 [12] http://hitchhikersclojure.com/blog/hitchhikers-guide-to-clojure/  
+[13] https://leiningen.org  
 
 -----------------------------------------------------------------------
 
