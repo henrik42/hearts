@@ -1947,7 +1947,7 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   __einführen__, aber dazu muss man dann immer den Code __umbauen__,
   nur damit man in der Lage ist, die Zwischenwerte auszugeben.
 
-  Es gibt natürlich Bibliotheken, die einem beim Debuggen untestützen
+  Es gibt natürlich Bibliotheken, die einem beim Debuggen unterstützen
   (z.B. [4]). Eine Alternative, die häufig ausreicht, ist das
   __Auskommentieren__ von Teilen einer Funktion.
 
