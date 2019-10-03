@@ -98,7 +98,7 @@ ausprobieren, während du die folgende Beschreibung durchliest:
     [:gabi :peter :paul :sonja]
     hearts.core=> ^D
 
-Oder via Leiningen:
+Oder via Leiningen, falls du dir das git Repo geholt hat:
 
 	$ lein repl
 	nREPL server started on port 64069 on host 127.0.0.1 - nrepl://127.0.0.1:64069
@@ -115,6 +115,10 @@ Oder via Leiningen:
 	hearts.core=> bilder
 	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
 
+Falls du mal Änderungen am Code machen möchtest, kannst du diese via
+`load-file` laden, __ohne__ dass du dafür die REPL neu starten musst:
+
+	hearts.core=> (load-file "core.clj")
 
 Über [11] kannst du dich auch über deinen Browser mit einer
 __Clojure__ __REPL__ verbinden und über ein Web-Interfaces mit dieser
