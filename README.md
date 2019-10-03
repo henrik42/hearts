@@ -1952,26 +1952,26 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   __Auskommentieren__ von Teilen einer Funktion.
 
   __Beispiel:__ Ich möchte die Spieler in der Reihenfolge ermitteln,
-  in der sie rauskommen müssen. Die folgende REPL-Sitzung zeigt, die
+  in der sie rauskommen müssen. Die folgende REPL-Sitzung zeigt, wie
   man zum gewünschten Ergebnis kommt. Derzeit habe ich den Code
   __innerhalb__ von `runde` stehen und es wäre wohl besser, ihn in
   eine separate Funktion zu extrahieren, auch um ihn besser testen zu
   können. Aber man kann ihn auch einfach so in die REPL pasten. Ich
   benutze hier den `#_` Kommentar, mit dem man __eine__ __Form__
   auskommentiert. Das ist super-praktisch, weil es mir erlaubt,
-  einzelne Verarbeitsschritte temporär auszuschalten und so den Code
-  in verschiedenen Verarbeitungstiefen ausprobieren zu können. Gerade
-  zusammen mit `->>` macht das Spaß. Auf diese Weise kann man ohne
-  viel Aufwand auch auf Zwischenergebnisse in der Verarbeitungs-Pipe
-  zugreifen und erkennen, was der Code macht. Die `#_=>` Teile kommen
-  von der REPL (Zeilenfortführung). Es ist kein Zufall, dass auch
-  diese mit `#_` beginnen.
+  einzelne Verarbeitungsschritte temporär auszuschalten und so den
+  Code in verschiedenen Verarbeitungstiefen ausprobieren zu
+  können. Gerade zusammen mit `->>` macht das Spaß. Auf diese Weise
+  kann man ohne viel Aufwand auch auf Zwischenergebnisse in der
+  Verarbeitungs-Pipe zugreifen und erkennen, was der Code macht. Die
+  `#_=>` Teile kommen von der REPL (Zeilenfortführung). Es ist kein
+  Zufall, dass auch diese mit `#_` beginnen.
 
   __REPL:__
 
 	hearts.core=> spieler
 	[:gabi :peter :paul :sonja]
-	earts.core=> (->> (concat spieler spieler)
+	hearts.core=> (->> (concat spieler spieler)
 			 #_=>      #_ (drop-while #(not= b %))
 			 #_=>      #_ (take 4))
 	(:gabi :peter :paul :sonja :gabi :peter :paul :sonja)
