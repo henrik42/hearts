@@ -100,7 +100,7 @@ ausprobieren, während du die folgende Beschreibung durchliest:
 
 Oder via Leiningen:
 
-	lein repl
+	$ lein repl
 	nREPL server started on port 64069 on host 127.0.0.1 - nrepl://127.0.0.1:64069
 	REPL-y 0.3.7, nREPL 0.2.12
 	Clojure 1.8.0
@@ -116,14 +116,17 @@ Oder via Leiningen:
 	(2 3 4 5 6 7 8 9 10 :bube :dame :koenig :ass)
 
 
-Über [11] kannst du dich auch über deinen Browser mit einer REPL
-verbinden und über ein Web-Interfaces mit dieser interagieren. 
+Über [11] kannst du dich auch über deinen Browser mit einer
+__Clojure__ __REPL__ verbinden und über ein Web-Interfaces mit dieser
+interagieren.
 
 Du kannst Clojure bzw. eine REPL aber auch __in__ __deinem__
 __Browser__ __ausführen__ [9]. Es gibt nämlich einen
-Clojurescript->JavaScript Transpiler, der in deinem Browser läuft und
-aus Clojurescript [10] JavaScript macht und das läuft dann in deinem
-Browser. So brauchst du weder JDK/Java noch den Code auf deinem
+Clojurescript->JavaScript Transpiler, der aus Clojurescript [10]
+JavaScript macht und das läuft dann in deinem Browser. D.h. der
+Clojure(-Script) Code, den du in die GUI eingibst, wird in deinem
+Browser durch den Transpiler in JavaScript überführt und dann
+ausgeführt. So brauchst du weder JDK/Java noch den Code auf deinem
 Rechner.
 
 __Hinweis:__ um in [9] den Code aus den folgenden Beispielen via
@@ -131,12 +134,19 @@ _copy_ _&_ _paste_ einzufügen, musst du in der GUI über das
 Tastatur-Symbol den "input mode" auf `none` oder `indent-mode`
 setzen. `paren-mode` funktioniert nicht, weil er dazu führt, dass am
 Zeilenende automatisch die schließenden Klamern zugefügt werden und
-das führt dann wiederum zu Syntaxfehlern.
+das führt dann wiederum zu Syntaxfehlern. Beim Einfügen von mehreren
+Formen gleichzeitig hatte ich Probleme. Wenn man die _Top-Level-Forms_
+einzeln einfügt, klappt es aber.
 
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
 Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
-Einführungen in Clojure findest du natürlich auch massenhaft im NETZ [12].
+Einführungen in Clojure findest du natürlich auch massenhaft im NETZ
+[12, 15].
+
+Falls du beim Nachvollziehen der unten aufgeführten Beispiele auch mal
+andere Sachen ausprobieren möchtest, hilft ein Blick in [14].
+
 
 [1] https://de.wikipedia.org/wiki/Hearts  
 [2] https://clojure.org/  
@@ -151,6 +161,8 @@ Einführungen in Clojure findest du natürlich auch massenhaft im NETZ [12].
 [11] https://repl.it/languages/clojure  
 [12] http://hitchhikersclojure.com/blog/hitchhikers-guide-to-clojure/  
 [13] https://leiningen.org  
+[14] https://clojure.org/api/cheatsheet  
+[15] http://clojure-doc.org/  
 
 -----------------------------------------------------------------------
 
@@ -1916,6 +1928,69 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   hier einfach nur den ersten Spieler betrachten, weil alle Spieler
   gleich viele Karten auf der Hand haben.
 
+-------------------
+
+  __Anmerkung:__ Die Verwendung von Funktionen und
+  Funktionskomposition führt dazu, dass man in Clojure häufig gar
+  keine Variablen (also lokale Namen) benötigt, um Zwischenergebnisse
+  daran zu binden. In Java macht man das häufiger.
+
+  Wenn man dabei ist, Code zu schreiben oder Fehler im Code zu suchen,
+  nutzt man solche Namen gerne, um die Zwischenwerte auszugeben, um so
+  zu verstehen, was das Programm eigentlich (falsch)
+  macht.
+
+  I.d.R. gibt man die Werte dann via `System/out` aus oder man benutzt
+  einen Debugger, um den Wert einer Variablen zu inspizieren.
+
+  In Clojure kann man natürlich auch Variablen für solche Zwecke
+  __einführen__, aber dazu muss man dann immer den Code __umbauen__,
+  nur damit man in der Lage ist, die Zwischenwerte auszugeben.
+
+  Es gibt natürlich Bibliotheken, die einem beim Debuggen untestützen
+  (z.B. [4]). Eine Alternative, die häufig ausreicht, ist das
+  __Auskommentieren__ von Teilen einer Funktion.
+
+  __Beispiel:__ Ich möchte die Spieler in der Reihenfolge ermitteln,
+  in der sie rauskommen müssen. Die folgende REPL-Sitzung zeigt, die
+  man zum gewünschten Ergebnis kommt. Derzeit habe ich den Code
+  __innerhalb__ von `runde` stehen und es wäre wohl besser, ihn in
+  eine separate Funktion zu extrahieren, auch um ihn besser testen zu
+  können. Aber man kann ihn auch einfach so in die REPL pasten. Ich
+  benutze hier den `#_` Kommentar, mit dem man __eine__ __Form__
+  auskommentiert. Das ist super-praktisch, weil es mir erlaubt,
+  einzelne Verarbeitsschritte temporär auszuschalten und so den Code
+  in verschiedenen Verarbeitungstiefen ausprobieren zu können. Gerade
+  zusammen mit `->>` macht das Spaß. Auf diese Weise kann man ohne
+  viel Aufwand auch auf Zwischenergebnisse in der Verarbeits-Pipe
+  zugreifen und erkennen, was der Code macht.
+
+  __REPL:__
+
+	hearts.core=> spieler
+	[:gabi :peter :paul :sonja]
+	earts.core=> (->> (concat spieler spieler)
+			 #_=>      #_ (drop-while #(not= b %))
+			 #_=>      #_ (take 4))
+	(:gabi :peter :paul :sonja :gabi :peter :paul :sonja)
+	hearts.core=> (->> (concat spieler spieler)
+			 #_=>      (drop-while #(not= b %))
+			 #_=>      #_ (take 4))
+	CompilerException java.lang.RuntimeException: Unable to resolve symbol: b in this context
+	hearts.core=> (def b :paul)
+	#'hearts.core/b
+	hearts.core=> (->> (concat spieler spieler)
+			 #_=>      (drop-while #(not= b %))
+			 #_=>      #_ (take 4))
+	(:paul :sonja :gabi :peter :paul :sonja)
+	hearts.core=> (->> (concat spieler spieler)
+			 #_=>      (drop-while #(not= b %))
+			 #_=>      (take 4))
+	(:paul :sonja :gabi :peter)
+
+
+-------------------
+
 * falls dem __nicht__ so ist (`when-not`), ermitteln wir die
   Reihenfolge, in der die Spieler in dieser Runde ihre Karten legen
   müssen. Das machen wir, indem wir die Liste der `spieler`
@@ -2168,6 +2243,7 @@ ist. Und damit laufen wir nicht mehr in das `recur`.
 [1] https://de.wikipedia.org/wiki/Rekursion  
 [2] https://de.wikipedia.org/wiki/Endrekursion  
 [3] https://de.wikipedia.org/wiki/Iterative_Programmierung  
+[4] https://github.com/alexanderjamesking/spy  
 
 ---
 
