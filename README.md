@@ -135,9 +135,9 @@ Rechner.
 
 __Hinweis:__ um in [9] den Code aus den folgenden Beispielen via
 _copy_ _&_ _paste_ einzufügen, musst du in der GUI über das
-Tastatur-Symbol den "input mode" auf `none` oder `indent-mode`
+Tastatur-Symbol den _input_ _mode_ auf `none` oder `indent-mode`
 setzen. `paren-mode` funktioniert nicht, weil er dazu führt, dass am
-Zeilenende automatisch die schließenden Klamern zugefügt werden und
+Zeilenende automatisch die schließenden Klammern zugefügt werden und
 das führt dann wiederum zu Syntaxfehlern. Beim Einfügen von mehreren
 Formen gleichzeitig hatte ich Probleme. Wenn man die _Top-Level-Forms_
 einzeln einfügt, klappt es aber.
@@ -145,8 +145,8 @@ einzeln einfügt, klappt es aber.
 Falls du mehr über die Möglichkeiten wissen möchtest, wie man Clojure
 Programme bauen und ausführen kann, findest du ein paar Hinweise in [8].
 
-Einführungen in Clojure findest du natürlich auch massenhaft im NETZ
-[12, 15].
+Einführungen in Clojure findest du natürlich auch massenhaft im
+Internet [12, 15].
 
 Falls du beim Nachvollziehen der unten aufgeführten Beispiele auch mal
 andere Sachen ausprobieren möchtest, hilft ein Blick in [14].
