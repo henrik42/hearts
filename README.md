@@ -291,26 +291,26 @@ ehesten die __imperativen__ Programmiersprachen [5]. In dem
 Wikiartikel wird zwar gesagt, dass die "deklarativen
 Programmiersprachen" (wie PROLOG) der Gegensatz zu den imperativen
 Programmiersprachen seien. Für mich entscheidend ist aber, dass die
-imperativen Programmiersprachen im wesentlichen auf Anweisungen
+imperativen Programmiersprachen im wesentlichen auf __Anweisungen__
 (_Statements_) und __Zustandsänderungen__ (also die Änderung von
 Variablen bzw. __Speicherstellen__; von Neumann Rechner) basieren. Die
-funktionale Programmierung basiert auf __Funktionen__, __Namen__ und
+funktionale Programmierung basiert auf __Funktionen__ und
 __Werten__. Das ist ein riesiger Unterschied und wie so ein
-funktionales Programm "sich anfühlt", wird hoffentlich durch den
+funktionales Programm _sich_ _anfühlt_, wird hoffentlich durch den
 folgenden Text deutlich.
 
 Clojure-Code ist in _Namespaces_ (__Namensräumen__ [6]) organisiert
 (ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
 einer __Datei__. Diese Datei muss in einem __Verzeichnis__ liegen,
-dessen Name zum Namensraum "passt". Der Namesraum `hearts.core` findet
+dessen Name zum Namensraum _passt_. Der Namesraum `hearts.core` findet
 sich in der Datei `src/hearts/core.clj`. Die Dateien und Namensräume
 bilden eine __hierarchische__ __Struktur__. Diese __Hierarchie__ ist
 für Clojure jedoch ohne Bedeutung. Sie dient allein der Strukturierung
 der Code-Basis und hat keine Auswirkung auf Sichtbarkeit oder
-ähnliches. I.d.R. "schneidet" man Namensräume nach
+ähnliches. I.d.R. _schneidet_ man Namensräume nach
 fachlichen/inhaltlichen Gesichtspunkten. Namensräume dienen ebenfalls
 als Mittel um __Namenskollisionen__ zu vermeiden und um die
-__Sichtbarkeit__ einzuschränken (durch "private Namen").
+__Sichtbarkeit__ einzuschränken (durch _private_ _Namen_).
 
 Clojure-Code (d.h. eine Clojure-Datei) besteht i.d.R. aus Folgen von
 sog. _S-Expressions_ [7]. Dabei handelt es sich um __geschachtelte__
@@ -1325,6 +1325,9 @@ gelegt hat.
   den Ergebniswert (also entweder den Map-Value oder das Set-Element)
   liefert.
 
+  __Hinweis:__ Der Vollständigkeit wegen sei erwähnt, dass Vektoren
+  Funktionen auf ihren 0-basierten Indexen sind (vgl. unten).
+
   __REPL:__
 
 		hearts.core=> (get {:bar "BAR" :foo "FOO"} :foo)
@@ -1345,6 +1348,11 @@ gelegt hat.
 		:bar
 		hearts.core=> (:foo [:foo :bar])
 		nil
+		hearts.core=> ([:foo :bar :fred] 2)
+		:fred
+		hearts.core=> ([:foo :bar :fred] 3)
+		IndexOutOfBoundsException   clojure.lang.PersistentVector.arrayFor ...
+
 
   Mit `:spieler` wird also auf den gemappten Wert der folgenden
   `reduce`-Form zugegriffen und dieser als Ergebnis geliefert. Damit
