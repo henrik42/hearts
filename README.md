@@ -1962,7 +1962,7 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   einzelne Verarbeitsschritte tempor‰r auszuschalten und so den Code
   in verschiedenen Verarbeitungstiefen ausprobieren zu kˆnnen. Gerade
   zusammen mit `->>` macht das Spaﬂ. Auf diese Weise kann man ohne
-  viel Aufwand auch auf Zwischenergebnisse in der Verarbeits-Pipe
+  viel Aufwand auch auf Zwischenergebnisse in der Verarbeitungs-Pipe
   zugreifen und erkennen, was der Code macht.
 
   __REPL:__
