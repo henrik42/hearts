@@ -1963,7 +1963,9 @@ Spieler keine Karte mehr auf der Hand haben; vgl. unten), liefert
   in verschiedenen Verarbeitungstiefen ausprobieren zu können. Gerade
   zusammen mit `->>` macht das Spaß. Auf diese Weise kann man ohne
   viel Aufwand auch auf Zwischenergebnisse in der Verarbeitungs-Pipe
-  zugreifen und erkennen, was der Code macht.
+  zugreifen und erkennen, was der Code macht. Die `#_=>` Teile kommen
+  von der REPL (Zeilenfortführung). Es ist kein Zufall, dass auch
+  diese mit `#_` beginnen.
 
   __REPL:__
 
