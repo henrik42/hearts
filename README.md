@@ -429,6 +429,10 @@ Wenn man die `def` Zeile in der REPL eingegeben hat (bzw. mit `-i
 core.clj` die Datei geladen hat), kann man sich anschließend den
 gebundenen Wert ausgeben lassen.
 
+---
+
+__Einschub: Die REPL__
+
 Die REPL liest Formen ein, wertet sie aus und _druckt_ das Ergebnis
 aus (REPL: _Read_, _Eval_, _Print_ _Loop_). Die Ausgabe erfolgt in
 einem Format, in dem diese Ausgabe auch wieder als __Eingabe__ genutzt
@@ -533,6 +537,11 @@ Es bedeutet auch, dass wir uns nie wieder selber eine Mikro-Sprache
 schreiben müssen, um die Anforderung nach dieser Form von Dynamik
 umzusetzen (vgl. __Greenspun's tenth rule__ [6]).
 
+Falls man nun gar nicht mit einer DSL in Clojure-__Syntax__ arbeiten
+mag, kann man natürlich auch eine __eigene__ __Syntax__ erschaffen und
+dann trotzdem den __Clojure-Compiler__ verwenden. Das erspart einem
+zumindest das Schreiben eines Interpreters.
+
 
 [1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html  
 [2] https://clojure.org/reference/java_interop  
@@ -540,6 +549,7 @@ umzusetzen (vgl. __Greenspun's tenth rule__ [6]).
 [4] https://clojure.org/reference/vars  
 [5] https://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache  
 [6] https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule  
+[7] https://github.com/henrik42/extended-lisp-reader  
 
 ---
 
