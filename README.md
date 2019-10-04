@@ -89,8 +89,8 @@ Und ausführen.
 
 ---
 
-Du kannst auch eine __interaktive REPL__ [7] starten und dann Dinge
-ausprobieren, während du die folgende Beschreibung durchliest:
+Du kannst auch eine __interaktive REPL__ [7, 16] starten und dann
+Dinge ausprobieren, während du die folgende Beschreibung durchliest:
 
     $ java -jar clojure-1.8.0.jar -i core.clj -e "(in-ns 'hearts.core)" -r
     #object[clojure.lang.Namespace 0xc430e6c "hearts.core"]
@@ -122,14 +122,15 @@ Falls du mal Änderungen am Code machen möchtest, kannst du diese via
 
 Über [11] kannst du dich auch über deinen Browser mit einer
 __Clojure__ __REPL__ verbinden und über ein Web-Interfaces mit dieser
-interagieren.
+interagieren. D.h. in diesem Fall brauchst du auf deinem Rechner kein
+JDK zu haben.
 
 Du kannst Clojure bzw. eine REPL aber auch __in__ __deinem__
 __Browser__ __ausführen__ [9]. Es gibt nämlich einen
 Clojurescript->JavaScript Transpiler, der aus Clojurescript [10]
 JavaScript macht und das läuft dann in deinem Browser. D.h. der
 Clojure(-Script) Code, den du in die GUI eingibst, wird in deinem
-Browser durch den Transpiler in JavaScript überführt und dann
+Browser durch den Transpiler in JavaScript überführt und dann dort
 ausgeführt. So brauchst du weder JDK/Java noch den Code auf deinem
 Rechner.
 
@@ -167,6 +168,7 @@ andere Sachen ausprobieren möchtest, hilft ein Blick in [14].
 [13] https://leiningen.org  
 [14] https://clojure.org/api/cheatsheet  
 [15] http://clojure-doc.org/  
+[16] https://lambdaisland.com/guides/clojure-repls  
 
 -----------------------------------------------------------------------
 
@@ -273,9 +275,9 @@ Spieler bei Punktgleichheit den Sieg teilen.
 
 Nun folgt eine detailierte Erläuterung des Codes. Ich möchte damit
 verschiedene Aspekte von Clojure erläutern. Dabei werde ich erst immer
-jene Dinge erläutern, die für das Verständnis des dann aufgeführten
-Code-Abschnitts nötig sind. Ich führe hier wirklich jede Zeile-Code
-auf. Es wird nichts ausgelassen.
+jene Dinge erläutern, die für das Verständnis des dann anschließend
+aufgeführten Code-Abschnitts nötig sind. Ich führe hier wirklich jede
+Zeile-Code auf. Es wird nichts ausgelassen.
 
 Los geht's.
 
@@ -286,16 +288,16 @@ Aspekte der __Objekt-orientierten__ __Programmiersprachen__ [2]
 enthalten (z.B. Datenkapselung [3]), nur tut sie das mit anderen
 Mitteln [4]. Die beiden sind also kein echter Gegensatz .
 
-Somit sind "das Gegenteil" zu funktionalen Programmiersprachen am
+Somit sind _das_ _Gegenteil_ zu funktionalen Programmiersprachen am
 ehesten die __imperativen__ Programmiersprachen [5]. In dem
-Wikiartikel wird zwar gesagt, dass die "deklarativen
-Programmiersprachen" (wie PROLOG) der Gegensatz zu den imperativen
-Programmiersprachen seien. Für mich entscheidend ist aber, dass die
-imperativen Programmiersprachen im wesentlichen auf __Anweisungen__
-(_Statements_) und __Zustandsänderungen__ (also die Änderung von
-Variablen bzw. __Speicherstellen__; von Neumann Rechner) basieren. Die
-funktionale Programmierung basiert auf __Funktionen__ und
-__Werten__. Das ist ein riesiger Unterschied und wie so ein
+Wikiartikel wird zwar gesagt, dass die _deklarativen_
+_Programmiersprachen_ (wie z.B. PROLOG) der Gegensatz zu den
+imperativen Programmiersprachen seien. Für mich entscheidend ist aber,
+dass die imperativen Programmiersprachen im wesentlichen auf
+__Anweisungen__ (_Statements_) und __Zustandsänderungen__ (also die
+Änderung von Variablen bzw. __Speicherstellen__; von Neumann Rechner)
+basieren. Die funktionale Programmierung basiert auf __Funktionen__
+und __Werten__. Das ist ein riesiger Unterschied und wie so ein
 funktionales Programm _sich_ _anfühlt_, wird hoffentlich durch den
 folgenden Text deutlich.
 
@@ -303,14 +305,17 @@ Clojure-Code ist in _Namespaces_ (__Namensräumen__ [6]) organisiert
 (ähnlich wie Packages in Java). I.d.R. entspricht jeder Namensraum
 einer __Datei__. Diese Datei muss in einem __Verzeichnis__ liegen,
 dessen Name zum Namensraum _passt_. Der Namesraum `hearts.core` findet
-sich in der Datei `src/hearts/core.clj`. Die Dateien und Namensräume
-bilden eine __hierarchische__ __Struktur__. Diese __Hierarchie__ ist
-für Clojure jedoch ohne Bedeutung. Sie dient allein der Strukturierung
-der Code-Basis und hat keine Auswirkung auf Sichtbarkeit oder
-ähnliches. I.d.R. _schneidet_ man Namensräume nach
-fachlichen/inhaltlichen Gesichtspunkten. Namensräume dienen ebenfalls
-als Mittel um __Namenskollisionen__ zu vermeiden und um die
-__Sichtbarkeit__ einzuschränken (durch _private_ _Namen_).
+sich in der Datei `src/hearts/core.clj`.
+
+Die Dateien und Namensräume bilden eine __hierarchische__
+__Struktur__. Diese __Hierarchie__ ist für Clojure jedoch ohne
+Bedeutung. Sie dient allein der Strukturierung der Code-Basis und hat
+keine Auswirkung auf Sichtbarkeit oder ähnliches.
+
+I.d.R. _schneidet_ man Namensräume nach fachlichen/inhaltlichen
+Gesichtspunkten. Namensräume dienen ebenfalls als Mittel um
+__Namenskollisionen__ zu vermeiden und um die __Sichtbarkeit__
+einzuschränken (durch _private_ _Namen_).
 
 Clojure-Code (d.h. eine Clojure-Datei) besteht i.d.R. aus Folgen von
 sog. _S-Expressions_ [7]. Dabei handelt es sich um __geschachtelte__
@@ -326,14 +331,30 @@ sagen kann [8].
 
 Die folgende Liste (erste Codezeile von `core.clj`) hat als erstes
 Element das Symbol `ns` und als zweites Element das Symbol
-`hearts.core`. Das erste Element einer Liste bezeichnet "etwas
-ausführbares" (__Funktor__; z.B. eine Funktion oder ein Makro) und die
-folgenden Elemente bilden die __Argumente__ des Funktors.
+`hearts.core`. Das erste Element einer Liste bezeichnet _etwas_
+_ausführbares_ (ich verwende dafür den Bezeichner __Funktor__;
+z.B. eine Funktion oder ein Makro, aber es gibt in Clojure weitere)
+und die folgenden Elemente bilden die __Argumente__ des Funktors.
 
 Die Bedeutung (__Sematik__) der Formen ergibt sich durch Clojures
 _Auswertungs-Regeln_ [9]. Die meisten Formen "werten zu sich selbst
 aus". Das heißt, dass die __Auswertung__ der __Form__ `2` (Syntax) die
-__Zahl__ 2 (Semantik; vom Typ `java.lang.Integer`) ergibt.
+__Zahl__ 2 (Semantik; vom Typ `java.lang.Long`) ergibt.
+
+__REPL:__
+
+	hearts.core=> 2
+	2
+	hearts.core=> (type 2)
+	java.lang.Long
+	hearts.core=> "foo"
+	"foo"
+	hearts.core=> (type "foo")
+	java.lang.String
+	hearts.core=> [1 2 3]
+	[1 2 3]
+	hearts.core=> str
+	#object[clojure.core$str 0x413f69cc "clojure.core$str@413f69cc"]
 
 Symbole werten zu jenem Wert aus, der an den durch das Symbol
 benannten __Namen__ __gebunden__ ist (vgl. unten).
@@ -346,18 +367,18 @@ auf die restlichen (Auswertungs-)Werte (__Argumente__).
 
 Es gibt einige __Sonderfälle__, die eine andere Auswertungsregel haben
 [10]. Und es gibt auch Funktoren, die __Seiteneffekte__ [13] haben,
-also im funktionalen Sinn nicht __pure__ sind.
+also im funktionalen Sinn nicht __rein__ (engl. _pure_) sind.
 
-Da Listen sowohl für "ausführbaren Code" als auch als Datenstruktur
-verwendet werden (sog. _Homoiconicity_; "code is data is code"
-[12, 11]), fällt es Clojure-Neulingen zu Beginn häufig schwer, zu
-erkennen, ob eine S-Expression/Form nun als "ausführbarer Code" oder
-als Daten-Wert gilt.
+Da Listen sowohl für _ausführbaren_ _Code_ als auch als
+__Datenstruktur__ verwendet werden (sog. _Homoiconicity_; "code is
+data is code" [12, 11]), fällt es Clojure-Neulingen zu Beginn häufig
+schwer, zu erkennen, ob eine S-Expression/Form nun als _ausführbarer_
+_Code_ oder als Daten-Wert gilt.
 
 Mit `ns` wird das Makro (mehr zu Makros weiter unten)
 `clojure.core/ns` benannt. Dieses Makro sorgt dafür, dass der
-angegebene Namensraum "aufgemacht" wird. Das Makro kann noch eine
-Menge mehr, wie z.B. andere Namensräume "importieren", aber das
+angegebene Namensraum _aufgemacht_ wird. Das Makro kann noch eine
+Menge mehr, wie z.B. andere Namensräume _importieren_, aber das
 brauchen wir hier nicht.
 
 [1] https://de.wikipedia.org/wiki/Funktionale_Programmierung  
@@ -387,13 +408,13 @@ __nicht__ zu ihrem gebundenen Wert __ausgewertet__ (vgl. oben),
 sondern sie wird als __Name__ für die Bindung verwendet (so ähnlich
 wie ein __lvalue__ -- sprich "el-value" -- in Java [1]).
 
-Es handelt sich um einen "Java String" vom Typ
+Es handelt sich um einen Java String vom Typ
 `java.lang.String`. Clojure übernimmt komplett die `java.lang`
 Datentypen, anders als z.B. Jython, das mit Wrapper-Datentypen
 arbeitet. Dadurch lässt sich Clojure sehr elegant mit anderen Java
-Klassen/Bibliotheken integrieren; sog. "Java interop" [2].
+Klassen/Bibliotheken integrieren; sog. __Java__ __interop__ [2].
 
-Als Java-Entwickler denkt man bei diesen "globalen Namen" vielleicht
+Als Java-Entwickler denkt man bei diesen _globalen_ _Namen_ vielleicht
 an __Variablen__. Es ist jedoch unüblich (wenn auch möglich), während
 eines Programmlaufs einen Namen nacheinander bzw. __wiederholt__ an
 (verschiedene) Werte zu binden.
@@ -408,12 +429,12 @@ Wenn man die `def` Zeile in der REPL eingegeben hat (bzw. mit `-i
 core.clj` die Datei geladen hat), kann man sich anschließend den
 gebundenen Wert ausgeben lassen.
 
-Die REPL liest Formen ein, wertet sie aus und "druckt" das Ergebnis
-aus. Die Ausgabe erfolgt in einem Format, in dem diese Ausgabe auch
-wieder als __Eingabe__ genutzt werden kann. Daher werden die
-Zeilenumbrüche z.B. als `\n` ausgegeben und der ganze String inkl. der
-Anführungszeichen ausgegeben. Die Ausgabe erfolgt also im
-__Literal__-Format (mit einigen Ausnahmen).
+Die REPL liest Formen ein, wertet sie aus und _druckt_ das Ergebnis
+aus (REPL: _Read_, _Eval_, _Print_ _Loop_). Die Ausgabe erfolgt in
+einem Format, in dem diese Ausgabe auch wieder als __Eingabe__ genutzt
+werden kann. Daher werden die Zeilenumbrüche z.B. als `\n` ausgegeben
+und der ganze String inkl. der Anführungszeichen ausgegeben. Die
+Ausgabe erfolgt also im __Literal__-Format (mit einigen Ausnahmen).
 
 __REPL:__
 
@@ -428,10 +449,97 @@ __REPL:__
 	hearts.core=> (type 42)
 	java.lang.Long
 
+Die einzelnen Schritt der REPL sind auch als Funktionen verfügbar. Man
+kann sich also eine REPL _selber_ _bauen_.
+
+__REPL:__
+
+	user=> (def foo "x\nfoo\ny")
+	#'user/foo
+	user=> foo
+	"x\nfoo\ny"
+	user=> (println foo)
+	x
+	foo
+	y
+	nil
+	user=> (pr-str foo)
+	"\"x\\nfoo\\ny\""
+	user=> (read-string (pr-str foo))
+	"x\nfoo\ny"
+
+Mit `read-string` können wir also ein Programm (d.h. eine __Form__)
+aus dem String lesen. Das geht auch mit anderen Formen:
+
+__REPL:__
+
+	user=> (read-string "2")
+	2
+	user=> (read-string ":foo")
+	:foo
+	user=> (read-string "foo")
+	foo
+	user=> (type (read-string "foo"))
+	clojure.lang.Symbol
+
+Man erkennt, dass zwar die Form _geparst_ wird, aber sie wird nicht
+ausgewertet. Das macht man mit `eval`:
+
+__REPL:__
+
+	user=> (eval (read-string ":foo"))
+	:foo
+	user=> (eval (read-string "2"))
+	2
+
+So kann man auch gut sehen, was "... werten zu sich selbst aus ..."
+bedeutet.
+
+Das folgende Beispiel zeigt nun, wie man die REPL als `read-string
+eval println` implementiert. 
+
+__Hinweis:__ die Eingabe zum Compiler (`eval`) ist eine
+__Datenstruktur__ (vgl. oben "code is data is code"), die man auch
+selber/programmatisch konstruieren kann.
+
+__REPL:__
+
+	user=> (inc 2)
+	3
+	user=> (read-string "(inc 2)")
+	(inc 2)
+	user=> (type (read-string "(inc 2)"))
+	clojure.lang.PersistentList
+	user=> (eval (read-string "(inc 2)"))
+	3
+	user=> (eval (list inc 2))
+	3
+	user=> (eval '(inc 2))
+	3
+	user=> (-> "(inc 2)" read-string eval println)
+	3
+	nil
+
+
+Die Verfügbarkeit von `read` und `eval` erlaubt es uns, Daten/Werte
+(Konfiguration?) aber auch _ausführbare_ _Dinge_ (_Programmlogik_) als
+Clojure-Quelltext _irgendwoher_ zu lesen (z.B. aus einer Datei, einer
+URL oder einer Datenbank) und diesen __dynamisch__ in unser Programm
+mit __einzubinden__ (__WARNUNG:__ das ist ein Sicherheitsrisiko. Es
+darf nur aus __vertrauenswürdigen__ __Quellen__ gelesen werden).
+
+Es bedeutet auch, dass wir uns nie wieder selber eine Mikro-Sprache
+(DSL [5]) ausdenken müssen und einen zugehörigen _Interpreter_ selber
+schreiben müssen, um die Anforderung nach dieser Form von Dynamik
+umzusetzen (vgl. __Greenspun's tenth rule__ [6]).
+
+
 [1] https://docs.oracle.com/cd/E19798-01/821-1841/bnahv/index.html  
 [2] https://clojure.org/reference/java_interop  
 [3] https://clojuredocs.org/clojure.core/def  
 [4] https://clojure.org/reference/vars  
+[5] https://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache  
+[6] https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule  
 
 ---
 
